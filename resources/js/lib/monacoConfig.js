@@ -7,6 +7,7 @@ import * as vscode from 'vscode';
 import getEditorServiceOverride from '@codingame/monaco-vscode-editor-service-override';
 import getKeybindingsServiceOverride from '@codingame/monaco-vscode-keybindings-service-override';
 import getModelServiceOverride from '@codingame/monaco-vscode-model-service-override';
+import getThemeServiceOverride from '@codingame/monaco-vscode-theme-service-override';
 import monacoVscodeTextmateServiceOverride from '@codingame/monaco-vscode-textmate-service-override';
 import { useOpenEditorStub } from 'monaco-editor-wrapper/vscode/services';
 import { getStorageValue, setStorageValue } from './storage';
@@ -90,6 +91,7 @@ export const createUserConfig = (workspaceRoot, code, codeUri) =>
                 userServices: {
                     ...getEditorServiceOverride(useOpenEditorStub),
                     ...getModelServiceOverride(),
+                    ...getThemeServiceOverride(),
                     ...monacoVscodeTextmateServiceOverride(),
                     ...getKeybindingsServiceOverride(),
                 },
