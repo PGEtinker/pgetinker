@@ -11,6 +11,10 @@
         right: 0;
         bottom: 1.2rem;
     }
+    
+    input.rename-input {
+        color: var(--vscode-foreground);
+    }
 
     .status {
         position: absolute;
