@@ -1,118 +1,18 @@
 import { createToast, ToastType } from './createToast';
 import { getStorageValue, setStorageValue } from './storage';
+import { button, resetFieldId, select, toggle } from "./form";
 
-let fieldId = 0;
 
-/**
- * 
- * @param {string} label 
- * @param {string} description 
- * @param {(event) => void} valueCallback
- * @param {options[]} options
- * @param {string} initialValue
- * @returns 
- */
-function select(label, description, valueCallback, options, initialValue)
 {
-    fieldId++;
-    let select = document.createElement("div")
     
-    select.classList.toggle("form-group", true);
-    select.classList.toggle("select", true);
-
-    select.innerHTML = `
-        <div class="form-label">${label}</div>
-        <div class="form-description">${description}</div>
-        <select name="select-${fieldId}"></select>
-    `;
-
-    for(let i = 0; i < options.length; i++)
     {
-        let option = document.createElement("option");
-        option.value = options[i].value;
-        option.innerHTML = options[i].label;
-        
-        if(options[i].value == initialValue)
         {
-            option.selected = true;
         }
-
-        select.querySelector("select").append(option);
     }
     
-    select.addEventListener("change", (event) =>
+
     {
-        valueCallback(event);
     });
-   
-    return select;
-}
-
-/**
- * 
- * @param {string} label 
- * @param {string} description 
- * @param {(event) => void} valueCallback 
- * @param {boolean} initialValue
- * @returns 
- */
-function toggle(label, description, valueCallback, initialValue)
-{
-    fieldId++;
-    let toggle = document.createElement("div")
-    
-    toggle.classList.toggle("form-group", true);
-    toggle.classList.toggle("toggle", true);
-
-    toggle.innerHTML = `
-        <div class="form-label">${label}</div>
-        <label>
-            <input type="checkbox" name="toggle-${fieldId}" ${initialValue ? "checked" : ""}>
-            ${description}
-        </label>
-    `;
-    
-    toggle.addEventListener("change", (event) =>
-    {
-        event.preventDefault();
-        valueCallback(event);
-    });
-
-    return toggle;
-}
-
-/**
- * 
- * @param {string} label 
- * @param {string} description
- * @param {(event) => void} callback 
- * @returns 
- */
-function button(label, description, callback)
-{
-    fieldId++;
-    
-    let group = document.createElement("div");
-    group.classList.toggle("form-group", true);
-
-    group.innerHTML = `
-        <div class="form-label">${label}</div>
-        <div class="form-description">${description}</div>
-    `;
-
-    let button = document.createElement("button");
-    button.setAttribute("name", `button-${fieldId}`);
-
-    button.innerHTML = label;
-    
-    button.addEventListener("click", (event) =>
-    {
-        callback(event);
-    });
-
-    group.append(button);
-
-    return group;
 }
 
 export default function settingsDialog(state)
@@ -120,7 +20,6 @@ export default function settingsDialog(state)
     
     return new Promise((resolve) =>
     {
-        fieldId = 0;
         
         let dialog = document.createElement('div');
                 
