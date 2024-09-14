@@ -40,6 +40,31 @@ export function conformStorage(): void
     {
         setStorageValue("editor.inlayHints.enabled", false);
     }
+    
+    if(getStorageValue("olcPixelGameEngine") == null)
+    {
+        setStorageValue("olcPixelGameEngine", "v2.27");
+    }
+
+    if(getStorageValue("miniaudio") == null)
+    {
+        setStorageValue("miniaudio", "0.11.21");
+    }
+    
+    if(getStorageValue("olcPGEX_Gamepad") == null)
+    {
+        setStorageValue("olcPGEX_Gamepad", "f5958a5");
+    }
+    
+    if(getStorageValue("olcPGEX_MiniAudio") == null)
+    {
+        setStorageValue("olcPGEX_MiniAudio", "v1.7");
+    }
+
+    if(getStorageValue("olcSoundWaveEngine") == null)
+    {
+        setStorageValue("olcSoundWaveEngine", "v0.02");
+    }
 }
 
 export function getStorageValue(key: string): string | null
