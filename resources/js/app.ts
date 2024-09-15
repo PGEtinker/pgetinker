@@ -29,6 +29,7 @@ import PlayerPanel from './components/PlayerPanel';
 import ProblemsPanel from './components/ProblemsPanel';
 import axios from 'axios';
 import { createToast, ToastType } from './lib/createToast';
+import { getCompilerLibraries } from './lib/compilerLibraries';
 
 declare function GoldenLayout(...args: any[]): void;
 
@@ -228,7 +229,8 @@ export default class PGEtinker
         
         axios.get('/sanctum/csrf-cookie').then(_ => {
             axios.post("/api/share", {
-                code: this.editorPanel.getValue()
+                code: this.editorPanel.getValue(),
+                libraries: getCompilerLibraries()
             }).then((response) =>
             {
                 this.compileSuccessHandler(response.data);
@@ -319,8 +321,10 @@ export default class PGEtinker
         return new Promise<void>((resolve, reject) =>
         {
             axios.get('/sanctum/csrf-cookie').then(_ => {
+                
                 axios.post("/api/compile", {
-                    code: this.editorPanel.getValue()
+                    code: this.editorPanel.getValue(),
+                    libraries: getCompilerLibraries()
                 }).then((response) =>
                 {
                     this.compileSuccessHandler(response.data);
