@@ -23,7 +23,7 @@ Route::get("/libraries", function(Request $request)
     $libraries->statusCode = 200;
     
     return response(json_encode($libraries, JSON_PRETTY_PRINT), 200)->header("Content-Type", "application/json");
-});
+})->middleware("auth.session");
 
 Route::get("/health-check", [CodeController::class, "HealthCheck" ]);
 
