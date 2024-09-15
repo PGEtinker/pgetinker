@@ -25,7 +25,7 @@ function renderVersionSelector(elem, bundleData)
 
     elem.append(select(
         "olcPixelGameEngine",
-        "Choose the version of olcPixelGameEngine to use.",
+        "Choose the version of olcPixelGameEngine libraries to use.",
         (event) =>
         {
             createToast(`Switched olcPixelGameEngine to version: ${event.target.value}.`, ToastType.Info);
