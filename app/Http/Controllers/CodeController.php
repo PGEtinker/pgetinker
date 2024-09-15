@@ -230,7 +230,41 @@ class CodeController extends Controller
         ];
     }
     
+    function validateLibraries($libraries)
+    {
+        if(!isset($libraries["olcPixelGameEngine"]))
+        {
+            Log::error("Library `olcPixelGameEngine` isn't in the set of libraries.");
+            return false;
+        }
+            
+        $libraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/PGEtinker-libs") . "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
+        
+        if(!file_exists($libraryDirectory))
+        {
+            Log::error("Library directory does not exist: {$libraryDirectory}");
+            return false;
+        }
+            
+        unset($libraries["olcPixelGameEngine"]);
 
+        if(count($libraries) == 0)
+        {
+            Log::error("No libraries are set.");
+            return false;
+        }
+
+        foreach($libraries as $library => $version)
+        {
+            if(!file_exists("{$libraryDirectory}/{$library}/{$version}"))
+            {
+                Log::error("Library directory does not exist: {$libraryDirectory}/{$library}/{$version}");
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 
 
