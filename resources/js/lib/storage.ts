@@ -1,3 +1,7 @@
+import { getCompilerLibraries } from "./compilerLibraries";
+// @ts-ignore
+import Cookies from 'js-cookie';
+
 const prefix: string = "pgetinker_";
 const store: Storage = window.localStorage;
 
@@ -65,6 +69,8 @@ export function conformStorage(): void
     {
         setStorageValue("olcSoundWaveEngine", "v0.02");
     }
+
+    Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
 }
 
 export function getStorageValue(key: string): string | null

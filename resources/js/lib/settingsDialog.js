@@ -1,7 +1,8 @@
 import { createToast, ToastType } from './createToast';
 import { getStorageValue, setStorageValue } from './storage';
 import { button, resetFieldId, select, toggle } from "./form";
-
+import Cookies from 'js-cookie';
+import { getCompilerLibraries } from "./compilerLibraries";
 
 function renderVersionSelector(elem, bundleData)
 {
@@ -28,8 +29,10 @@ function renderVersionSelector(elem, bundleData)
         "Choose the version of olcPixelGameEngine libraries to use.",
         (event) =>
         {
-            createToast(`Switched olcPixelGameEngine to version: ${event.target.value}.`, ToastType.Info);
             setStorageValue("olcPixelGameEngine", event.target.value);
+            Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
+            createToast(`Switched olcPixelGameEngine to version: ${event.target.value}.`, ToastType.Info);
+            
             setTimeout(() =>
             {
                 elem.innerHTML = "";
@@ -48,6 +51,7 @@ function renderVersionSelector(elem, bundleData)
             (event) =>
             {
                 setStorageValue(library, event.target.value);
+                Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
                 createToast(`Switched ${library} to version: ${event.target.value}.`, ToastType.Info);
             },
             bundle[library].map(version => ({ label: version, value: version })),
