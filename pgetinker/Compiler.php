@@ -546,7 +546,8 @@ class Compiler
             "pgetinker.o",
             "-std=c++20",
         ]);
-        
+        $this->logger->info("Compiler command:\n\n" . implode("\n", $this->compilerCommand) . "\n");
+
         $this->logger->info("preparing linker command");
         $this->linkerCommand = array_merge($this->linkerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
@@ -566,6 +567,7 @@ class Compiler
             "-sSINGLE_FILE",
             "-std=c++20",
         ]);
+        $this->logger->info("Linker command:\n\n" . implode("\n", $this->linkerCommand) . "\n");
 
         
         return true;
