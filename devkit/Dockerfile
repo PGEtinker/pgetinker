@@ -8,6 +8,9 @@ ARG POSTRES_VERSION=15
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=UTC
 
+# We don't need the standalone Chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+
 RUN echo "## Set timezone" \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TS > /etc/timezone \
@@ -85,6 +88,10 @@ RUN echo "## Update and install packages" \
     && apt-get install -y yarn \
     && apt-get install -y mysql-client \
     && apt-get install -y postgresql-client-$POSTGRES_VERSION \
+    && curl --location --silent https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && apt-get update \
+    && apt-get install google-chrome-stable -y --no-install-recommends \
     && apt-get -y clean \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
