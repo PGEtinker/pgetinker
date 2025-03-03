@@ -34,6 +34,7 @@ RUN echo "## Update and install packages" \
         git-lfs \
         gnupg \
         gosu \
+        hugo \
         libcap2-bin \
         libidn12 \
         libnl-route-3-dev \
@@ -135,10 +136,12 @@ RUN echo "## Create volume mountpoints" \
     && mkdir /home/pgetinker/app \
     && mkdir /home/pgetinker/language-server \
     && mkdir /home/pgetinker/screenshot \
+    && mkdir /home/pgetinker/wiki \
     && chown -R pgetinker:pgetinker /opt/libs \
     && chown -R pgetinker:pgetinker /home/pgetinker/app \
     && chown -R pgetinker:pgetinker /home/pgetinker/language-server \
     && chown -R pgetinker:pgetinker /home/pgetinker/screenshot \
+    && chown -R pgetinker:pgetinker /home/pgetinker/wiki \
     && echo "## Done"
 
 USER pgetinker
@@ -149,6 +152,7 @@ VOLUME /opt/libs
 VOLUME /home/pgetinker/app
 VOLUME /home/pgetinker/language-server
 VOLUME /home/pgetinker/screenshot
+VOLUME /home/pgetinker/wiki
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY php.ini /etc/php/8.3/cli/conf.d/99-pgetinker.ini
