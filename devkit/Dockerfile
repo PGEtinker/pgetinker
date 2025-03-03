@@ -133,8 +133,12 @@ RUN echo "## Build and Install nsjail" \
 RUN echo "## Create volume mountpoints" \
     && mkdir /opt/libs \
     && mkdir /home/pgetinker/app \
+    && mkdir /home/pgetinker/language-server \
+    && mkdir /home/pgetinker/screenshot \
     && chown -R pgetinker:pgetinker /opt/libs \
     && chown -R pgetinker:pgetinker /home/pgetinker/app \
+    && chown -R pgetinker:pgetinker /home/pgetinker/language-server \
+    && chown -R pgetinker:pgetinker /home/pgetinker/screenshot \
     && echo "## Done"
 
 USER pgetinker
@@ -143,6 +147,8 @@ WORKDIR /home/pgetinker
 # Define volumes
 VOLUME /opt/libs
 VOLUME /home/pgetinker/app
+VOLUME /home/pgetinker/language-server
+VOLUME /home/pgetinker/screenshot
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY php.ini /etc/php/8.3/cli/conf.d/99-pgetinker.ini
