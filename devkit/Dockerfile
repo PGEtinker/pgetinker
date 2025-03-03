@@ -138,7 +138,7 @@ RUN echo "## Create volume mountpoints" \
     && echo "## Done"
 
 USER pgetinker
-WORKDIR /home/pgetinker/app
+WORKDIR /home/pgetinker
 
 # Define volumes
 VOLUME /opt/libs
