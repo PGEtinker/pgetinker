@@ -154,6 +154,7 @@ VOLUME /home/pgetinker/language-server
 VOLUME /home/pgetinker/screenshot
 VOLUME /home/pgetinker/wiki
 
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY php.ini /etc/php/8.3/cli/conf.d/99-pgetinker.ini
 
