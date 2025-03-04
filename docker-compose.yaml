@@ -5,11 +5,11 @@ services:
             context: ./devkit
         image: pgetinker/devkit:latest
         volumes:
-            - ${LIBRAIES_PATH:-./libs}:/opt/libs
-            - ${APP_PATH:-./app}:/home/pgetinker/app
-            - ${LANGUAGE_SERVER_PATH:-./language-server}:/home/pgetinker/language-server
-            - ${SCREENSHOT_PATH:-./screenshot}:/home/pgetinker/screenshot
-            - ${WIKI_PATH:-./wiki}:/home/pgetinker/wiki
+            - ${APP_PATH:-./PGEtinker/app}:/home/pgetinker/app
+            - ${LANGUAGE_SERVER_PATH:-./PGEtinker/language-server}:/home/pgetinker/language-server
+            - ${LIBRAIES_PATH:-./PGEtinker/libs}:/opt/libs
+            - ${SCREENSHOT_PATH:-./PGEtinker/screenshot}:/home/pgetinker/screenshot
+            - ${WIKI_PATH:-./PGEtinker/wiki}:/home/pgetinker/wiki
             - ./devkit/docker-entrypoint.sh:/docker-entrypoint.sh
             - ./devkit/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
         ports:
