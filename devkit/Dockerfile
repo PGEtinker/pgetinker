@@ -34,7 +34,6 @@ RUN echo "## Update and install packages" \
         git-lfs \
         gnupg \
         gosu \
-        hugo \
         libcap2-bin \
         libidn12 \
         libnl-route-3-dev \
@@ -87,6 +86,9 @@ RUN echo "## Update and install packages" \
     && apt-get install -y yarn \
     && apt-get install -y mysql-client \
     && apt-get install -y postgresql-client-$POSTGRES_VERSION \
+    && wget -O /hugo.deb https://github.com/gohugoio/hugo/releases/download/v0.145.0/hugo_extended_0.145.0_linux-amd64.deb \
+    && apt install -y -q /hugo.deb \
+    && rm /hugo.deb \
     && curl --location --silent https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt-get update \
