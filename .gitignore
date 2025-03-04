@@ -1,1 +1,6 @@
 .env
+app
+language-server
+libs
+screenshot
+wiki
