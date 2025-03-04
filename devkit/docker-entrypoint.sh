@@ -15,8 +15,9 @@ check_laravel_app() {
 
     # Check for Laravel-specific files
     if [ ! -f "$app_dir/artisan" ] || [ ! -f "$app_dir/composer.json" ]; then
-        echo "## Error: '$app_dir' does not appear to be a Laravel application."
-        echo "## Missing artisan or composer.json files."
+        echo "## Error: '$app_dir' does not contain PGEtinker/app."
+        echo "## Did you clone the repo and set it's location in the .env file?"
+        echo ""
         return 2
     fi
 
@@ -55,8 +56,8 @@ check_laravel_app() {
         echo "## NPM dependencies found."
     fi
 
-    # TODO: Check for database driver and do a fresh migration if needed.
-    if [ "$DB_CONNECTION" = "" ]; then
+    # Check for database driver and do a fresh migration if needed.
+    if [ "$DB_CONNECTION" = "" ] || [ "$DB_CONNECTION" = "sqlite3" ]; then
         echo "## Database connection not set, assuming sqlite3."
 
         if [ ! -f database/database.sqlite ]; then
@@ -90,6 +91,14 @@ check_language_server() {
         return 1
     fi    
     
+    # Check for language-server specific files
+    if [ ! -f "$app_dir/server.ts" ] || [ ! -f "$app_dir/package.json" ]; then
+        echo "## Error: '$app_dir' does not contain PGEtinker/language-server."
+        echo "## Did you clone the repo and set it's location in the .env file?"
+        echo ""
+        return 2
+    fi
+
     cd $app_dir
 
     # Check for node_modules directory (NPM dependencies)
@@ -122,6 +131,14 @@ check_screenshot() {
         return 1
     fi    
 
+    # Check for screenshot specific files
+    if [ ! -f "$app_dir/index.js" ] || [ ! -f "$app_dir/package.json" ]; then
+        echo "## Error: '$app_dir' does not contain PGEtinker/screenshot."
+        echo "## Did you clone the repo and set it's location in the .env file?"
+        echo ""
+        return 2
+    fi
+
     cd $app_dir
 
     # Check for node_modules directory (NPM dependencies)
@@ -153,17 +170,20 @@ check_libraries() {
         echo "## Error: Directory '$app_dir' does not exist."
         return 1
     fi    
-    
+
     # Check for pgetinker library specific files
     if [ ! -f "$app_dir/manifest.json" ] || [ ! -f "$app_dir/Makefile" ]; then
-        echo "## Error: '$app_dir' does not appear contain the pgetinker libraries."
+        echo "## Error: '$app_dir' does not contain PGEtinker/libs."
+        echo "## Did you clone the repo and set it's location in the .env file?"
+        echo ""
         return 2
     fi
 
     echo "## PGEtinker libraries found in '$app_dir'"
     cd $app_dir
-
-    bash build-libs.sh
+    
+    # build the libraries, if needed.
+    bash build-libs.sh > /dev/null 2>&1
     
     if [ $? -eq 0 ]; then
         echo "## PGEtinker libraries built."
@@ -177,35 +197,60 @@ check_libraries() {
     return 0
 }
 
-# hugo.toml
+check_wiki() {
+    local app_dir="/home/pgetinker/wiki"
+    echo "#### BEGIN: checking for wiki at $app_dir"
 
+    # Check if directory exists
+    if [ ! -d "$app_dir" ]; then
+        echo "## Error: Directory '$app_dir' does not exist."
+        return 1
+    fi
+
+    # Check for wiki specific files
+    if [ ! -f "$app_dir/hugo.toml" ]; then
+        echo "## Error: '$app_dir' does not contain PGEtinker/wiki."
+        echo "## Did you clone the repo and set it's location in the .env file?"
+        echo ""
+        return 2
+    else
+        echo "## wiki found."
+    fi
+
+    echo "#### END: checking for wiki at $app_dir" && echo ""
+
+    return 0    
+}
+
+FAILED=0
 
 # Call the function with the provided directory
 check_laravel_app || {
-    echo "## Error: the laravel app failed catastrophically and can not start."
-    exit 1
+    FAILED=1
 }
 
 check_language_server || {
-    echo "## Error: the language server failed catastrophically and can not start."
-    exit 2
+    FAILED=1
 }
 
 check_screenshot || {
-    echo "## Error: the screenshot service failed catastrophically and can not start."
-    exit 3
+    FAILED=1
 }
 
 check_libraries || {
-    echo "## Error: the pgetinker libraries could not be found or built."
-    exit 4
+    FAILED=1
 }
 
 check_wiki || {
-    echo "## Error: the wiki failed catastrophically and can not start."
-    exit 5
+    FAILED=1
 }
 
-cd /home/pgetinker
-
-exec supervisord -c /etc/supervisor/conf.d/supervisord.conf
+if [ $FAILED -eq 0 ]; then
+    echo "#### PGEtinker startup tests have passed. Starting services. ####"
+    echo ""
+    cd /home/pgetinker
+    exec supervisord -c /etc/supervisor/conf.d/supervisord.conf
+else
+    echo "## One or more commands failed, see above."
+    exit 1
+fi
