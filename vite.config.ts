@@ -6,6 +6,10 @@ import importMetaUrlPlugin from '@codingame/esbuild-import-meta-url-plugin';
 export default defineConfig({
     base: "./",
     server: {
+        host: true,
+        hmr: {
+            host: "localhost",
+        },
         watch: {
             ignored: [
                 path.join(process.cwd(), "storage", "app", "workspaces", "**")
