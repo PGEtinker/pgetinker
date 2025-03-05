@@ -139,11 +139,13 @@ RUN echo "## Create volume mountpoints" \
     && mkdir /home/pgetinker/language-server \
     && mkdir /home/pgetinker/screenshot \
     && mkdir /home/pgetinker/wiki \
+    && mkdir /home/pgetinker/tmp \
     && chown -R pgetinker:pgetinker /opt/libs \
     && chown -R pgetinker:pgetinker /home/pgetinker/app \
     && chown -R pgetinker:pgetinker /home/pgetinker/language-server \
     && chown -R pgetinker:pgetinker /home/pgetinker/screenshot \
     && chown -R pgetinker:pgetinker /home/pgetinker/wiki \
+    && chown -R pgetinker:pgetinker /home/pgetinker/tmp \
     && echo "## Done"
 
 USER pgetinker
@@ -155,6 +157,7 @@ VOLUME /home/pgetinker/app
 VOLUME /home/pgetinker/language-server
 VOLUME /home/pgetinker/screenshot
 VOLUME /home/pgetinker/wiki
+VOLUME /home/pgetinker/tmp
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
