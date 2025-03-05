@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=UTC
 
 # We don't need the standalone Chromium
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 RUN echo "## Set timezone" \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
