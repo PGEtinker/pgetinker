@@ -6,7 +6,7 @@ use App\Models\Code;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class MoveDatabase extends Command
+class IdentifyDatabase extends Command
 {
     /**
      * The name and signature of the console command.
