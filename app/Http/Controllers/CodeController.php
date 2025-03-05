@@ -250,7 +250,7 @@ class CodeController extends Controller
             return false;
         }
             
-        $libraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/PGEtinker-libs") . "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
+        $libraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs") . "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
         
         if(!file_exists($libraryDirectory))
         {

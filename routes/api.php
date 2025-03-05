@@ -10,7 +10,7 @@ Route::post("/compile", [CodeController::class, "Compile" ])->middleware("auth.s
 
 Route::get("/libraries", function(Request $request)
 {
-    if(!file_exists(env("PGETINKER_LIBS_DIRECTORY") . "/manifest.json"))
+    if(!file_exists(env("PGETINKER_LIBS_DIRECTORY", "/opt/libs") . "/manifest.json"))
     {
         return response([
             "statusCode" => 404,
@@ -18,7 +18,7 @@ Route::get("/libraries", function(Request $request)
         ], 404)->header("Content-Type", "application/json");
     }
 
-    $libraries = json_decode(file_get_contents(env("PGETINKER_LIBS_DIRECTORY") . "/manifest.json"));
+    $libraries = json_decode(file_get_contents(env("PGETINKER_LIBS_DIRECTORY", "/opt/libs") . "/manifest.json"));
     unset($libraries->macroToObject);
     $libraries->statusCode = 200;
     

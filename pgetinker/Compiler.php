@@ -399,7 +399,7 @@ class Compiler
     {
         $this->logger->info("begin processing code");
         
-        $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/PGEtinker-libs");
+        $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
 
         if(!file_exists($baseLibraryDirectory . "/manifest.json"))
         {
@@ -467,7 +467,7 @@ class Compiler
     {
         $compilerEnvironment = env("COMPILER_ENVIRONMENT", "local");
         
-        $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/PGEtinker-libs");
+        $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
         
         $libraries = $this->libraryVersions;
         $baseLibraryDirectory .= "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
