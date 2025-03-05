@@ -222,6 +222,12 @@ check_wiki() {
     return 0    
 }
 
+if [ ! $# -eq 0 ]; then
+    cd /home/pgetinker/tmp
+    exec "$@"
+    exit 0
+fi
+
 FAILED=0
 
 # Call the function with the provided directory
