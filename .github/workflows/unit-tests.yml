@@ -27,6 +27,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      - name: Build PGEtinker Docker Images
+        run: |
+          cp .env.sail .env
+          ./scripts/pgetinker build
+
       - name: Initialize PGEtinker
         run: ./scripts/pgetinker initialize ci
       
