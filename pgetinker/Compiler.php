@@ -22,14 +22,22 @@ class Compiler
     private $compilerExitCode;
 
     private $environmentVariables = [];
-
-    private $errors = [];
     
+    private $errors = [];
+
     private $foundGeometryHeader = false;
 
     private $html = "";
 
+    private $implementationMacros = [];
+
     private $linkerCommand = [];
+
+    private $libraryDirectories = [];
+    
+    private $libraryMap = [];
+    
+    private $libraryVersions = [];
 
     private $linkerExitCode;
 
@@ -47,6 +55,16 @@ class Compiler
         return $this;
     }
     
+    public function setLibraryVersions($libraries)
+    {
+        $this->libraryVersions = $libraries;
+    }
+
+    public function getLibraryVersions()
+    {
+        return $this->libraryVersions;
+    }
+
     public function serialize()
     {
         $object = new stdClass();
@@ -57,6 +75,7 @@ class Compiler
         $object->environmentVariables = $this->environmentVariables;
         $object->errors = $this->errors;
         $object->html = $this->html;
+        $object->libraryVersions = $this->libraryVersions;
         $object->linkerCommand = $this->linkerCommand;
         $object->linkerExitCode = $this->linkerExitCode;
         $object->linkerInputFiles = $this->linkerInputFiles;
@@ -75,12 +94,18 @@ class Compiler
         $this->environmentVariables = $object->environmentVariables;
         $this->errors = $object->errors;
         $this->html = $object->html;
+        $this->libraryVersions = $object->libraryVersions;
         $this->linkerCommand = $object->linkerCommand;
         $this->linkerExitCode = $object->linkerExitCode;
         $this->linkerInputFiles = $object->linkerInputFiles;
         $this->logger = null;
         $this->output = $object->output;
         $this->workingDirectory = "";
+    }
+
+    public function getCode()
+    {
+        return implode("\n", $this->code);
     }
 
     public function setCode(string $code)
@@ -100,7 +125,18 @@ class Compiler
         if($raw)
             return implode("\n", $this->output);
         
-        return str_replace("/opt/emsdk/upstream/emscripten/cache/sysroot", "/***", implode("\n", $this->output));
+        $filtered = [];
+        
+        foreach($this->output as $text)
+        {
+            // skip cache messages
+            if(strpos($text, "cache") === 0)
+                continue; 
+
+            $filtered[] = str_replace("/opt/emsdk/upstream/emscripten/cache/sysroot", "/***", $text);
+        }
+
+        return implode("\n", $filtered);
     }
     
     public function getErrorOutput($raw = false)
@@ -108,7 +144,18 @@ class Compiler
         if($raw)
             return implode("\n", $this->errors);
         
-        return str_replace("/opt/emsdk/upstream/emscripten/cache/sysroot", "/***", implode("\n", $this->errors));
+        $filtered = [];
+        
+        foreach($this->errors as $text)
+        {
+            // skip cache messages
+            if(strpos($text, "cache") === 0)
+                continue; 
+
+            $filtered[] = str_replace("/opt/emsdk/upstream/emscripten/cache/sysroot", "/***", $text);
+        }
+
+        return implode("\n", $filtered);
     }
 
     public function getHtml()
@@ -162,49 +209,40 @@ class Compiler
 
     private function processCodeDetectImplementationMacros($index)
     {
-        $libraryMap = [
-            'OLC_PGE_APPLICATION'      => 'olcPixelGameEngine.o',
-            'OLC_SOUNDWAVE_ENGINE'     => 'olcSoundWaveEngine.o',
-            'OLC_PGEX_GRAPHICS2D'      => 'olcPGEX_Graphics2D.o',
-            'OLC_PGEX_GRAPHICS3D'      => 'olcPGEX_Graphics3D.o',
-            'OLC_PGEX_POPUPMENU'       => 'olcPGEX_PopUpMenu.o',
-            'OLC_PGEX_QUICKGUI'        => 'olcPGEX_QuickGUI.o',
-            'OLC_PGEX_RAYCASTWORLD'    => 'olcPGEX_RayCastWorld.o',
-            'OLC_PGEX_SOUND'           => 'olcPGEX_Sound.o',
-            'OLC_PGEX_SPLASHSCREEN'    => 'olcPGEX_SplashScreen.o',
-            'OLC_PGEX_TRANSFORMEDVIEW' => 'olcPGEX_TransformedView.o',
-            'OLC_PGEX_WIREFRAME'       => 'olcPGEX_Wireframe.o',
-        ];       
-        
-        // filter macros to detect implementation #define
-        if(str_contains($this->code[$index], "#define"))
-        {
-            $foundImplementationMacro = false;
-            foreach($libraryMap as $macro => $objectFileName)
-            {
-                if(str_contains($this->code[$index], $macro))
-                {
-                    // blank the line
-                    $this->code[$index] = "";
-                    
-                    if($macro == "OLC_PGE_APPLICATION" && $this->foundGeometryHeader)
-                    {
-                        $objectFileName = "olcPixelGameEngine_withGeometry.o";
-                        $this->logger->info("Found the need for geometry utility support");
-                    }
-                        
-                    // indicate that we use this library
-                    $this->linkerInputFiles[] = "./lib/{$objectFileName}";
-                    
-                    $this->logger->info("Found implementation macro: {$macro}");
-                    $foundImplementationMacro = true;
-                    break;
-                }
-            }
+        // broad phase, don't process if this line doesn't at least contain the word "define"
+        if(!str_contains($this->code[$index], "define"))
+            return false;
 
-            if($foundImplementationMacro)
-                return true;
-        }        
+        $foundImplementationMacro = false;
+        
+        foreach($this->libraryMap as $macro => $objectFileName)
+        {
+            preg_match(
+                '/(.*)\s*#\s*define?\s+' . $macro . '(.*)/',
+                $this->code[$index],
+                $match,
+                PREG_OFFSET_CAPTURE,
+                0
+            );
+            
+            // no match, this time
+            if(count($match) == 0)
+                continue;
+
+            if(!empty(trim($match[1][0])) || !empty(trim($match[2][0])))
+                continue;
+            
+            $this->implementationMacros[] = [
+                "macro" => $macro,
+                "lineIndex" => $index
+            ];
+            
+            $foundImplementationMacro = true;
+            break;
+        }
+
+        if($foundImplementationMacro)
+            return true;
         
         return false;
     }
@@ -229,24 +267,33 @@ class Compiler
 
             if(env("COMPILER_REMOTE_INCLUDE_CACHING", false))
             {
-                $remoteIncludeCache = Redis::get("remote_include_{$hashedUrl}");
-                
-                // if we have a cached version of the url's contents, don't pull it
-                if(isset($remoteIncludeCache))
+                try
                 {
-                    $this->logger->info("remote include cache hit");
-                    $remoteIncludeCache = json_decode($remoteIncludeCache, false);
+                    $remoteIncludeCache = Redis::get("remote_include_{$hashedUrl}");
                     
-                    // just because it's cached, doesn't mean you get to compile faster!
-                    usleep(floatval($remoteIncludeCache->time) * 1000000);
-                    
-                    file_put_contents(
-                        "{$this->workingDirectory}/{$potentialFilename}",
-                        $remoteIncludeCache->content
-                    );
-                    
-                    $this->code[$index] = '#include "' . $potentialFilename .'"';
-                    return true;
+                    // if we have a cached version of the url's contents, don't pull it
+                    if(isset($remoteIncludeCache))
+                    {
+                        $this->logger->info("remote include cache hit");
+                        $remoteIncludeCache = json_decode($remoteIncludeCache, false);
+                        
+                        Redis::expire("remote_include_{$hashedUrl}", env("REDIS_TTL", 60));
+                        
+                        // just because it's cached, doesn't mean you get to compile faster!
+                        usleep(floatval($remoteIncludeCache->time) * 1000000);
+                        
+                        file_put_contents(
+                            "{$this->workingDirectory}/{$potentialFilename}",
+                            $remoteIncludeCache->content
+                        );
+                        
+                        $this->code[$index] = '#include "' . $potentialFilename .'"';
+                        return true;
+                    }
+                }
+                catch(Exception $e)
+                {
+                    Log::emergency("Remote Include Cache Enabled, But Redis Failed");
                 }
             }
             
@@ -333,7 +380,14 @@ class Compiler
                 $remoteIncludeCache->time = $requestDuration;
                 $remoteIncludeCache->content = $response->body();
                 
-                Redis::set("remote_include_{$hashedUrl}", json_encode($remoteIncludeCache, JSON_PRETTY_PRINT));
+                try
+                {
+                    Redis::setex("remote_include_{$hashedUrl}", env("REDI_TTL", 60), json_encode($remoteIncludeCache, JSON_PRETTY_PRINT));
+                }
+                catch(Exception $e)
+                {
+                    Log::emergency("Remote Inlucde Cache Enabled, But Redis Failed");
+                }
             }
 
             $this->code[$index] = '#include "' . $potentialFilename .'"';
@@ -341,9 +395,22 @@ class Compiler
         }
     }
     
-    private function processCode()
+    public function processCode()
     {
         $this->logger->info("begin processing code");
+        
+        $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
+
+        if(!file_exists($baseLibraryDirectory . "/manifest.json"))
+        {
+            $this->errors[] = "library manifest doesn't exist";
+            return false;
+        }
+
+        $temp = json_decode(file_get_contents($baseLibraryDirectory . "/manifest.json"), true);
+        $this->libraryMap = $temp["macroToObject"];
+        unset($temp);
+
         $startTime = microtime(true);
 
         for($i = 0; $i < count($this->code); $i++)
@@ -370,6 +437,27 @@ class Compiler
                 continue;
         }
 
+
+        if(count($this->implementationMacros) != 0)
+        {
+            foreach($this->implementationMacros as $implementation)
+            {
+                if($implementation["macro"] == "OLC_PGE_APPLICATION")
+                {
+                    if($this->foundGeometryHeader)
+                    {
+                        $this->linkerInputFiles[] = "olcPixelGameEngine/olcPixelGameEngine_withGeometry.o";
+                        $this->code[$implementation["lineIndex"]] = "";
+                        continue;
+                    }
+                }
+                
+                $this->linkerInputFiles[] = $this->libraryMap[$implementation["macro"]];
+                $this->code[$implementation["lineIndex"]] = "";
+                continue;
+            }
+        }
+        
         $this->logger->info("finished processing code");
         
         return (count($this->errors) == 0);
@@ -377,9 +465,19 @@ class Compiler
     
     private function prepareEnvironment()
     {
-        $version = "v0.02";
-
         $compilerEnvironment = env("COMPILER_ENVIRONMENT", "local");
+        
+        $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
+        
+        $libraries = $this->libraryVersions;
+        $baseLibraryDirectory .= "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
+        unset($libraries["olcPixelGameEngine"]);
+        $this->libraryDirectories["olcPixelGameEngine"] = $baseLibraryDirectory . "/olcPixelGameEngine";
+
+        foreach($libraries as $library => $version)
+        {
+            $this->libraryDirectories["{$library}"] = "{$baseLibraryDirectory}/{$library}/{$version}";
+        }
 
         $this->logger->info("writing linesOfCode to {$this->workingDirectory}/pgetinker.cpp");
         file_put_contents(
@@ -397,9 +495,12 @@ class Compiler
                 "PATH" => "/bin:/usr/bin:/opt/emsdk:/opt/emsdk/upstream/emscripten",
             ]);
     
-            symlink(base_path() . "/third_party/{$version}/include", "{$this->workingDirectory}/include");
-            symlink(base_path() . "/third_party/{$version}/lib", "{$this->workingDirectory}/lib");
-            symlink(base_path() . "/third_party/emscripten_shell.html", "{$this->workingDirectory}/emscripten_shell.html");
+            foreach($this->libraryDirectories as $library => $directory)
+            {
+                symlink($directory, "{$this->workingDirectory}/{$library}");
+            }
+
+            symlink(base_path() . "/misc/emscripten_shell.html", "{$this->workingDirectory}/emscripten_shell.html");
         }
 
         if($compilerEnvironment === "nsjail")
@@ -409,17 +510,20 @@ class Compiler
             $nsJailCommand = [
                 "nsjail",
                 "--config",
-                base_path() . env("COMPILER_NSJAIL_CFG", "/third_party/nsjail-emscripten.cfg"),
+                base_path() . env("COMPILER_NSJAIL_CFG", "/misc/nsjail-emscripten.cfg"),
                 "-B",
-                "{$this->workingDirectory}:/user",
+                "{$this->workingDirectory}:/workspace",
                 "-R",
-                base_path() . "/third_party/{$version}/include:/user/include",
-                "-R",
-                base_path() . "/third_party/{$version}/lib:/user/lib",
-                "-R",
-                base_path() . "/third_party/emscripten_shell.html:/user/emscripten_shell.html",
-                "--",
+                base_path() . "/misc/emscripten_shell.html:/workspace/emscripten_shell.html",
             ];
+
+            foreach($this->libraryDirectories as $library => $directory)
+            {
+                $nsJailCommand[] = "-R";
+                $nsJailCommand[] = "{$directory}:/workspace/{$library}";
+            }
+
+            $nsJailCommand[] = "--";
 
             $this->compilerCommand = $nsJailCommand;
             $this->linkerCommand   = $nsJailCommand;
@@ -429,16 +533,21 @@ class Compiler
         $this->compilerCommand = array_merge($this->compilerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
             "-c",
-            "-I./include/olcPixelGameEngine",
-            "-I./include/olcPixelGameEngine/extensions",
-            "-I./include/olcPixelGameEngine/utilities",
-            "-I./include/olcSoundWaveEngine",
+            "-O1",
+            "-I./miniaudio",
+            "-I./olcPGEX_Gamepad",
+            "-I./olcPGEX_MiniAudio",
+            "-I./olcPixelGameEngine",
+            "-I./olcPixelGameEngine/extensions",
+            "-I./olcPixelGameEngine/utilities",
+            "-I./olcSoundWaveEngine",
             "pgetinker.cpp",
             "-o",
             "pgetinker.o",
             "-std=c++20",
         ]);
-        
+        $this->logger->info("Compiler command:\n\n" . implode("\n", $this->compilerCommand) . "\n");
+
         $this->logger->info("preparing linker command");
         $this->linkerCommand = array_merge($this->linkerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
@@ -458,6 +567,10 @@ class Compiler
             "-sSINGLE_FILE",
             "-std=c++20",
         ]);
+        $this->logger->info("Linker command:\n\n" . implode("\n", $this->linkerCommand) . "\n");
+
+        
+        return true;
     }
 
     private function compile()
@@ -571,7 +684,10 @@ class Compiler
             return false;
         }
 
-        $this->prepareEnvironment();
+        if(!$this->prepareEnvironment())
+        {
+            return false;
+        }
 
         if(!$this->compile())
         {
@@ -595,8 +711,12 @@ class Compiler
             
             Storage::disk("local")->deleteDirectory($this->workingDirectory);
 
-            Log::info("Compile: finished successfully");
+            $this->logger->info("OUTPUT:\n" . $this->getOutput());
+            $this->logger->info("ERROR:\n" . $this->getErrorOutput());
+            $this->logger->info("LIBRARIES:\n" . implode("\n", $this->linkerInputFiles));
 
+            Log::info("Compile: finished successfully");
+            $this->output[] = "Compiled Successfully";
             return true;
         }
         
@@ -616,9 +736,9 @@ class Compiler
                 ->command([
                     "nsjail",
                     "--config",
-                    base_path() . env("COMPILER_NSJAIL_CFG", "/third_party/nsjail-emscripten.cfg"),
+                    base_path() . env("COMPILER_NSJAIL_CFG", "/misc/nsjail-emscripten.cfg"),
                     "-B",
-                    "{$this->workingDirectory}:/user",
+                    "{$this->workingDirectory}:/workspace",
                     "--",
                     "/opt/emsdk/upstream/emscripten/em++",
                     "-v",

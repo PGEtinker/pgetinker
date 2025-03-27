@@ -2,12 +2,12 @@ export default function agreeDialog()
 {
     return new Promise((resolve, reject) =>
     {
-        let agreeDialog = document.createElement("div");
+        let dialog = document.createElement("div");
     
-        agreeDialog.classList.toggle("dialog", true);
-        agreeDialog.classList.toggle("first-time", true);
+        dialog.classList.toggle("dialog", true);
+        dialog.classList.toggle("first-time", true);
 
-        agreeDialog.innerHTML = `
+        dialog.innerHTML = `
         <div class="window">
             <div class="header">Welome to PGEtinker!</div>
             <div class="content">
@@ -26,7 +26,7 @@ export default function agreeDialog()
                     <li>
                         Store information in your browser to be used within
                         the confines of the PGEtinker online application.
-                        It's for stuff like persiting your layout, your
+                        It's for stuff like persisting your layout, your
                         theme, and other options so when you come back
                         it's the way you left it.
                     </li>
@@ -56,19 +56,19 @@ export default function agreeDialog()
             </div>
         </div>`;
         
-        agreeDialog.querySelector("#i-disagree").addEventListener("click", (event) =>
+        dialog.querySelector("#i-disagree").addEventListener("click", (event) =>
         {
             reject();
-            agreeDialog.remove();
+            dialog.remove();
         });
 
-        agreeDialog.querySelector("#i-agree").addEventListener("click", (event) =>
+        dialog.querySelector("#i-agree").addEventListener("click", (event) =>
         {
             resolve();
-            agreeDialog.remove();
+            dialog.remove();
         });
         
-        document.body.appendChild(agreeDialog);
+        document.body.appendChild(dialog);
     });
 
 }
