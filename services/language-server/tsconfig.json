@@ -1,0 +1,53 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "moduleResolution": "Bundler",
+      "outDir": "dist",
+      "lib": [
+        "ESNext",
+        "DOM"
+      ],
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      // Enable project compilation
+      "composite": true,
+      "declaration": true,
+      "declarationMap": true,
+      "sourceMap": true,
+      "inlineSources": false,
+      "stripInternal": true,
+      "strict": true,
+      "strictPropertyInitialization": false,
+      "importHelpers": true,
+      "downlevelIteration": false,
+      "noImplicitReturns": true,
+      "noUnusedParameters": true,
+      "noUnusedLocals": true,
+      // Enable type checking of declaration files, skip in packages where needed
+      "skipLibCheck": false,
+       // Disallow inconsistently-cased references to the same file
+      "forceConsistentCasingInFileNames": true,
+      "noImplicitOverride": true,
+      "experimentalDecorators": true,
+      "jsx": "react"
+    },
+    "include": [
+      "**/src/**/*.ts",
+      "**/test/**/*.ts",
+      "**/src/**/*.tsx",
+      "**/test/**/*.tsx",
+      "**/packages/*/*.ts",
+      "**/packages/*/*.js",
+      "**/resources/**/*.mts",
+      "**/resources/**/*.mjs",
+      "*.js",
+      "*.ts",
+    ],
+    "exclude": [
+      "dist/**/*",
+      "lib/**/*",
+      "node_modules/**/*"
+    ]
+  }
+  
