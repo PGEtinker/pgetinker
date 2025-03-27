@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+function language_server_init() {
+    local app_dir="/var/www/html"
+    echo "#### BEGIN: checking for language server at $app_dir"
+    
+    # Check if directory exists
+    if [ ! -d "$app_dir" ]; then
+        echo "## Error: Directory '$app_dir' does not exist."
+        return 1
+    fi    
+    
+    # Check for language-server specific files
+    if [ ! -f "$app_dir/server.ts" ] || [ ! -f "$app_dir/package.json" ]; then
+        echo "## Error: '$app_dir' does not contain PGEtinker/language-server."
+        echo ""
+        return 2
+    fi
+
+    cd $app_dir
+
+    # Check for node_modules directory (NPM dependencies)
+    if [ ! -d "$app_dir/node_modules" ]; then
+        echo "## NPM dependencies not installed. Attempting to install"
+        
+        npm install --quiet > /dev/null 2>&1
+        
+        if [ $? -eq 0 ]; then
+            echo "## NPM dependencies installed."
+        else
+            echo "## NPM dependencies failed to install."
+            return 4
+        fi
+    else
+        echo "## NPM dependencies found."
+    fi
+
+    echo "#### END: checking for language server at $app_dir" && echo ""
+    return 0    
+}
+
+
+if [ "$SUPERVISOR_NPM_USER" != "root" ] && [ "$SUPERVISOR_NPM_USER" != "sail" ]; then
+    echo "You should set SUPERVISOR_PHP_USER to either 'sail' or 'root'."
+    exit 1
+fi
+
+if [ ! -z "$WWWUSER" ]; then
+    usermod -u $WWWUSER sail
+fi
+
+if [ $# -gt 0 ]; then
+    if [ "$SUPERVISOR_NPM_USER" = "root" ]; then
+        exec "$@"
+    else
+        exec gosu $WWWUSER "$@"
+    fi
+else
+    gosu $WWWUSER bash -c "$(declare -f language_server_init); language_server_init"
+    
+    if [ $? -eq 0 ]; then
+        echo "Language Server initialized."
+    else
+        echo "Language Server failed to initialize."
+        exit 1
+    fi
+
+    exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+fi
