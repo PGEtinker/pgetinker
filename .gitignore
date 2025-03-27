@@ -4,6 +4,7 @@
 /public/hot
 /public/storage
 /public/wiki
+/services/wiki
 /storage/*.key
 /vendor
 .env
