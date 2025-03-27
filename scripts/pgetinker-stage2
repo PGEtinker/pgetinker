@@ -662,6 +662,8 @@ elif [ "$1" == "initialize" ]; then
     echo "  - Install NPM dependencies."
     echo "  - Generate laravel application key."
     echo "  - Generate a pre-built frontend."
+    echo "  - Create wiki symlinks."
+    echo "  - Init and Update Submodules."
     echo "  - Run laravel migration scripts."
     echo ""
     echo "This command usually needs to be run once after pulling"
@@ -727,8 +729,14 @@ elif [ "$1" == "initialize" ]; then
             echo "## Done."
             echo
             
-            echo "#### Create hugo symlink."
+            echo "#### Create wiki symlinks."
             ln -s /var/www/html/services/wiki/public public/wiki
+            echo "## Done."
+            echo
+            
+            echo "#### Init and Update Submodules."
+            git submodule init
+            git submodule update    
             echo "## Done."
             echo
 
