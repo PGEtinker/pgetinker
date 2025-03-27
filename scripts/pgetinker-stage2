@@ -645,12 +645,15 @@ elif [ "$1" == "open" ]; then
 # Initialize PGEtinker.
 elif [ "$1" == "initialize" ]; then
 
+    if [ -z "$("${DOCKER_COMPOSE[@]}" ps -q 2> /dev/null)" ]; then
+        EXEC="no"
+    fi
+
     if [ "$EXEC" == "yes" ]; then
         echo "PGEtinker services are running."
-        echo "Shutting down!"
+        echo "Run: ./scripts/pgetinker down"
         echo ""
-        ./scripts/pgetinker down
-        echo ""
+        exit
     fi
 
     echo "This command will:"
