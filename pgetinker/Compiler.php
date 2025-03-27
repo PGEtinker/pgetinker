@@ -672,11 +672,24 @@ class Compiler
     {
         if(!file_exists($this->workingDirectory) || !is_dir($this->workingDirectory))
             throw new Exception("Working Directory Inaccessible. Did you set one?");
-        
+
         $logHandler = new StreamHandler("{$this->workingDirectory}/compiler.log");
         $logHandler->setFormatter(new LineFormatter(null, null, true, true));
         
         $this->logger->setHandlers([$logHandler]);
+
+        if(empty($this->libraryVersions))
+        {
+            $manifestPath = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs") . "/manifest.json";
+            
+            if(!file_exists($manifestPath))
+                throw new Exception("Library manifest does not exist!");
+            
+            $manifest = json_decode(file_get_contents($manifestPath), true);
+            $this->libraryVersions = $manifest["latest"];
+            $this->logger->info("Libraries not set, using latest as default!");
+        }
+        
 
         if(!$this->processCode())
         {
