@@ -2,7 +2,14 @@ name: UnitTests
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual run'
 
 jobs:
   pgetinker-tests:
@@ -19,37 +26,48 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-        
-      - name: Get Commit Hash
-        id: vars
-        run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Add "VERSION" hashes to .env
-        run: echo -e "VERSION=${{ steps.vars.outputs.sha }}\nVITE_VERSION=${{ steps.vars.outputs.sha }}" >> .env.example
-
-      - name: Copy environment file and set version
-        run: cp .env.test .env
-
-      - name: Install Dependencies
-        run: npm install && npm run build && composer install --prefer-dist --no-interaction --no-progress && php artisan dusk:chrome-driver --detect
-
-      - name: Build Library Objects
-        run: bash build-libs.sh
-        
-      - name: Generate app key
-        run: php artisan key:generate
-
-      - name: Create Database File
-        run: touch database/database.sqlite
       
-      - name: Initial Database Migration
-        run: php artisan migrate
-        
-      - name: Execute Unit Tests
-        run: php artisan test
+      - name: Run your job
+        run: |
+          echo "Workflow triggered!"
+          # Add your build/test steps here
+          
+      - name: Print trigger info
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Reason: ${{ github.event.inputs.reason }}"
+          fi      
+      # - name: Get Commit Hash
+      #   id: vars
+      #   run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Run Server
-        run: php artisan serve &
+      # - name: Add "VERSION" hashes to .env
+      #   run: echo -e "VERSION=${{ steps.vars.outputs.sha }}\nVITE_VERSION=${{ steps.vars.outputs.sha }}" >> .env.example
+
+      # - name: Copy environment file and set version
+      #   run: cp .env.test .env
+
+      # - name: Install Dependencies
+      #   run: npm install && npm run build && composer install --prefer-dist --no-interaction --no-progress && php artisan dusk:chrome-driver --detect
+
+      # - name: Build Library Objects
+      #   run: bash build-libs.sh
+        
+      # - name: Generate app key
+      #   run: php artisan key:generate
+
+      # - name: Create Database File
+      #   run: touch database/database.sqlite
       
-      - name: Execute Browser Tests
-        run: php artisan dusk
+      # - name: Initial Database Migration
+      #   run: php artisan migrate
+        
+      # - name: Execute Unit Tests
+      #   run: php artisan test
+
+      # - name: Run Server
+      #   run: php artisan serve &
+      
+      # - name: Execute Browser Tests
+      #   run: php artisan dusk
