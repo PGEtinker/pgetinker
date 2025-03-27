@@ -31,6 +31,9 @@ jobs:
         run: |
           cp .env.sail .env
           ./scripts/pgetinker build
+      
+      - name: Ensure PGEtinker is down
+        run: ./scripts/pgetinker down
 
       - name: Initialize PGEtinker
         run: ./scripts/pgetinker initialize ci
