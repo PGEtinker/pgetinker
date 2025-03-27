@@ -44,7 +44,7 @@ jobs:
       - name: Run Unit Tests
         run: ./scripts/pgetinker test
 
-      - name: Start PGEtinker
+      - name: Stop PGEtinker
         run: ./scripts/pgetinker down
 
       # - name: Get Commit Hash
