@@ -202,7 +202,7 @@ fi
 
 EXEC="yes"
 
-if [ -z "$SAIL_SKIP_CHECKS" ]; then
+if [ -z "$SAIL_SKIP_CHECKS" ] && [ "$1" != "initialize" ]; then
     # Ensure that Docker is running...
     if ! docker info > /dev/null 2>&1; then
         echo "${BOLD}Docker is not running.${NC}" >&2
