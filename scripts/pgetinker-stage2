@@ -703,7 +703,7 @@ elif [ "$1" == "initialize" ]; then
             echo
 
             echo "#### Installing composer dependencies."
-            docker run -ti --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app composer install --no-interaction
+            docker run --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app composer install --no-interaction
             if [ ! $? -eq 0 ]; then
                 echo "## Composer dependencies failed to install."
                 return 3
@@ -712,7 +712,7 @@ elif [ "$1" == "initialize" ]; then
             echo
 
             echo "#### Installing npm dependencies."
-            docker run -ti --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app npm install --yes
+            docker run --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app npm install --yes
             if [ ! $? -eq 0 ]; then
                 echo "## NPM dependencies failed to install."
                 return 4
@@ -721,7 +721,7 @@ elif [ "$1" == "initialize" ]; then
             echo
             
             echo "#### Generating application key."
-            docker run -ti --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app php artisan key:generate > /dev/null 2>&1
+            docker run --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app php artisan key:generate > /dev/null 2>&1
             if [ ! $? -eq 0 ]; then
                 echo "## Application key failed to generate."
                 return 4
@@ -730,7 +730,7 @@ elif [ "$1" == "initialize" ]; then
             echo
 
             echo "#### Building static files."
-            docker run -ti --rm -e WWWUSER="${WWWUSER}" -v '.:/var/www/html' pgetinker/app npm run build
+            docker run --rm -e WWWUSER="${WWWUSER}" -v '.:/var/www/html' pgetinker/app npm run build
             if [ ! $? -eq 0 ]; then
                 echo "## Static files failed to install."
                 return 4
@@ -749,7 +749,7 @@ elif [ "$1" == "initialize" ]; then
             echo
 
             echo "#### Build emscripten libraries."
-            docker run -ti --rm -e WWWUSER="${WWWUSER}" -v './services/libs:/var/www/html' pgetinker/app bash build-libs.sh
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './services/libs:/var/www/html' pgetinker/app bash build-libs.sh
             if [ ! $? -eq 0 ]; then
                 echo "## Emscripten libraries failed to build."
                 return 4
