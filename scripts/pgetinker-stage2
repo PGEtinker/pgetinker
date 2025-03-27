@@ -664,6 +664,7 @@ elif [ "$1" == "initialize" ]; then
     echo "  - Generate a pre-built frontend."
     echo "  - Create wiki symlinks."
     echo "  - Init and Update Submodules."
+    echo "  - Build emscripten libraries."
     echo "  - Run laravel migration scripts."
     echo ""
     echo "This command usually needs to be run once after pulling"
@@ -737,6 +738,13 @@ elif [ "$1" == "initialize" ]; then
             echo "#### Init and Update Submodules."
             git submodule init
             git submodule update    
+
+            echo "#### Build emscripten libraries."
+            docker run -ti --rm -e WWWUSER="${WWWUSER}" -v './services/libs:/var/www/html' pgetinker/app bash build-libs.sh
+            if [ ! $? -eq 0 ]; then
+                echo "## Emscripten libraries failed to build."
+                return 4
+            fi
             echo "## Done."
             echo
 
