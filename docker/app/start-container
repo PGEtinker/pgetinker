@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+
+function add_application_hostname_to_hosts_file() {
+    if [ ! -z "$1" ]; then
+        
+        # extract the protocol
+        local proto="$(echo $1 | grep :// | sed -e's,^\(.*://\).*,\1,g')"
+        # remove the protocol
+        local url="$(echo ${1/$proto/})"
+        # extract the user (if any)
+        local user="$(echo $url | grep @ | cut -d@ -f1)"
+        # extract the host and port
+        local hostport="$(echo ${url/$user@/} | cut -d/ -f1)"
+        # by request host without port    
+        local host="$(echo $hostport | sed -e 's,:.*,,g')"
+        # by request - try to extract the port
+        local port="$(echo $hostport | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\).*,\1,g' -e 's,[^0-9],,g')"
+        # extract the path (if any)
+        local path="$(echo $url | grep / | cut -d/ -f2-)"
+
+        # Extract IP address from hosts, using hostname as critera
+        IP="$(grep "$(cat /etc/hostname)" /etc/hosts | awk '{print $1}' | head -n 1)"
+        
+        # do nothing if localhost
+        if [ ! "$host" == "localhost" ]; then
+            # add to /etc/hosts
+            echo "$IP    $host" | tee -a /etc/hosts > /dev/null
+        fi
+    fi
+}
+
+
+function sanity_check_display_help() {
+    echo "## $1"
+    echo "##"
+    echo "## Run the following command to initialize PGEtinker!"
+    echo "##"
+    echo "##   ./scripts/pgetinker initialize"
+    echo "##"
+    exit 1
+}
+
+function sanity_check_application() {
+    local app_dir="/var/www/html"  # First argument is the app directory
+
+    # Check for vendor directory (Composer dependencies)
+    if [ ! -d "$app_dir/vendor" ]; then
+        
+        sanity_check_display_help "Composer dependencies not installed."
+    fi
+
+    # Check for environment configuration
+    if [ ! -f "$app_dir/.env" ]; then
+        sanity_check_display_help "Environment configurations are missing."
+    fi
+
+    # Check for node_modules directory (NPM dependencies)
+    if [ ! -d "$app_dir/node_modules" ]; then
+        sanity_check_display_help "## NPM dependencies not installed."
+    fi
+
+    # Check for built static files
+    if [ ! -d "$app_dir/public/build" ]; then
+        sanity_check_display_help "## Static files do not exist."
+    fi
+    
+    # app_dir="/opt/libs"
+    # echo "#### BEGIN: checking for pgetinker libraries at $app_dir"
+    
+    # # Check if directory exists
+    # if [ ! -d "$app_dir" ]; then
+    #     echo "## Error: Directory '$app_dir' does not exist."
+    #     return 1
+    # fi    
+
+    # # Check for pgetinker library specific files
+    # if [ ! -f "$app_dir/manifest.json" ] || [ ! -f "$app_dir/Makefile" ]; then
+    #     echo "## Error: '$app_dir' does not contain PGEtinker/libs."
+    #     echo "## Did you clone the repo and set it's location in the .env file?"
+    #     echo ""
+    #     return 2
+    # fi
+
+    # echo "## PGEtinker libraries found in '$app_dir'"
+    # cd $app_dir
+    
+    # # build the libraries, if needed.
+    # bash build-libs.sh > /dev/null 2>&1
+    
+    # if [ $? -eq 0 ]; then
+    #     echo "## PGEtinker libraries built."
+    # else
+    #     echo "## PGEtinker libraries failed to build."
+    #     return 3
+    # fi
+
+    # echo "#### END: checking for pgetinker libraries at $app_dir" && echo ""
+
+    return 0
+}
+
+if [ "$SUPERVISOR_PHP_USER" != "root" ] && [ "$SUPERVISOR_PHP_USER" != "sail" ]; then
+    echo "You should set SUPERVISOR_PHP_USER to either 'sail' or 'root'."
+    exit 1
+fi
+
+if [ ! -z "$WWWUSER" ]; then
+    usermod -u $WWWUSER sail
+fi
+
+if [ ! -d /.composer ]; then
+    mkdir /.composer
+fi
+
+chmod -R ugo+rw /.composer
+
+if [ $# -gt 0 ]; then
+    if [ "$SUPERVISOR_PHP_USER" = "root" ]; then
+        exec "$@"
+    else
+        exec gosu $WWWUSER "$@"
+    fi
+    exit
+else
+    add_application_hostname_to_hosts_file "$APP_URL"
+    sanity_check_application
+    echo "Application initialized."
+    exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+fi

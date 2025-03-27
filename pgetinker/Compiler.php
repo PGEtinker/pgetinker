@@ -33,21 +33,11 @@ class Compiler
 
     private $linkerCommand = [];
 
-    private $libraryMap = [
-        'OLC_PGE_APPLICATION'      => 'olcPixelGameEngine.o',
-        'OLC_SOUNDWAVE_ENGINE'     => 'olcSoundWaveEngine.o',
-        'OLC_PGEX_GRAPHICS2D'      => 'olcPGEX_Graphics2D.o',
-        'OLC_PGEX_GRAPHICS3D'      => 'olcPGEX_Graphics3D.o',
-        'OLC_PGEX_POPUPMENU'       => 'olcPGEX_PopUpMenu.o',
-        'OLC_PGEX_QUICKGUI'        => 'olcPGEX_QuickGUI.o',
-        'OLC_PGEX_RAYCASTWORLD'    => 'olcPGEX_RayCastWorld.o',
-        'OLC_PGEX_SOUND'           => 'olcPGEX_Sound.o',
-        'OLC_PGEX_SPLASHSCREEN'    => 'olcPGEX_SplashScreen.o',
-        'OLC_PGEX_TRANSFORMEDVIEW' => 'olcPGEX_TransformedView.o',
-        'OLC_PGEX_WIREFRAME'       => 'olcPGEX_Wireframe.o',
-        'MINIAUDIO_IMPLEMENTATION' => 'miniaudio.o',
-        'OLC_PGEX_MINIAUDIO'       => 'olcPGEX_MiniAudio.o',
-    ];
+    private $libraryDirectories = [];
+    
+    private $libraryMap = [];
+    
+    private $libraryVersions = [];
 
     private $linkerExitCode;
 
@@ -65,6 +55,16 @@ class Compiler
         return $this;
     }
     
+    public function setLibraryVersions($libraries)
+    {
+        $this->libraryVersions = $libraries;
+    }
+
+    public function getLibraryVersions()
+    {
+        return $this->libraryVersions;
+    }
+
     public function serialize()
     {
         $object = new stdClass();
@@ -75,6 +75,7 @@ class Compiler
         $object->environmentVariables = $this->environmentVariables;
         $object->errors = $this->errors;
         $object->html = $this->html;
+        $object->libraryVersions = $this->libraryVersions;
         $object->linkerCommand = $this->linkerCommand;
         $object->linkerExitCode = $this->linkerExitCode;
         $object->linkerInputFiles = $this->linkerInputFiles;
@@ -93,6 +94,7 @@ class Compiler
         $this->environmentVariables = $object->environmentVariables;
         $this->errors = $object->errors;
         $this->html = $object->html;
+        $this->libraryVersions = $object->libraryVersions;
         $this->linkerCommand = $object->linkerCommand;
         $this->linkerExitCode = $object->linkerExitCode;
         $this->linkerInputFiles = $object->linkerInputFiles;
@@ -396,6 +398,19 @@ class Compiler
     public function processCode()
     {
         $this->logger->info("begin processing code");
+        
+        $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
+
+        if(!file_exists($baseLibraryDirectory . "/manifest.json"))
+        {
+            $this->errors[] = "library manifest doesn't exist";
+            return false;
+        }
+
+        $temp = json_decode(file_get_contents($baseLibraryDirectory . "/manifest.json"), true);
+        $this->libraryMap = $temp["macroToObject"];
+        unset($temp);
+
         $startTime = microtime(true);
 
         for($i = 0; $i < count($this->code); $i++)
@@ -431,18 +446,18 @@ class Compiler
                 {
                     if($this->foundGeometryHeader)
                     {
-                        $this->linkerInputFiles[] = "./lib/olcPixelGameEngine_withGeometry.o";
+                        $this->linkerInputFiles[] = "olcPixelGameEngine/olcPixelGameEngine_withGeometry.o";
                         $this->code[$implementation["lineIndex"]] = "";
                         continue;
                     }
                 }
                 
-                $this->linkerInputFiles[] = "./lib/" . $this->libraryMap[$implementation["macro"]];
+                $this->linkerInputFiles[] = $this->libraryMap[$implementation["macro"]];
                 $this->code[$implementation["lineIndex"]] = "";
                 continue;
             }
         }
-
+        
         $this->logger->info("finished processing code");
         
         return (count($this->errors) == 0);
@@ -450,9 +465,19 @@ class Compiler
     
     private function prepareEnvironment()
     {
-        $version = "v0.02";
-
         $compilerEnvironment = env("COMPILER_ENVIRONMENT", "local");
+        
+        $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
+        
+        $libraries = $this->libraryVersions;
+        $baseLibraryDirectory .= "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
+        unset($libraries["olcPixelGameEngine"]);
+        $this->libraryDirectories["olcPixelGameEngine"] = $baseLibraryDirectory . "/olcPixelGameEngine";
+
+        foreach($libraries as $library => $version)
+        {
+            $this->libraryDirectories["{$library}"] = "{$baseLibraryDirectory}/{$library}/{$version}";
+        }
 
         $this->logger->info("writing linesOfCode to {$this->workingDirectory}/pgetinker.cpp");
         file_put_contents(
@@ -470,9 +495,12 @@ class Compiler
                 "PATH" => "/bin:/usr/bin:/opt/emsdk:/opt/emsdk/upstream/emscripten",
             ]);
     
-            symlink(base_path() . "/third_party/{$version}/include", "{$this->workingDirectory}/include");
-            symlink(base_path() . "/third_party/{$version}/lib", "{$this->workingDirectory}/lib");
-            symlink(base_path() . "/third_party/emscripten_shell.html", "{$this->workingDirectory}/emscripten_shell.html");
+            foreach($this->libraryDirectories as $library => $directory)
+            {
+                symlink($directory, "{$this->workingDirectory}/{$library}");
+            }
+
+            symlink(base_path() . "/misc/emscripten_shell.html", "{$this->workingDirectory}/emscripten_shell.html");
         }
 
         if($compilerEnvironment === "nsjail")
@@ -482,17 +510,20 @@ class Compiler
             $nsJailCommand = [
                 "nsjail",
                 "--config",
-                base_path() . env("COMPILER_NSJAIL_CFG", "/third_party/nsjail-emscripten.cfg"),
+                base_path() . env("COMPILER_NSJAIL_CFG", "/misc/nsjail-emscripten.cfg"),
                 "-B",
-                "{$this->workingDirectory}:/user",
+                "{$this->workingDirectory}:/workspace",
                 "-R",
-                base_path() . "/third_party/{$version}/include:/user/include",
-                "-R",
-                base_path() . "/third_party/{$version}/lib:/user/lib",
-                "-R",
-                base_path() . "/third_party/emscripten_shell.html:/user/emscripten_shell.html",
-                "--",
+                base_path() . "/misc/emscripten_shell.html:/workspace/emscripten_shell.html",
             ];
+
+            foreach($this->libraryDirectories as $library => $directory)
+            {
+                $nsJailCommand[] = "-R";
+                $nsJailCommand[] = "{$directory}:/workspace/{$library}";
+            }
+
+            $nsJailCommand[] = "--";
 
             $this->compilerCommand = $nsJailCommand;
             $this->linkerCommand   = $nsJailCommand;
@@ -502,17 +533,21 @@ class Compiler
         $this->compilerCommand = array_merge($this->compilerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
             "-c",
-            "-I./include",
-            "-I./include/olcPixelGameEngine",
-            "-I./include/olcPixelGameEngine/extensions",
-            "-I./include/olcPixelGameEngine/utilities",
-            "-I./include/olcSoundWaveEngine",
+            "-O1",
+            "-I./miniaudio",
+            "-I./olcPGEX_Gamepad",
+            "-I./olcPGEX_MiniAudio",
+            "-I./olcPixelGameEngine",
+            "-I./olcPixelGameEngine/extensions",
+            "-I./olcPixelGameEngine/utilities",
+            "-I./olcSoundWaveEngine",
             "pgetinker.cpp",
             "-o",
             "pgetinker.o",
             "-std=c++20",
         ]);
-        
+        $this->logger->info("Compiler command:\n\n" . implode("\n", $this->compilerCommand) . "\n");
+
         $this->logger->info("preparing linker command");
         $this->linkerCommand = array_merge($this->linkerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
@@ -532,6 +567,10 @@ class Compiler
             "-sSINGLE_FILE",
             "-std=c++20",
         ]);
+        $this->logger->info("Linker command:\n\n" . implode("\n", $this->linkerCommand) . "\n");
+
+        
+        return true;
     }
 
     private function compile()
@@ -633,11 +672,24 @@ class Compiler
     {
         if(!file_exists($this->workingDirectory) || !is_dir($this->workingDirectory))
             throw new Exception("Working Directory Inaccessible. Did you set one?");
-        
+
         $logHandler = new StreamHandler("{$this->workingDirectory}/compiler.log");
         $logHandler->setFormatter(new LineFormatter(null, null, true, true));
         
         $this->logger->setHandlers([$logHandler]);
+
+        if(empty($this->libraryVersions))
+        {
+            $manifestPath = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs") . "/manifest.json";
+            
+            if(!file_exists($manifestPath))
+                throw new Exception("Library manifest does not exist!");
+            
+            $manifest = json_decode(file_get_contents($manifestPath), true);
+            $this->libraryVersions = $manifest["latest"];
+            $this->logger->info("Libraries not set, using latest as default!");
+        }
+        
 
         if(!$this->processCode())
         {
@@ -645,7 +697,10 @@ class Compiler
             return false;
         }
 
-        $this->prepareEnvironment();
+        if(!$this->prepareEnvironment())
+        {
+            return false;
+        }
 
         if(!$this->compile())
         {
@@ -669,6 +724,10 @@ class Compiler
             
             Storage::disk("local")->deleteDirectory($this->workingDirectory);
 
+            $this->logger->info("OUTPUT:\n" . $this->getOutput());
+            $this->logger->info("ERROR:\n" . $this->getErrorOutput());
+            $this->logger->info("LIBRARIES:\n" . implode("\n", $this->linkerInputFiles));
+
             Log::info("Compile: finished successfully");
             $this->output[] = "Compiled Successfully";
             return true;
@@ -690,9 +749,9 @@ class Compiler
                 ->command([
                     "nsjail",
                     "--config",
-                    base_path() . env("COMPILER_NSJAIL_CFG", "/third_party/nsjail-emscripten.cfg"),
+                    base_path() . env("COMPILER_NSJAIL_CFG", "/misc/nsjail-emscripten.cfg"),
                     "-B",
-                    "{$this->workingDirectory}:/user",
+                    "{$this->workingDirectory}:/workspace",
                     "--",
                     "/opt/emsdk/upstream/emscripten/em++",
                     "-v",

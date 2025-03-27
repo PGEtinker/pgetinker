@@ -23,7 +23,7 @@ class CodeController extends Controller
 {
     function Compile(Request $request)
     {
-        $result = $this->compileCode($request->input("code", null));
+        $result = $this->compileCode($request->input("code", null), $request->input("libraries", null));
         unset($result["hash"]);
         return response($result, $result["statusCode"])->header("Content-Type", "application/json");
     }
@@ -31,7 +31,7 @@ class CodeController extends Controller
     function Share(Request $request)
     {
         $code   = $request->input("code", null);
-        $result = $this->compileCode($code);
+        $result = $this->compileCode($code, $request->input("libraries", null));
     
         // if failed to compile, bail
         if($result["statusCode"] !== 200)
@@ -112,9 +112,9 @@ class CodeController extends Controller
         ], 400);
     }
 
-    function compileCode($code)
+    function compileCode($code, $libraries)
     {
-        if($code == null)
+        if($code == null || $libraries == null)
         {
             Log::debug("Compile: missing required code parameters");
     
@@ -133,6 +133,14 @@ class CodeController extends Controller
             ];
         }
         
+        if(!$this->validateLibraries($libraries))
+        {
+            return [
+                "statusCode" => 400,
+                "message" => "inavlid libraries set",
+            ];
+        }
+
         $hashedCode = hashCode($code);
         
         if(env("COMPILER_CACHING", false))
@@ -152,6 +160,7 @@ class CodeController extends Controller
                     return [
                         "statusCode" => $compiler->getStatus(),
                         "hash" => $hashedCode,
+                        "libraries" => $compiler->getLibraryVersions(),
                         "html" => $compiler->getHtml(),
                         "stdout" => $compiler->getOutput(),
                         "stderr" => $compiler->getErrorOutput(),
@@ -182,9 +191,10 @@ class CodeController extends Controller
         Log::debug("Compile: working directory created {$directoryName}");
         
         $compiler = new Compiler();
-        $compiler
-            ->setCode($code)
-            ->setWorkingDirectory(Storage::disk("local")->path($directoryName));
+        
+        $compiler->setCode($code);
+        $compiler->setLibraryVersions($libraries);
+        $compiler->setWorkingDirectory(Storage::disk("local")->path($directoryName));
         
         if($compiler->build())
         {
@@ -204,6 +214,7 @@ class CodeController extends Controller
                 "statusCode" => 200,
                 "hash" => $hashedCode,
                 "html" => $compiler->getHtml(),
+                "libraries" => $compiler->getLibraryVersions(),
                 "stdout" => $compiler->getOutput(),
                 "stderr" => $compiler->getErrorOutput(),
             ];
@@ -225,12 +236,47 @@ class CodeController extends Controller
             "statusCode" => 400,
             "hash" => $hashedCode,
             "html" => $compiler->getHtml(),
+            "libraries" => $compiler->getLibraryVersions(),
             "stdout" => $compiler->getOutput(),
             "stderr" => $compiler->getErrorOutput(),
         ];
     }
     
+    function validateLibraries($libraries)
+    {
+        if(!isset($libraries["olcPixelGameEngine"]))
+        {
+            Log::error("Library `olcPixelGameEngine` isn't in the set of libraries.");
+            return false;
+        }
+            
+        $libraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs") . "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
+        
+        if(!file_exists($libraryDirectory))
+        {
+            Log::error("Library directory does not exist: {$libraryDirectory}");
+            return false;
+        }
+            
+        unset($libraries["olcPixelGameEngine"]);
 
+        if(count($libraries) == 0)
+        {
+            Log::error("No libraries are set.");
+            return false;
+        }
+
+        foreach($libraries as $library => $version)
+        {
+            if(!file_exists("{$libraryDirectory}/{$library}/{$version}"))
+            {
+                Log::error("Library directory does not exist: {$libraryDirectory}/{$library}/{$version}");
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 
 
