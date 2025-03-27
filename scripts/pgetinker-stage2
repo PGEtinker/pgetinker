@@ -656,7 +656,7 @@ elif [ "$1" == "initialize" ]; then
         exit
     fi
 
-    if [ $2 == "ci" ]; then
+    if [ "$2" == "ci" ]; then
         proceed=y
     else
         echo "This command will:"
