@@ -1,4 +1,0 @@
-[submodule "wiki"]
-	path = services/wiki
-	url = https://github.com/PGEtinker/wiki
-	branch = main

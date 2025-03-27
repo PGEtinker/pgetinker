@@ -25,5 +25,5 @@ if [ $# -gt 0 ]; then
 else
     echo "$PWD $APP_URL"
     git config --global --add safe.directory /app
-    exec gosu $WWWUESR "hugo --baseURL $APP_URL/wiki/ -w"
+    exec gosu $WWWUSER hugo --baseURL "$APP_URL/wiki/" -w
 fi
