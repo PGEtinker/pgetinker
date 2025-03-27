@@ -656,28 +656,33 @@ elif [ "$1" == "initialize" ]; then
         exit
     fi
 
-    echo "This command will:"
-    echo "  - Clear all vendor/npm dependencies."
-    echo "  - Clear all configurations."
-    echo "  - Create default environment configurations."
-    echo "  - Build all docker images."
-    echo "  - Install composer dependencies."
-    echo "  - Install NPM dependencies."
-    echo "  - Generate laravel application key."
-    echo "  - Generate a pre-built frontend."
-    echo "  - Clone wiki repo."
-    echo "  - Create wiki symlinks."
-    echo "  - Build emscripten libraries."
-    echo "  - Run laravel migration scripts."
-    echo ""
-    echo "This command usually needs to be run once after pulling"
-    echo "the repository. Using it afterwards can result in"
-    echo "unexpected and undesirable data loss."
-    echo ""
-    echo -n "Proceed? (y/N) "; read proceed
-    echo ""
-    
-    proceed=${proceed:-N}
+    if [ $2 == "ci" ]; then
+        proceed=y
+    else
+        echo "This command will:"
+        echo "  - Clear all vendor/npm dependencies."
+        echo "  - Clear all configurations."
+        echo "  - Create default environment configurations."
+        echo "  - Build all docker images."
+        echo "  - Install composer dependencies."
+        echo "  - Install NPM dependencies."
+        echo "  - Generate laravel application key."
+        echo "  - Generate a pre-built frontend."
+        echo "  - Clone wiki repo."
+        echo "  - Create wiki symlinks."
+        echo "  - Build emscripten libraries."
+        echo "  - Run laravel migration scripts."
+        echo ""
+        echo "This command usually needs to be run once after pulling"
+        echo "the repository. Using it afterwards can result in"
+        echo "unexpected and undesirable data loss."
+        echo ""
+        echo -n "Proceed? (y/N) "; read proceed
+        echo ""
+        
+        proceed=${proceed:-N}
+
+    fi
     
     case $proceed in
         [Yy]*)
