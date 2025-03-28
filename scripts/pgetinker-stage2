@@ -152,6 +152,9 @@ if [ -n "$APP_ENV" ] && [ -f ./.env."$APP_ENV" ]; then
   source ./.env."$APP_ENV";
 elif [ -f ./.env ]; then
   source ./.env;
+else
+  cp ./.env.sail .env
+  source ./.env
 fi
 
 # Define environment variables...
