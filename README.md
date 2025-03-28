@@ -40,6 +40,5 @@ A few things of note. PGEtinker is largely a Laravel project, with a few other s
 ## Known issues with the repo
 
 * Sharing Screenshots haven't been added yet.
-* The dusk test suite is completely broken, don't try it. Please.
 * The services can not be started on arbitrary ports, you get port 80 and that's it. However the reverse proxy service does forward the protocols properly so if it's behind a TLS terminator reverse proxy you can host it publicly on a HTTPS address.
 
