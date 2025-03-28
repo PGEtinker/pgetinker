@@ -39,6 +39,9 @@ jobs:
       - name: Run Unit Tests
         run: ./scripts/pgetinker test
 
+      - name: Run Browser Tests
+        run: ./scripts/pgetinker dusk
+
       - name: Stop PGEtinker
         run: ./scripts/pgetinker down
 
