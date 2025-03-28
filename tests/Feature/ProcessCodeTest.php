@@ -35,8 +35,6 @@ class ProcessCodeTest extends TestCase
         $code = "\t  #define OLC_PGE_APPLICATION\n";
         $compiler->setCode($code);
         $compiler->processCode();
-        print_r($code);
-        print_r($compiler->getCode());
         $this->assertTrue($code != $compiler->getCode());
 
         $code = "#   define OLC_PGE_APPLICATION\n";
