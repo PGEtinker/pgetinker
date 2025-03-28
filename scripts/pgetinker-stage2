@@ -157,6 +157,7 @@ fi
 # Define environment variables...
 export APP_PORT=${APP_PORT:-80}
 export APP_SERVICE=${APP_SERVICE:-"laravel.test"}
+export PROXY_SERVICE=${PROXY_SERVICE:-"proxy"}
 export DB_PORT=${DB_PORT:-3306}
 export WWWUSER=${WWWUSER:-$UID}
 export WWWGROUP=${WWWGROUP:-$(id -g)}
@@ -367,7 +368,7 @@ elif [ "$1" == "dusk" ]; then
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(-e "APP_URL=http://${APP_SERVICE}")
+        ARGS+=(-e "APP_URL=http://${PROXY_SERVICE}")
         ARGS+=(-e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub")
         ARGS+=("$APP_SERVICE" php artisan dusk)
     else
@@ -381,7 +382,7 @@ elif [ "$1" == "dusk:fails" ]; then
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(-e "APP_URL=http://${APP_SERVICE}")
+        ARGS+=(-e "APP_URL=http://${PROXY_SERVICE}")
         ARGS+=(-e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub")
         ARGS+=("$APP_SERVICE" php artisan dusk:fails)
     else
