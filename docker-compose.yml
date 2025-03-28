@@ -1,5 +1,5 @@
 services:
-    app:
+    laravel.test:
         build:
             context: './docker/app'
             dockerfile: Dockerfile
@@ -53,7 +53,7 @@ services:
         networks:
             - sail
         depends_on:
-            - app
+            - laravel.test
 
     language-server:
         build:
@@ -87,7 +87,7 @@ services:
         networks:
             - sail
         depends_on:
-            app:
+            laravel.test:
                 condition: service_healthy
             language-server:
                 condition: service_started

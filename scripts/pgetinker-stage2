@@ -152,11 +152,15 @@ if [ -n "$APP_ENV" ] && [ -f ./.env."$APP_ENV" ]; then
   source ./.env."$APP_ENV";
 elif [ -f ./.env ]; then
   source ./.env;
+else
+  cp ./.env.sail .env
+  source ./.env
 fi
 
 # Define environment variables...
 export APP_PORT=${APP_PORT:-80}
-export APP_SERVICE=${APP_SERVICE:-"app"}
+export APP_SERVICE=${APP_SERVICE:-"laravel.test"}
+export PROXY_SERVICE=${PROXY_SERVICE:-"proxy"}
 export DB_PORT=${DB_PORT:-3306}
 export WWWUSER=${WWWUSER:-$UID}
 export WWWGROUP=${WWWGROUP:-$(id -g)}
@@ -367,7 +371,7 @@ elif [ "$1" == "dusk" ]; then
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(-e "APP_URL=http://${APP_SERVICE}")
+        ARGS+=(-e "APP_URL=http://${PROXY_SERVICE}")
         ARGS+=(-e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub")
         ARGS+=("$APP_SERVICE" php artisan dusk)
     else
@@ -381,7 +385,7 @@ elif [ "$1" == "dusk:fails" ]; then
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
         [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(-e "APP_URL=http://${APP_SERVICE}")
+        ARGS+=(-e "APP_URL=http://${PROXY_SERVICE}")
         ARGS+=(-e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub")
         ARGS+=("$APP_SERVICE" php artisan dusk:fails)
     else
@@ -759,10 +763,10 @@ elif [ "$1" == "initialize" ]; then
 
             # Function to check if all services are healthy
             wait_for_healthy() {
-                local service="app"
-                container_id=$("${DOCKER_COMPOSE[@]}" ps -q "$service")
+                
+                container_id=$("${DOCKER_COMPOSE[@]}" ps -q "$APP_SERVICE")
                 if [ -z "$container_id" ]; then
-                    echo "Error: Container for $service not found."
+                    echo "Error: Container for $APP_SERVICE not found."
                     exit 1
                 fi
 
@@ -774,7 +778,7 @@ elif [ "$1" == "initialize" ]; then
                         break
                         ;;
                         "unhealthy")
-                        echo "$service is unhealthy, exiting..."
+                        echo "$APP_SERVICE is unhealthy, exiting..."
                         exit 1
                         ;;
                         "no-healthcheck")
