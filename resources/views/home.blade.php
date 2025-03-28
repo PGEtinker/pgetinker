@@ -10,18 +10,18 @@
 
     <meta property="twitter:description" content="Interactively build olcPixelGameEngine programs right from the browser." />
 @if (empty($share_thumb_url))
-    <meta property="twitter:image:src" content="{{ env("APP_URL") }}/images/PGEtinker-screenshot.png" />
+    <meta property="twitter:image:src" content="{{ config("app.url") }}/images/PGEtinker-screenshot.png" />
 @else
     <meta property="twitter:image:src" content="{{ $share_thumb_url }}" />
 @endif
 
     <meta property="og:title" content="PGEtinker" />
     <meta property="og:description" content="Interactively build olcPixelGameEngine programs right from the browser." />
-    <meta property="url" content="{{ env("APP_URL") }}" />
+    <meta property="url" content="{{ config("app.url") }}" />
     <meta property="og:type" content="website" />
 @if (empty($share_thumb_url))
-    <meta property="og:image" content="{{ env("APP_URL") }}/images/PGEtinker-screenshot.png" />
-    <meta property="og:image:secure_url" content="{{ env("APP_URL") }}/images/PGEtinker-screenshot.png" />
+    <meta property="og:image" content="{{ config("app.url") }}/images/PGEtinker-screenshot.png" />
+    <meta property="og:image:secure_url" content="{{ config("app.url") }}/images/PGEtinker-screenshot.png" />
 @else
     <meta property="og:image" content="{{ $share_thumb_url }}" />
     <meta property="og:image:secure_url" content="{{ $share_thumb_url }}" />
@@ -29,7 +29,7 @@
 
     <title>PGEtinker</title>
     
-    <link rel="icon" type="text/svg" href="{{ env('APP_URL') }}/favicon.svg">
+    <link rel="icon" type="text/svg" href="{{ config("app.url") }}/favicon.svg">
 
     <link rel="stylesheet" type="text/css" href="{{ Vite::asset('resources/css/app/goldenlayout-base.scss')}}">
     <link rel="stylesheet" type="text/css" href="{{ Vite::asset('resources/css/app/goldenlayout-dark-theme.scss')}}" id="goldenlayout-dark-theme">
