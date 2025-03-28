@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -44,7 +45,7 @@ class CodeController extends Controller
         $share = Code::where("hash", $result["hash"])->first();
         if($share != null)
         {
-            $result["shareURL"] = env("APP_URL") . "/s/" . $share->slug;
+            $result["shareURL"] = FacadesRequest::getSchemeAndHttpHost() . "/s/" . $share->slug;
 
             if(empty($share->thumb_url))
             {
@@ -84,7 +85,7 @@ class CodeController extends Controller
         
         if($share->save())
         {
-            $result["shareURL"] = env("APP_URL") . "/s/" . $slug;
+            $result["shareURL"] = FacadesRequest::getSchemeAndHttpHost() . "/s/" . $slug;
             $result["shareThumbURL"] = $share->thumb_url;
             unset($result["hash"]);
 
