@@ -760,10 +760,10 @@ elif [ "$1" == "initialize" ]; then
 
             # Function to check if all services are healthy
             wait_for_healthy() {
-                local service="app"
-                container_id=$("${DOCKER_COMPOSE[@]}" ps -q "$service")
+                
+                container_id=$("${DOCKER_COMPOSE[@]}" ps -q "$APP_SERVICE")
                 if [ -z "$container_id" ]; then
-                    echo "Error: Container for $service not found."
+                    echo "Error: Container for $APP_SERVICE not found."
                     exit 1
                 fi
 
@@ -775,7 +775,7 @@ elif [ "$1" == "initialize" ]; then
                         break
                         ;;
                         "unhealthy")
-                        echo "$service is unhealthy, exiting..."
+                        echo "$APP_SERVICE is unhealthy, exiting..."
                         exit 1
                         ;;
                         "no-healthcheck")
