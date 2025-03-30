@@ -36,6 +36,7 @@ services:
             - meilisearch
             - mailpit
             - selenium
+            - screenshot
     wiki:
         build:
             context: './docker/wiki'
@@ -75,6 +76,25 @@ services:
         depends_on:
             - mysql
             - redis
+    screenshot:
+        build:
+            context: './docker/screenshot'
+            dockerfile: Dockerfile
+        image: 'pgetinker/screenshot'
+        networks:
+            - sail
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        depends_on:
+            - mysql
+        environment:
+            PMA_HOST: mysql
+            PMA_USER: ${DB_USERNAME}
+            PMA_PASSWORD: ${DB_PASSWORD}
+            PMA_ABSOLUTE_URI: ${APP_URL:-http://localhost}/phpmyadmin/
+            PMA_ARBITRARY: 1
+        networks:
+            - sail
     proxy:
         build:
             context: './docker/nginx'

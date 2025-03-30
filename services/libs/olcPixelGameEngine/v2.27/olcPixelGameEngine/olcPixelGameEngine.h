@@ -6902,6 +6902,10 @@ namespace olc
 		static void MainLoop()
 		{
 			olc::Platform::ptrPGE->olc_CoreUpdate();
+			EM_ASM({
+				Module.canvas.dispatchEvent(new Event("pge-core-update"));
+			});
+						
 			if (!ptrPGE->olc_IsRunning())
 			{
 				if (ptrPGE->OnUserDestroy())
