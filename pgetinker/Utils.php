@@ -112,7 +112,14 @@ function uploadFileToPit($filename, $content = null)
     if(empty(env("PIT_ACCESS_TOKEN")))
     {
         Log::error("Error: missing Pit Access Token... aborted.");
-        return null;
+        $directory = public_path("screenshots");
+        if(!is_dir($directory))
+        {
+            mkdir($directory, 0775, true);
+        }
+        
+        file_put_contents($directory . "/" . $filename, $content);
+        return config("app.url") . "/screenshots/" . $filename;
     }
 
     try
