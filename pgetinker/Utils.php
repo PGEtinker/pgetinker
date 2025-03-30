@@ -79,16 +79,10 @@ function hashCode(string $code)
 
 function takeScreenshotOfHtml($html)
 {
-    if(empty(env("SCREENSHOTTER_URL")))
-    {
-        Log::error("Error: screenshotter url not set... aborted.");
-        return file_get_contents(base_path() . "/resources/images/screenshot-fail.png");
-    }
-    
     try
     {
         $response = Http::withHeader("Content-Type", "application/json")
-                            ->post(env("SCREENSHOTTER_URL"), [
+                            ->post("http://screenshot:6969", [
                                 "html" => $html,
                             ]);
                             
@@ -118,7 +112,14 @@ function uploadFileToPit($filename, $content = null)
     if(empty(env("PIT_ACCESS_TOKEN")))
     {
         Log::error("Error: missing Pit Access Token... aborted.");
-        return null;
+        $directory = public_path("screenshots");
+        if(!is_dir($directory))
+        {
+            mkdir($directory, 0775, true);
+        }
+        
+        file_put_contents($directory . "/" . $filename, $content);
+        return config("app.url") . "/screenshots/" . $filename;
     }
 
     try

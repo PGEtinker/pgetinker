@@ -3,6 +3,7 @@
 /public/build
 /public/hot
 /public/storage
+/public/screenshots
 /public/wiki
 /services/wiki
 /storage/*.key
