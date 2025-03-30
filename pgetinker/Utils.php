@@ -79,16 +79,10 @@ function hashCode(string $code)
 
 function takeScreenshotOfHtml($html)
 {
-    if(empty(env("SCREENSHOTTER_URL")))
-    {
-        Log::error("Error: screenshotter url not set... aborted.");
-        return file_get_contents(base_path() . "/resources/images/screenshot-fail.png");
-    }
-    
     try
     {
         $response = Http::withHeader("Content-Type", "application/json")
-                            ->post(env("SCREENSHOTTER_URL"), [
+                            ->post("http://screenshot:6969", [
                                 "html" => $html,
                             ]);
                             
