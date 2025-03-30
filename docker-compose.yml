@@ -36,6 +36,7 @@ services:
             - meilisearch
             - mailpit
             - selenium
+            - screenshot
     wiki:
         build:
             context: './docker/wiki'
@@ -75,6 +76,13 @@ services:
         depends_on:
             - mysql
             - redis
+    screenshot:
+        build:
+            context: './docker/screenshot'
+            dockerfile: Dockerfile
+        image: 'pgetinker/screenshot'
+        networks:
+            - sail
     proxy:
         build:
             context: './docker/nginx'
