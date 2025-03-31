@@ -111,7 +111,6 @@ function uploadFileToPit($filename, $content = null)
 
     if(empty(env("PIT_ACCESS_TOKEN")))
     {
-        Log::error("Error: missing Pit Access Token... aborted.");
         $directory = public_path("screenshots");
         if(!is_dir($directory))
         {
@@ -119,6 +118,8 @@ function uploadFileToPit($filename, $content = null)
         }
         
         file_put_contents($directory . "/" . $filename, $content);
+
+        Log::info("Saving screenshot to: {$directory}/{$filename}");
         return config("app.url") . "/screenshots/" . $filename;
     }
 

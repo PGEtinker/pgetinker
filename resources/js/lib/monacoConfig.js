@@ -10,7 +10,7 @@ import getModelServiceOverride from '@codingame/monaco-vscode-model-service-over
 import getThemeServiceOverride from '@codingame/monaco-vscode-theme-service-override';
 import monacoVscodeTextmateServiceOverride from '@codingame/monaco-vscode-textmate-service-override';
 import { useOpenEditorStub } from 'monaco-editor-wrapper/vscode/services';
-import { getStorageValue, setStorageValue } from './storage';
+import { getStorageValue } from './storage';
 
 export const getUserConfiguration = () =>
 {
