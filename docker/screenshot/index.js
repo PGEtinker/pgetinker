@@ -6,6 +6,35 @@ import Module from "module";
 
 configDotenv();
 
+// open the browser
+let browser = null;
+
+async function getBrowser() {
+    
+    if (!browser || !(await browser.isConnected())) {
+        if (browser) await browser.close();
+        
+        browser = await puppeteer.launch({
+            executablePath: '/usr/bin/google-chrome',
+            headless: true,
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--enable-webgl',
+                '--use-gl=desktop',
+                '--enable-gpu',
+                '--enable-unsafe-swiftshader',
+                '--use-fake-ui-for-media-stream',
+                '--use-fake-device-for-media-stream',
+                '--autoplay-policy=user-gesture-required',
+                '--mute-audio',
+            ],
+        });
+    }
+
+    return browser;
+}
+
 const app = express();
 const port = process.env.PORT || 6969;
 const mode = process.env.MODE || 'production';
@@ -37,48 +66,30 @@ app.post("/", async(request, response) =>
         return;
     }
     
-    // open the browser
-    const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/google-chrome',
-        headless: true,
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--enable-webgl',
-            '--use-gl=desktop',
-            '--enable-gpu',
-            '--enable-unsafe-swiftshader',
-            '--use-fake-ui-for-media-stream',
-            '--use-fake-device-for-media-stream',
-            '--autoplay-policy=user-gesture-required',
-            '--mute-audio',
-        ],
-    });
-
     // open the tab
-    const page = await browser.newPage();
+    const page = await (await getBrowser()).newPage();
     console.log("Screenshot:", "new page");
-
-    // Capture console messages
-    page.on('console', message =>
-    {
-        const type = message.type().toUpperCase();
-        const text = message.text();
-        console.log(`[PAGE CONSOLE ${type}] ${text}`);
-    });
-  
-    // Capture page errors
-    page.on('pageerror', error =>
-    {
-        console.error('[PAGE ERROR]', error.message);
-    });    
-
-    // set the page's content
-    await page.setContent(request.body.html);
-    console.log("Screenshot:", "set html content");
 
     try
     {
+        // Capture console messages
+        page.on('console', message =>
+        {
+            const type = message.type().toUpperCase();
+            const text = message.text();
+            console.log(`[PAGE CONSOLE ${type}] ${text}`);
+        });
+      
+        // Capture page errors
+        page.on('pageerror', error =>
+        {
+            console.error('[PAGE ERROR]', error.message);
+        });    
+    
+        // set the page's content
+        await page.setContent(request.body.html);
+        console.log("Screenshot:", "set html content");
+
         // setup core update handler
         await page.evaluate(() =>
         {
@@ -93,17 +104,17 @@ app.post("/", async(request, response) =>
             Module.canvas.addEventListener("pge-core-update", pgeUpdateHandler);
         });
         console.log("Screenshot:", "setup core update handler")
-
+        
         // wait for pge to be ready
         await page.waitForFunction(() =>
         {
             return Module.pgeReadyForScreenshot;
         });
         console.log("Screenshot:", "pge is ready for screenshot");
-
+        
         // wait for 5 second after ready
         await sleep(5);
-
+        
         // get the PGE canvas
         const canvas = await page.$('canvas');
         console.log("Screenshot:", "get the canvas");
@@ -118,35 +129,34 @@ app.post("/", async(request, response) =>
             height: boundingBox.height
         });
         console.log("Screenshot:", "resize window to size of bounding box");
-        
+
         // shutter --- click 
         const screenshot = await page.screenshot({
             type: "png",
             encoding: "binary",
         });
         console.log("Screenshot:", "take screenshot");
-        
-        // close the tab
-        await page.close();
-        console.log("Screenshot:", "close tab");
-        
+
         response.statusCode = 200;
         response.header("Content-Type", "image/png");
         response.send(screenshot);
     }
-    catch(e)
+    catch(err)
     {
+        console.error(err);
         response.statusCode = 400;
         response.send(null);
     }
-
-    // close the browser
-    await browser.close();
-    console.log("Screenshot:", "close browser");
-
+    finally
+    {
+        // close the tab
+        await page.close();
+        console.log("Screenshot:", "close tab");
+    }
 });
 
 app.listen(port, () =>
 {
+    getBrowser();
     console.log(`Screenshotter listening on port ${port}`);
 });
