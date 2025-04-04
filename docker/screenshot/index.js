@@ -1,5 +1,5 @@
 import { configDotenv } from "dotenv";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 import express from "express";
 import morgan from "morgan";
 import Module from "module";
