@@ -6,6 +6,7 @@
 /public/screenshots
 /public/wiki
 /services/wiki
+/shared/emsdk
 /storage/*.key
 /vendor
 .env
