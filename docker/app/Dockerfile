@@ -85,20 +85,13 @@ RUN userdel -r ubuntu
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
 
-RUN (cd /opt; git clone https://github.com/emscripten-core/emsdk.git) \
-    && (cd /opt/emsdk; bash emsdk install 3.1.56; bash emsdk activate 3.1.56) \
-    && bash -c "EMSDK_QUIET=1 source /opt/emsdk/emsdk_env.sh; embuilder build libpng sdl2_mixer"
-
-RUN curl -L -o /tmp/clangd-linux-18.1.3.zip https://github.com/clangd/clangd/releases/download/18.1.3/clangd-linux-18.1.3.zip \
-    && (cd /tmp; unzip clangd-linux-18.1.3.zip) \
-    && mv /tmp/clangd_18.1.3/bin/clangd /usr/bin/ \
-    && mv /tmp/clangd_18.1.3/lib/clang /usr/lib/ \
-    && rm -rf /tmp/clangd_18.1.3 \
-    && rm /tmp/clangd-linux-18.1.3.zip
-
 RUN mkdir -p /opt/libs \
+    && mkdir -p /opt/emsdk \
     && chown -R $WWWGROUP:sail /opt/libs \
     && chown -R $WWWGROUP:sail /opt/emsdk
+
+VOLUME /opt/emsdk
+VOLUME /opt/libs
 
 COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
