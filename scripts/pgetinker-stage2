@@ -674,7 +674,8 @@ elif [ "$1" == "initialize" ]; then
         echo "  - Generate a pre-built frontend."
         echo "  - Clone wiki repo."
         echo "  - Create wiki symlinks."
-        echo "  - Build emscripten libraries."
+        echo "  - Pull and install emscripten."
+        echo "  - Build shared emscripten libraries."
         echo "  - Run laravel migration scripts."
         echo ""
         echo "This command usually needs to be run once after pulling"
@@ -751,9 +752,24 @@ elif [ "$1" == "initialize" ]; then
             ln -s /var/www/html/services/wiki/public public/wiki
             echo "## Done."
             echo
+            
+            echo "#### Pull and install emscripten."
+            if [ -f "shared/emsdk/emsdk_env.sh" ]; then
+                echo "## emsdk has already been pulled."
+            else
+                echo "## emsdk not found, pulling."
+                (mkdir -p shared; cd shared; git clone https://github.com/emscripten-core/emsdk.git)
+            fi
 
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk install 3.1.56
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk activate 3.1.56
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/opt/emsdk' pgetinker/app bash -c "EMSDK_QUIET=1 source /opt/emsdk/emsdk_env.sh; embuilder build libpng sdl2_mixer"
+            
+            echo "## Done."
+            echo
+            
             echo "#### Build emscripten libraries."
-            docker run --rm -e WWWUSER="${WWWUSER}" -v './services/libs:/var/www/html' pgetinker/app bash build-libs.sh
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/opt/emsdk' -v './shared/libs:/var/www/html' pgetinker/app bash build-libs.sh
             if [ ! $? -eq 0 ]; then
                 echo "## Emscripten libraries failed to build."
                 return 4
@@ -846,7 +862,7 @@ elif [ "$1" == "language-server" ] || [ "$1" == "ls" ]; then
             ARGS+=("$LANGUAGE_SERVER_SERVICE" "$CMD")
         else
             sail_is_not_running
-        fi    
+        fi
     fi
 fi
 
