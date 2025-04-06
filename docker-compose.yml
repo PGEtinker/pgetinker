@@ -18,7 +18,8 @@ services:
         privileged: true
         volumes:
             - '.:/var/www/html'
-            - './services/libs:/opt/libs'
+            - './shared/libs:/opt/libs'
+            - './shared/emsdk:/opt/emsdk'
             - '/dev/shm:/dev/shm'
         tty: true        # Allocates a TTY
         stdin_open: true # Keeps stdin open for input
@@ -70,7 +71,8 @@ services:
         privileged: true
         volumes:
             - './services/language-server:/var/www/html'
-            - './services/libs:/opt/libs'
+            - './shared/libs:/opt/libs'
+            - './shared/emsdk:/opt/emsdk'
         networks:
             - sail
         depends_on:
