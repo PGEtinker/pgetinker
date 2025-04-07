@@ -559,6 +559,7 @@ class Compiler
             "./emscripten_shell.html",
             "-sASYNCIFY",
             "-sALLOW_MEMORY_GROWTH=1",
+            "-sSTACK_SIZE=131072",
             "-sMAX_WEBGL_VERSION=2",
             "-sMIN_WEBGL_VERSION=2",
             "-sUSE_LIBPNG=1",
