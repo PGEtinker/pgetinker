@@ -646,6 +646,60 @@ elif [ "$1" == "open" ]; then
         sail_is_not_running
     fi
 
+# Clean PGEtinker.
+elif [ "$1" == "clean" ]; then
+
+    if [ "$EXEC" == "no" ]; then
+        echo "PGEtinker services are not running."
+        echo "Run: ./scripts/pgetinker up -d"
+        echo ""
+        exit
+    fi
+
+    echo "This command will:"
+    echo "  - Purge logs."
+    echo "  - Purge workspace files."
+    echo "  - Purge redis caches."
+    echo ""
+    echo "This command usually needs to be run once after pulling"
+    echo "the repository. Using it afterwards can result in"
+    echo "unexpected and undesirable data loss."
+    echo ""
+    echo -n "Proceed? (y/N) "; read proceed
+    echo ""
+    
+    proceed=${proceed:-N}
+    
+    case $proceed in
+        [Yy]*)
+            echo "#### Purging laravel.log"
+            rm -rf storage/logs/laravel.log
+            touch storage/logs/laravel.log
+            echo "## Done."
+            echo
+
+            echo "#### Purging workspaces."
+            rm -rf storage/app/workspaces/*
+            echo "## Done."
+            echo
+
+            echo "#### Purging redis cache."
+            scripts/pgetinker exec redis redis-cli FLUSHALL > /dev/null
+            echo "## Done."
+            echo
+            
+            ;;
+        [Nn]*)
+            echo "You chose to exit without doing anything!"
+            echo ""
+            ;;
+        *)
+            echo "You chose to exit without doing anything!"
+            echo ""
+            ;;
+    esac            
+    exit
+
 # Initialize PGEtinker.
 elif [ "$1" == "initialize" ]; then
 
