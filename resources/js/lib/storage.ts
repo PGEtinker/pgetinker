@@ -47,7 +47,7 @@ export function conformStorage(): void
     
     if(getStorageValue("olcPixelGameEngine") == null)
     {
-        setStorageValue("olcPixelGameEngine", "v2.27");
+        setStorageValue("olcPixelGameEngine", "v2.25");
     }
 
     if(getStorageValue("miniaudio") == null)
@@ -62,7 +62,7 @@ export function conformStorage(): void
     
     if(getStorageValue("olcPGEX_MiniAudio") == null)
     {
-        setStorageValue("olcPGEX_MiniAudio", "v1.7");
+        setStorageValue("olcPGEX_MiniAudio", "v1.5");
     }
 
     if(getStorageValue("olcSoundWaveEngine") == null)

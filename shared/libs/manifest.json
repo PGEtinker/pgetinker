@@ -1,9 +1,9 @@
 {
     "latest": {
-        "olcPixelGameEngine": "v2.27",
+        "olcPixelGameEngine": "v2.25",
         "miniaudio":          "0.11.21",
         "olcPGEX_Gamepad":    "f5958a5",
-        "olcPGEX_MiniAudio":  "v1.7",
+        "olcPGEX_MiniAudio":  "v1.5",
         "olcSoundWaveEngine": "v0.02"
     },
     "bundles": {
