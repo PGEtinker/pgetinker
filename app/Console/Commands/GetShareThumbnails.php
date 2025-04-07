@@ -41,10 +41,18 @@ class GetShareThumbnails extends Command
         }
         
         $controller = new CodeController();
+
+        $manifestPath = "/opt/libs/manifest.json";
+            
+        if(!file_exists($manifestPath))
+            throw new Exception("Library manifest does not exist!");
         
+        $manifest = json_decode(file_get_contents($manifestPath), true);
+        $libraries = $manifest["latest"];
+
         foreach($codes as $code)
         {
-            $result = $controller->compileCode($code->code);
+            $result = $controller->compileCode($code->code, $libraries);
             $code->thumb_url = uploadFileToPit($code->slug . ".png", takeScreenshotOfHtml($result["html"]));
             $code->save();
         }
