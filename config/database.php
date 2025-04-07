@@ -39,6 +39,22 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
+        'supa' => [
+            'driver' => 'pgsql',
+            'url' => env('SUPA_URL'),
+            'host' => env('SUPA_HOST', '127.0.0.1'),
+            'port' => env('SUPA_PORT', '5432'),
+            'database' => env('SUPA_DATABASE', 'laravel'),
+            'username' => env('SUPA_USERNAME', 'root'),
+            'password' => env('SUPA_PASSWORD', ''),
+            'charset' => env('SUPA_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
+
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
