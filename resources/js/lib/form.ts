@@ -6,22 +6,25 @@ let fieldId = 0;
  * @param {(Event) => void} callback 
  * @returns 
  */
-export function button(label: string, description: string, callback: (event: Event) => void)
+export function button(label: string, description: string, text: string, callback: (event: Event) => void)
 {
     fieldId++;
     
     let group = document.createElement("div");
     group.classList.toggle("form-group", true);
 
-    group.innerHTML = `
-        <div class="form-label">${label}</div>
-        <div class="form-description">${description}</div>
-    `;
+    group.innerHTML = ``;
+
+    if(label.length > 0)
+        group.innerHTML += `<div class="form-label">${label}</div>`;
+    
+    if(description.length > 0)
+        group.innerHTML += `<div class="form-description">${description}</div>`;
 
     let button = document.createElement("button");
     button.setAttribute("name", `button-${fieldId}`);
 
-    button.innerHTML = label;
+    button.innerHTML = text;
     
     button.addEventListener("click", (event) =>
     {
