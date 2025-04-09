@@ -29,6 +29,7 @@ export default function settingsDialog(state)
         dialog.querySelector(".content").append(button(
             "Restore Default Layout",
             "If you're unhappy with the layout and want to just start over!",
+            "Restore Default Layout",
             async(event) =>
             {
                 await state.switchToDefaultLayout();
