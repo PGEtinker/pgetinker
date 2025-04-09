@@ -43,6 +43,7 @@
         }
 
         input[type="checkbox"] {
+            flex: 0 0 1.6rem;
             display: inline-block;
             width: 1.6rem;
             height: 1.6rem;
@@ -51,10 +52,9 @@
 
         label {
             display: flex;
+            flex-direction: row;
             font-size: 1.2rem;
             line-height: 1.6rem;
-            justify-content: left;
-            align-content: center;
         }
     }
 
