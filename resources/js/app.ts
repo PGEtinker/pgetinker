@@ -29,7 +29,7 @@ import PlayerPanel from './components/PlayerPanel';
 import ProblemsPanel from './components/ProblemsPanel';
 import axios from 'axios';
 import { createToast, ToastType } from './lib/createToast';
-import { getLibrariesManifest, getCompilerLibraries } from './lib/compilerLibraries';
+import { getCompilerLibraries } from './lib/compilerLibraries';
 
 declare function GoldenLayout(...args: any[]): void;
 
@@ -50,8 +50,6 @@ export default class PGEtinker
 
     constructor()
     {
-        getLibrariesManifest();
-
         this.consolePanel        = new ConsolePanel(this);
         this.compilerOutputPanel = new CompilerOutputPanel(this);
         this.editorPanel         = new EditorPanel(this);
