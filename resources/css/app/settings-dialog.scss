@@ -46,12 +46,15 @@
             display: inline-block;
             width: 1.6rem;
             height: 1.6rem;
+            margin-right: .6rem;
         }
 
         label {
-            display: block;
+            display: flex;
             font-size: 1.2rem;
             line-height: 1.6rem;
+            justify-content: left;
+            align-content: center;
         }
     }
 
