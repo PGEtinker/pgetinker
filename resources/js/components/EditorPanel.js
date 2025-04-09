@@ -71,6 +71,17 @@ export default class EditorPanel
         }
     }
 
+    async restartLanguageClient()
+    {
+        const lcWrapper = this.monacoWrapper.getLanguageClientWrapper();
+        
+        if(!lcWrapper.isStarted())
+            return;
+
+        await axios.get('/sanctum/csrf-cookie');
+        await lcWrapper.restartLanguageClient();
+    }
+
     async onPreInit()
     {
         this.monacoWrapper = await runCppWrapper();
@@ -81,7 +92,7 @@ export default class EditorPanel
         clearInterval(this.reconnectInterval);
         await this.monacoWrapper.dispose();
     }
-
+    
     async onInit()
     {
         if(!this.monacoWrapper)
