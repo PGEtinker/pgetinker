@@ -59,8 +59,7 @@
     }
 
     .form-group:hover {
-        border: 1px solid rgba(0, 0, 255,0.7);
-        margin: -1px;
+        outline: 1px solid var(--pgetinker-settings-dialog-hover);
     }
 
 
