@@ -3,6 +3,7 @@ import { setStorageValue } from './storage';
 import { resetFieldId, select } from "./form";
 import Cookies from 'js-cookie';
 import { getCompilerLibraries } from "./compilerLibraries";
+import settingsDialog from './settingsDialog';
 
 export default function librariesDialog(state)
 {
@@ -19,6 +20,7 @@ export default function librariesDialog(state)
                 <div class="content">
                 </div>
                 <div class="footer">
+                    <button type="button" class="back">Back</button>
                     <button type="button" class="ok">Close</button>
                 </div>                
             </div>`;
@@ -95,7 +97,14 @@ export default function librariesDialog(state)
                 }
             }
         });
-
+        
+        dialog.querySelector(".back").addEventListener("click", (event) =>
+        {
+            settingsDialog(state);
+            dialog.remove();
+            resolve();
+        });
+    
         dialog.querySelector(".ok").addEventListener("click", (event) =>
         {
             dialog.remove();
