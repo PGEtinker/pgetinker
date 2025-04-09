@@ -1,12 +1,20 @@
-import { getCompilerLibraries } from "./compilerLibraries";
+import { getLibrariesManifest, getCompilerLibraries } from "./compilerLibraries";
 // @ts-ignore
 import Cookies from 'js-cookie';
 
+interface Window {
+    librariesManifest: any;
+    localStorage: Storage;
+}
+
+declare const window: Window;
 const prefix: string = "pgetinker_";
 const store: Storage = window.localStorage;
 
-export function conformStorage(): void
+export async function conformStorage(): Promise<void>
 {
+    await getLibrariesManifest();
+
     let agree = store.getItem("pgetinkerAgreedToTerms");
     store.removeItem("pgetinkerAgreedToTerms");
     if(agree)
