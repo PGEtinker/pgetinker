@@ -1,24 +1,12 @@
+import axios from 'axios';
 import { getStorageValue } from './storage';
 
-export function getLibrariesManifest(): void
+export async function getLibrariesManifest(): Promise<void>
 {
     // @ts-ignore
-    axios.get('/sanctum/csrf-cookie')
-        .then(() =>
-        {
-            // @ts-ignore
-            axios.get("/api/libraries")
-                // @ts-ignore
-                .then((response) =>
-                {
-                    // @ts-ignore
-                    window.librariesManifest = response.data;
-                })
-                // @ts-ignore
-                .catch((reasons) => console.error(reasons));
-        })
-        // @ts-ignore
-        .catch((reasons) => console.error(reasons));    
+    await axios.get('/sanctum/csrf-cookie');
+    // @ts-ignore
+    window.librariesManifest = (await axios.get("/api/libraries")).data;
 }
 
 export function getCompilerLibraries(): any
