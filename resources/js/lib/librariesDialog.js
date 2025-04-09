@@ -6,23 +6,8 @@ import { getCompilerLibraries } from "./compilerLibraries";
 
 export default function librariesDialog(state)
 {
-    let manifest;
-    let currentLibraries;
-
-    return new Promise(async(resolve, reject) =>
+    return new Promise((resolve) =>
     {
-        await axios.get('/sanctum/csrf-cookie');
-        
-        try
-        {
-            manifest = (await axios.get("/api/libraries")).data;
-        }
-        catch(err)
-        {
-            reject(err);
-            return;
-        }
-
         let dialog = document.createElement('div');
         
         dialog.classList.toggle("dialog", "true");
@@ -45,14 +30,14 @@ export default function librariesDialog(state)
             resetFieldId();
 
             // ensure fresh versions
-            currentLibraries = getCompilerLibraries();
+            let currentLibraries = getCompilerLibraries();
 
-            const pgeVersions = [];
-            for(let i = 0; i < manifest.bundles["olcPixelGameEngine"].length; i++)
+            const options = [];
+            for(let i = 0; i < librariesManifest.bundles["olcPixelGameEngine"].length; i++)
             {
-                pgeVersions.push({
-                    label: manifest.bundles["olcPixelGameEngine"][i].version,
-                    value: manifest.bundles["olcPixelGameEngine"][i].version
+                options.push({
+                    label: librariesManifest.bundles["olcPixelGameEngine"][i].version,
+                    value: librariesManifest.bundles["olcPixelGameEngine"][i].version
                 });
             }
 
@@ -71,16 +56,16 @@ export default function librariesDialog(state)
 
                     dialog.dispatchEvent(new Event("update-bundle"));
                 },
-                pgeVersions,
+                options,
                 currentLibraries["olcPixelGameEngine"],
             ));
                 
-            for(let i = 0; i < manifest.bundles["olcPixelGameEngine"].length; i++)
+            for(let i = 0; i < librariesManifest.bundles["olcPixelGameEngine"].length; i++)
             {
-                if(manifest.bundles["olcPixelGameEngine"][i].version != currentLibraries["olcPixelGameEngine"])
+                if(librariesManifest.bundles["olcPixelGameEngine"][i].version != currentLibraries["olcPixelGameEngine"])
                     continue;
                 
-                const currentBundle = manifest.bundles["olcPixelGameEngine"][i];
+                const currentBundle = librariesManifest.bundles["olcPixelGameEngine"][i];
 
                 for(let i = 0; i < currentBundle.libraries.length; i++)
                 {
@@ -118,7 +103,7 @@ export default function librariesDialog(state)
         });
         
         dialog.dispatchEvent(new Event("update-bundle"));
-                
+
         document.body.appendChild(dialog);
     });
 }
