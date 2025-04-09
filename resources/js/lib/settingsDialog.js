@@ -95,7 +95,7 @@ export default function settingsDialog(state)
                 event.preventDefault();
                 dialog.remove();
                 resolve();
-                
+            
                 librariesDialog(state);
             }
         ));
