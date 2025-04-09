@@ -63,9 +63,22 @@
                     font-weight: bold;
                     order: -1;
                 }
-
+                ;
+                
                 &.ok:hover {
                     background: #0B5ED7;
+                    color: #fff;
+                }
+
+                &.back {
+                    background: var(--pgetinker-link-color);
+                    color: #fff;
+                    font-weight: bold;
+                    order: -1;
+                }
+
+                &.back:hover {
+                    background: var(--pgetinker-link-hover-color);
                     color: #fff;
                 }
 
