@@ -25,6 +25,8 @@ body {
     --pgetinker-dialog-background-color:#222;
     --pgetinker-dialog-text-color:#ded;
     --pgetinker-dialog-border-color: #444;
+
+    --pgetinker-settings-dialog-hover: rgba(0, 255, 255,0.3);
 }
 
 body.light {
@@ -50,6 +52,8 @@ body.light {
     --pgetinker-dialog-background-color:#fff;
     --pgetinker-dialog-text-color:#000;
     --pgetinker-dialog-border-color: #444;
+
+    --pgetinker-settings-dialog-hover: rgba(17, 85, 85, 0.3);
 }
 
 html,
