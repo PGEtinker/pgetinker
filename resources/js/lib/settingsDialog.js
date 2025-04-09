@@ -3,6 +3,25 @@ import { getStorageValue, setStorageValue } from './storage';
 import { button, resetFieldId, select, toggle } from "./form";
 import Cookies from 'js-cookie';
 import { getCompilerLibraries } from "./compilerLibraries";
+import librariesDialog from './librariesDialog';
+
+function renderCurrentLibraryVersions()
+{
+    const versions = getCompilerLibraries();
+
+    const keys = Object.keys(versions);
+    keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+    
+    let output = `<div class="form-label">Current Library Versions</div>`;
+
+    keys.forEach((key) =>
+    {
+        output += `<div class="library-version"><span>${key}</span><span>${versions[key]}</span></div>`;
+    });
+
+    return output;
+}
+
 
 export default function settingsDialog(state)
 {
@@ -64,6 +83,21 @@ export default function settingsDialog(state)
                 }
             ],
             getStorageValue("theme")
+        ));
+        
+
+        dialog.querySelector(".content").append(button(
+            "",
+            renderCurrentLibraryVersions(),
+            "Select Library Versions",
+            (event) =>
+            {
+                event.preventDefault();
+                dialog.remove();
+                resolve();
+                
+                librariesDialog(state);
+            }
         ));
         
         dialog.querySelector(".content").append(toggle(
