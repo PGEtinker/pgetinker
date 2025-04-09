@@ -26,6 +26,20 @@
 
         .form-description {
             padding: .6rem 0;
+            
+            .library-version {
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+                span:first-child {
+                    width: 15rem;
+                    font-weight: bolder;
+                }
+                
+                span:first-child:after {
+                    content: ": "
+                }
+            } 
         }
 
         input[type="checkbox"] {
