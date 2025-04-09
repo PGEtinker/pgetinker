@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post("/share",   [CodeController::class, "Share" ])->middleware("auth.session");
 Route::post("/compile", [CodeController::class, "Compile" ])->middleware("auth.session");
+Route::get("/health-check", [CodeController::class, "HealthCheck" ]);
 
 Route::get("/libraries", function(Request $request)
 {
@@ -24,8 +25,6 @@ Route::get("/libraries", function(Request $request)
     
     return response(json_encode($libraries, JSON_PRETTY_PRINT), 200)->header("Content-Type", "application/json");
 })->middleware("auth.session");
-
-Route::get("/health-check", [CodeController::class, "HealthCheck" ]);
 
 Route::get("/news", function(Request $request)
 {
