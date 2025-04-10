@@ -37,6 +37,10 @@
     
     <link rel="stylesheet" type="text/css" href="{{ Vite::asset('resources/css/normalize.scss')}}">
     <link rel="stylesheet" type="text/css" href="{{ Vite::asset('resources/css/app.scss')}}">
+
+    <script>
+        window.AppVersion = "{{ config('app.version')() }}";
+    </script>
     @vite('resources/js/app-preload.ts')
 </head>
 <body>
