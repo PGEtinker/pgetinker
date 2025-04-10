@@ -133,7 +133,7 @@
                                 </a>
                             </li>
                             <li class="subitem">
-                                <a target="_blank" href="https://github.com/Moros1138/PGEtinker/issues/new?assignees=Moros1138&labels=bug&projects=&template=bug_report.md&title=Bug in Version: {{ substr(env('VERSION', 'develop'), 0, 7) }}">
+                                <a target="_blank" href="https://github.com/Moros1138/PGEtinker/issues/new?assignees=Moros1138&labels=bug&projects=&template=bug_report.md&title=Bug in Version: {{ config('app.version')() }}">
                                     <i data-lucide="bug"></i>
                                     <span>Report an issue</span>
                                 </a>
