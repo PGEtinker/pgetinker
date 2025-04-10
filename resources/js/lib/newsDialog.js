@@ -32,7 +32,7 @@ export default function newsDialog()
                             For more details visit the <a href="https://github.com/Moros1138/PGEtinker" target="_blank">PGEtinker github repository</a>.
                         </p>
                         <p>
-                        Version: ${version.substring(0, 7)}
+                        Version: ${version}
                         </p>
                     </div>
                     <div class="footer">
