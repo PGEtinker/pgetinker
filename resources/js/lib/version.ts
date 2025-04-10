@@ -1,3 +1,3 @@
 // @ts-ignore
-const version = import.meta.env.VITE_VERSION || "develop";
+const version = window.AppVersion;
 export default version;
