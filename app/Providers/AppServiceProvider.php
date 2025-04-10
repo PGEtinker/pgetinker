@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         {
             return cache()->remember('app_version', now()->addSeconds(10), function()
             {
+                Log::info("cache miss on app.version");
                 try {
                     $branch = trim(exec('git rev-parse --abbrev-ref HEAD 2>/dev/null', $output, $returnCode));
                     $commit = trim(exec('git rev-parse --short HEAD 2>/dev/null', $output, $returnCode));
