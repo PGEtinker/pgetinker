@@ -28,9 +28,7 @@ class AppServiceProvider extends ServiceProvider
         
         Config::set('app.version', function ()
         {
-            $cacheTime = (config("app.env") === "production") ? now()->addHours(24) : now()->addMinutes(15);
-            
-            return cache()->remember('app_version', $cacheTime, function()
+            return cache()->remember('app_version', now()->addSeconds(10), function()
             {
                 try {
                     $branch = trim(exec('git rev-parse --abbrev-ref HEAD 2>/dev/null', $output, $returnCode));
