@@ -12,10 +12,14 @@ please refer to the repository's commit history.
 
 ## Notes
 
+This is an unreleased entry. I will author the notes prior
+publishing and deploying to the PGEtinker website.
+
 ## Commits
 
 ### 2025-04-10
-
+- main: add github-markdown styles to the markdown view
+- main: add github-markdown-css package
 - main: add /changelog page
 - main: add markdown view
 - main: add markdown.scss
