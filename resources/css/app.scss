@@ -2,59 +2,7 @@
 @import "./app/loading.scss";
 @import "toastify-js/src/toastify.css";
 
-body {
-    --pgetinker-link-color: #ff6500;
-    --pgetinker-link-hover-color: #ffab62;
-
-    --pgetinker-background-color: #3e3c44;
-    --pgetinker-text-color:#ded;
-    --pgetinker-text-shadow-color: #000;
-
-    --pgetinker-menu-text-color: #ded;
-    --pgetinker-menu-background: #3e3c44;
-    --pgetinker-menu-hover-background:#a86326;
-    --pgetinker-menu-hover-text-color: #ded;
-
-    --pgetinker-submenu-text-color: #ded;
-    --pgetinker-submenu-background: #43454b;
-    --pgetinker-submenu-hover-background:#909da7;
-    --pgetinker-submenu-hover-text-color: black;
-
-    --pgetinker-content-border-color: #8c909d;
-
-    --pgetinker-dialog-background-color:#222;
-    --pgetinker-dialog-text-color:#ded;
-    --pgetinker-dialog-border-color: #444;
-
-    --pgetinker-settings-dialog-hover: rgba(0, 255, 255,0.3);
-}
-
-body.light {
-    --pgetinker-link-color: #f70;
-    --pgetinker-link-hover-color: #7a4c23;
-
-    --pgetinker-background-color: #fff;
-    --pgetinker-text-color:#000;
-    --pgetinker-text-shadow-color: none;
-
-    --pgetinker-menu-text-color: #424242;
-    --pgetinker-menu-background: #f1f1f1;
-    --pgetinker-menu-hover-background:#f70;
-    --pgetinker-menu-hover-text-color: #ded;
-
-    --pgetinker-submenu-background: #f1f1f1;
-    --pgetinker-submenu-hover-background:#ddd;
-    --pgetinker-submenu-text-color: black;
-    --pgetinker-submenu-hover-text-color: black;
-
-    --pgetinker-content-border-color: #8c909d;
-
-    --pgetinker-dialog-background-color:#fff;
-    --pgetinker-dialog-text-color:#000;
-    --pgetinker-dialog-border-color: #444;
-
-    --pgetinker-settings-dialog-hover: rgba(17, 85, 85, 0.3);
-}
+@import "./common.scss";
 
 html,
 body {
