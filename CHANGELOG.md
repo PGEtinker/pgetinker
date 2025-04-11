@@ -19,6 +19,7 @@ publishing and deploying to the PGEtinker website.
 
 ### 2025-04-11
 
+- main: use menu background color for header, nav, and item links
 - main: remove top margin/padding from first h1
 - main: use background color from common style on markdown-body
 - main: add html padding to markdown style
