@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{{ Vite::asset('resources/css/normalize.scss')}}">
     <link rel="stylesheet" type="text/css" href="{{ Vite::asset('resources/css/markdown.scss')}}">
 </head>
-<body>
+<body class="markdown-body">
     <div class="container">
         {!! $content !!}
     </div>

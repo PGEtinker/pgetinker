@@ -1,13 +1,8 @@
+@import "github-markdown-css/github-markdown.css";
 @import "./common.scss";
 
 html {
     font-size: 24px;
-}
-
-body {
-    background-color: var(--pgetinker-background-color);
-    color: var(--pgetinker-text-color);
-    font-size: 0.6rem;
 }
 
 a:active,
