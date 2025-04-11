@@ -34,6 +34,13 @@
         & > .content {
             padding: 1rem;
 
+            iframe {
+                width: 100%;
+                height: 50vh;
+                border: none;
+                outline: 1px solid var(--pgetinker-dialog-border-color);
+            }
+            
             @media screen and (max-width: 750px) {
                 h1,
                 h2,
