@@ -1,0 +1,29 @@
+@import "./common.scss";
+
+html {
+    font-size: 24px;
+}
+
+body {
+    background-color: var(--pgetinker-background-color);
+    color: var(--pgetinker-text-color);
+    font-size: 0.6rem;
+}
+
+a:active,
+a:link,
+a:visited {
+    color: var(--pgetinker-link-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--pgetinker-link-hover-color);
+    text-decoration: underline;
+}
+
+.container {
+    width: 100%;
+    max-width: 32rem;
+    margin: 0 auto;
+}
