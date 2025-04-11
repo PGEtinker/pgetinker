@@ -17,6 +17,15 @@ publishing and deploying to the PGEtinker website.
 
 ## Commits
 
+### 2025-04-11
+
+- main: remove top margin/padding from first h1
+- main: use background color from common style on markdown-body
+- main: add html padding to markdown style
+- main: use /changelog in iframe
+- main: add iframe styles to dialog
+- main: change overall background color
+
 ### 2025-04-10
 - main: add github-markdown styles to the markdown view
 - main: add github-markdown-css package
