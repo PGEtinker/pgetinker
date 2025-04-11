@@ -8,48 +8,31 @@ export default function newsDialog()
         dialog.classList.toggle("dialog", true);
         dialog.classList.toggle("news", true);
         
-        axios.get('/sanctum/csrf-cookie').then(_ =>
+        dialog.innerHTML = `
+        <div class="window">
+            <div class="header">News and Updates</div>
+            <div class="content">
+                <h3>PGEtinker has been updated. Here's what's been done:</h3>
+                <iframe src="/changelog"></iframe>
+                <p>
+                    For more details visit the <a href="https://github.com/Moros1138/PGEtinker" target="_blank">PGEtinker github repository</a>.
+                </p>
+                <p>
+                Version: ${version}
+                </p>
+            </div>
+            <div class="footer">
+                <button class="ok">Close</button>
+            </div>
+        </div>`;
+    
+        dialog.querySelector("button.ok").addEventListener("click", (event) =>
         {
-            axios.get("/api/news").then((response) =>
-            {
+            dialog.remove();
+            resolve();
+        });
                 
-                let entries = [];
-                
-                response.data.entries.forEach((entry) =>
-                {
-                    entries.push(`<div class="${entry.type}">${entry.message}</div>`);
-                });
-    
-                dialog.innerHTML = `
-                <div class="window">
-                    <div class="header">News and Updates</div>
-                    <div class="content">
-                        <h3>PGEtinker has been updated. Here's what's been done:</h3>
-                        <h3>${response.data.date}</h3>
-                        <div class="entries">${entries.join("")}</div>
-                        
-                        <p>
-                            For more details visit the <a href="https://github.com/Moros1138/PGEtinker" target="_blank">PGEtinker github repository</a>.
-                        </p>
-                        <p>
-                        Version: ${version}
-                        </p>
-                    </div>
-                    <div class="footer">
-                        <button class="ok">Close</button>
-                    </div>
-                </div>`;
-    
-                dialog.querySelector("button.ok").addEventListener("click", (event) =>
-                {
-                    dialog.remove();
-                    resolve();
-                });
-                
-                document.body.appendChild(dialog);
-            });
-    });
-       
+        document.body.appendChild(dialog);
     });
 
 }
