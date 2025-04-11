@@ -6,6 +6,9 @@ html {
     padding: .6rem;
 }
 
+.markdown-body {
+    background-color: var(--pgetinker-background-color)
+}
 a:active,
 a:link,
 a:visited {
