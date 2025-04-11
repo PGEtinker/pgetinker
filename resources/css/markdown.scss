@@ -9,6 +9,12 @@ html {
 .markdown-body {
     background-color: var(--pgetinker-background-color)
 }
+
+.markdown-body h1:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+
 a:active,
 a:link,
 a:visited {
