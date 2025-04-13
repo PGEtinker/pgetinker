@@ -41,62 +41,35 @@ function sanity_check_display_help() {
 }
 
 function sanity_check_application() {
-    local app_dir="/var/www/html"  # First argument is the app directory
-
     # Check for vendor directory (Composer dependencies)
-    if [ ! -d "$app_dir/vendor" ]; then
-        
+    if [ ! -d "/var/www/html/vendor" ]; then
         sanity_check_display_help "Composer dependencies not installed."
     fi
 
     # Check for environment configuration
-    if [ ! -f "$app_dir/.env" ]; then
+    if [ ! -f "/var/www/html/.env" ]; then
         sanity_check_display_help "Environment configurations are missing."
     fi
 
     # Check for node_modules directory (NPM dependencies)
-    if [ ! -d "$app_dir/node_modules" ]; then
+    if [ ! -d "/var/www/html/node_modules" ]; then
         sanity_check_display_help "## NPM dependencies not installed."
     fi
 
     # Check for built static files
-    if [ ! -d "$app_dir/public/build" ]; then
+    if [ ! -d "/var/www/html/public/build" ]; then
         sanity_check_display_help "## Static files do not exist."
     fi
     
-    app_dir="/opt/libs"
-    echo "#### BEGIN: checking for pgetinker libraries at $app_dir"
-    
     # Check if directory exists
-    if [ ! -d "$app_dir" ]; then
-        echo "## Error: Directory '$app_dir' does not exist."
-        return 1
+    if [ ! -d "/opt/libs" ]; then
+        sanity_check_display_help "## Directory: '/opt/libs' does not exist. Are your volumes set?"
     fi    
 
     # Check for pgetinker library specific files
-    if [ ! -f "$app_dir/manifest.json" ] || [ ! -f "$app_dir/Makefile" ]; then
-        echo "## Error: '$app_dir' does not contain PGEtinker/libs."
-        echo "## Did you clone the repo and set it's location in the .env file?"
-        echo ""
-        return 2
+    if [ ! -f "/opt/libs/manifest.json" ] || [ ! -f "/opt/libs/Makefile" ]; then
+        sanity_check_display_help "## '/opt/libs' does not contain libraries. Are your volumes set?"
     fi
-
-    echo "## PGEtinker libraries found in '$app_dir'"
-    cd $app_dir
-    
-    # # build the libraries, if needed.
-    bash build-libs.sh
-    
-    if [ $? -eq 0 ]; then
-        echo "## PGEtinker libraries built."
-    else
-        echo "## PGEtinker libraries failed to build."
-        return 3
-    fi
-
-    echo "#### END: checking for pgetinker libraries at $app_dir" && echo ""
-    
-    cd /var/www/html
 
     return 0
 }
