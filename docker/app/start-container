@@ -64,42 +64,44 @@ function sanity_check_application() {
         sanity_check_display_help "## Static files do not exist."
     fi
     
-    # app_dir="/opt/libs"
-    # echo "#### BEGIN: checking for pgetinker libraries at $app_dir"
+    app_dir="/opt/libs"
+    echo "#### BEGIN: checking for pgetinker libraries at $app_dir"
     
-    # # Check if directory exists
-    # if [ ! -d "$app_dir" ]; then
-    #     echo "## Error: Directory '$app_dir' does not exist."
-    #     return 1
-    # fi    
+    # Check if directory exists
+    if [ ! -d "$app_dir" ]; then
+        echo "## Error: Directory '$app_dir' does not exist."
+        return 1
+    fi    
 
-    # # Check for pgetinker library specific files
-    # if [ ! -f "$app_dir/manifest.json" ] || [ ! -f "$app_dir/Makefile" ]; then
-    #     echo "## Error: '$app_dir' does not contain PGEtinker/libs."
-    #     echo "## Did you clone the repo and set it's location in the .env file?"
-    #     echo ""
-    #     return 2
-    # fi
+    # Check for pgetinker library specific files
+    if [ ! -f "$app_dir/manifest.json" ] || [ ! -f "$app_dir/Makefile" ]; then
+        echo "## Error: '$app_dir' does not contain PGEtinker/libs."
+        echo "## Did you clone the repo and set it's location in the .env file?"
+        echo ""
+        return 2
+    fi
 
-    # echo "## PGEtinker libraries found in '$app_dir'"
-    # cd $app_dir
+    echo "## PGEtinker libraries found in '$app_dir'"
+    cd $app_dir
     
     # # build the libraries, if needed.
-    # bash build-libs.sh > /dev/null 2>&1
+    bash build-libs.sh
     
-    # if [ $? -eq 0 ]; then
-    #     echo "## PGEtinker libraries built."
-    # else
-    #     echo "## PGEtinker libraries failed to build."
-    #     return 3
-    # fi
+    if [ $? -eq 0 ]; then
+        echo "## PGEtinker libraries built."
+    else
+        echo "## PGEtinker libraries failed to build."
+        return 3
+    fi
 
-    # echo "#### END: checking for pgetinker libraries at $app_dir" && echo ""
+    echo "#### END: checking for pgetinker libraries at $app_dir" && echo ""
+    
+    cd /var/www/html
 
     return 0
 }
 
-if [ "$SUPERVISOR_PHP_USER" != "root" ] && [ "$SUPERVISOR_PHP_USER" != "sail" ]; then
+if [ "$SUPERVISOR_APACHE_USER" != "root" ] && [ "$SUPERVISOR_APACHE_USER" != "sail" ]; then
     echo "You should set SUPERVISOR_PHP_USER to either 'sail' or 'root'."
     exit 1
 fi
@@ -115,7 +117,7 @@ fi
 chmod -R ugo+rw /.composer
 
 if [ $# -gt 0 ]; then
-    if [ "$SUPERVISOR_PHP_USER" = "root" ]; then
+    if [ "$SUPERVISOR_APACHE_USER" = "root" ]; then
         exec "$@"
     else
         exec gosu $WWWUSER "$@"
