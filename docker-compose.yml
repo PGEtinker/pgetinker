@@ -56,7 +56,6 @@ services:
             - sail
         depends_on:
             - laravel.test
-
     language-server:
         build:
             context: './docker/language-server'
