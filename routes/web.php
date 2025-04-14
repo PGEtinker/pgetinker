@@ -54,7 +54,7 @@ Route::get("/changelog", function(Request $request)
         $html = Markdown::parse(file_get_contents($path));
 
         return view("markdown", [
-            "title" => "Release Notes",
+            "title" => "Changelog",
             "content" => $html,
             "framed" => ($isFramed) ? "framed" : ""
         ]);
