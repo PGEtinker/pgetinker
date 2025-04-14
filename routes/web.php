@@ -65,3 +65,49 @@ Route::get("/changelog", function(Request $request)
     }
 });
 
+Route::get("/release-notes", function(Request $request)
+{
+    $path = base_path("/CHANGELOG.md");
+    
+    $isFramed = filter_var(
+        $request->query("framed", "false"),
+        FILTER_VALIDATE_BOOLEAN
+    );
+
+    try
+    {
+        if(!file_exists($path))
+            throw new Exception("path not found");
+        
+        $rawText = file_get_contents($path);
+        
+        $marker = "# <u>Release Notes";
+        $firstPos = strpos($rawText, $marker);
+
+        if(!($firstPos !== false))
+            throw new Exception("missing release notes entry");
+
+        $secondPos = strpos($rawText, $marker, $firstPos + strlen($marker));
+
+        if($secondPos !== false)
+        {
+            $result = substr($rawText, $firstPos, $secondPos - $firstPos);
+        }
+        else
+        {
+            $result = substr($rawText, $firstPos);
+        }
+
+        $html = Markdown::parse($result);
+
+        return view("markdown", [
+            "title" => "Release Notes",
+            "content" => $html,
+            "framed" => ($isFramed) ? "framed" : ""
+        ]);
+    }
+    catch(Exception $e)
+    {
+        dd($e->getMessage());
+    }
+});
