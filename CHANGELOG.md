@@ -18,7 +18,8 @@ publishing and deploying to the PGEtinker website.
 ## Commits
 
 ### 2025-04-14
-
+- main: update vite to version 6.2.6
+- main: update axios to version 1.8.4
 - pgetinker: add "update" command
 - pgetinker: use APP_URL instead of hard coded url
 
