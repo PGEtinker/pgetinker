@@ -13,7 +13,7 @@ export default function newsDialog()
             <div class="header">News and Updates</div>
             <div class="content">
                 <h3>PGEtinker has been updated. Here's what's been done:</h3>
-                <iframe src="/changelog"></iframe>
+                <iframe src="/release-notes?framed=true"></iframe>
                 <p>
                     For more details visit the <a href="https://github.com/Moros1138/PGEtinker" target="_blank">PGEtinker github repository</a>.
                 </p>
