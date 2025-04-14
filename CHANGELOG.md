@@ -17,6 +17,21 @@ publishing and deploying to the PGEtinker website.
 
 ## Commits
 
+### 2025-04-13
+
+- main: use release notes instead of changelog
+- main: add /release-notes endpoint
+- main: add framed styles to markdown views and styles
+- main: add framed handler to changelog route
+- pgetinker: instruct use of detached mode
+- pgetinker: use http cloning for wiki repository.
+- app: clean up sanity_check_application
+- main: older versions of PGE require different macros for geometry build test
+- app: switch to apache2 instead of the php dev server
+- main: readability
+- proxy: remove unused wiki config
+- proxy: resolve backend services at runtime instead of start-up
+
 ### 2025-04-11
 
 - main: use menu background color for header, nav, and item links
