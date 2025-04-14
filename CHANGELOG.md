@@ -19,6 +19,7 @@ publishing and deploying to the PGEtinker website.
 
 ### 2025-04-13
 
+- mian: whoops, use Changelog title for /changelog route
 - main: use release notes instead of changelog
 - main: add /release-notes endpoint
 - main: add framed styles to markdown views and styles
