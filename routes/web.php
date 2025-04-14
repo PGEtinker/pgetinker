@@ -37,10 +37,15 @@ Route::get("/player", function ()
     return view("player");
 });
 
-Route::get("/changelog", function()
+Route::get("/changelog", function(Request $request)
 {
     $path = base_path("/CHANGELOG.md");
     
+    $isFramed = filter_var(
+        $request->query("framed", "false"),
+        FILTER_VALIDATE_BOOLEAN
+    );
+
     try
     {
         if(!file_exists($path))
@@ -48,10 +53,15 @@ Route::get("/changelog", function()
         
         $html = Markdown::parse(file_get_contents($path));
 
-        return view("markdown", ["title" => "ChangeLog", "content" => $html]);
+        return view("markdown", [
+            "title" => "Release Notes",
+            "content" => $html,
+            "framed" => ($isFramed) ? "framed" : ""
+        ]);
     }
     catch(Exception $e)
     {
         dd($e->getMessage());
     }
 });
+
