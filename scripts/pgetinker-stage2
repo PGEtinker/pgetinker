@@ -886,7 +886,7 @@ elif [ "$1" == "initialize" ]; then
             echo "#"
             echo "#            Run: ./scripts/pgetinker up -d"
             echo "#"
-            echo "#     Site will be available at: http://localhost"
+            echo "#     Site will be available at: $APP_URL"
             echo "#"
             echo "########################################################"
             echo ""
