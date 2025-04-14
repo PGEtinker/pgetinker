@@ -700,6 +700,152 @@ elif [ "$1" == "clean" ]; then
     esac            
     exit
 
+# Update PGEtinker
+elif [ "$1" == "update" ]; then
+
+    if [ "$EXEC" == "no" ]; then
+        echo "PGEtinker services are not running."
+        echo "Run: ./scripts/pgetinker up -d"
+        echo ""
+        exit
+    fi
+    if [ "$2" == "ci" ]; then
+        proceed=y
+    else
+        echo "This command will:"
+        echo "  - Run git pull."
+        echo "  - Build changed docker images."
+        echo "  - Install composer dependencies."
+        echo "  - Install NPM dependencies."
+        echo "  - Generate a pre-built frontend."
+        echo "  - Pull wiki repo."
+        echo "  - Build shared emscripten libraries."
+        echo "  - Run laravel migration scripts."
+        echo "  - Restart PGEtinker services."
+        echo ""
+        echo "This command helps streamline the update process"
+        echo "by automatically handling all of the things that"
+        echo "needs to be done each time there's a potentially"
+        echo "breaking change to the project!"
+        echo ""
+        echo -n "Proceed? (y/N) "; read proceed
+        echo ""    
+        
+        proceed=${proceed:-N}
+    fi    
+    
+    case $proceed in
+        [Yy]*)
+            rm -rf public/build public/hot
+
+            echo "#### Run git pull."
+            git pull
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to pull latest version."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+            
+            echo "#### Build changed docker images."
+            scripts/pgetinker build
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to build docker images."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "#### Install composer dependencies."
+            scripts/pgetinker composer install
+            if [ ! $? -eq 0 ]; then
+                echo "## Composer dependencies failed to install."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "#### Install NPM dependencies."
+            scripts/pgetinker npm install
+            if [ ! $? -eq 0 ]; then
+                echo "## NPM dependencies failed to install."
+                exit 1
+            fi            
+            echo "## Done."
+            echo
+
+            echo "#### Generate a pre-built frontend."
+            scripts/pgetinker npm run build
+            if [ ! $? -eq 0 ]; then
+                echo "## Static files failed to install."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "#### Pull wiki repo."
+            (cd services/wiki; git pull)
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to pull latest wiki."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+            
+            echo "#### Build shared emscripten libraries."
+            scripts/pgetinker exec laravel.test bash -c "(cd /opt/libs; bash build-libs.sh)"
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to build shared emscripten libraries."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "#### Run laravel migration scripts."
+            scripts/pgetinker artisan migrate
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to run database migrations."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "#### Restart PGEtinker services."
+            scripts/pgetinker down
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to bring PGEtinker services down."
+                exit 1
+            fi
+            scripts/pgetinker up -d
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to bring PGEtinker services up."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "########################################################"
+            echo "#"
+            echo "#                PGEtinker is ready!"
+            echo "#"
+            echo "#     Site will be available at: $APP_URL"
+            echo "#"
+            echo "########################################################"
+            echo ""
+
+            ;;
+        [Nn]*)
+            echo "You chose to exit without doing anything!"
+            echo ""
+            ;;
+        *)
+            echo "You chose to exit without doing anything!"
+            echo ""
+            ;;
+    esac
+
+    exit
+
 # Initialize PGEtinker.
 elif [ "$1" == "initialize" ]; then
 
