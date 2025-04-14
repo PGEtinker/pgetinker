@@ -17,8 +17,14 @@ publishing and deploying to the PGEtinker website.
 
 ## Commits
 
+### 2025-04-14
+
+- pgetinker: add "update" command
+- pgetinker: use APP_URL instead of hard coded url
+
 ### 2025-04-13
 
+- main: correct typo in changelog
 - main: whoops, use Changelog title for /changelog route
 - main: use release notes instead of changelog
 - main: add /release-notes endpoint
