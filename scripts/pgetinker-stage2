@@ -798,7 +798,7 @@ elif [ "$1" == "initialize" ]; then
             echo
             
             echo "#### Clone wiki repo."
-            (mkdir -p services; cd services; git clone git@github.com:PGEtinker/wiki.git)
+            (mkdir -p services; cd services; git clone https://github.com/PGEtinker/wiki.git)
             echo "## Done."
             echo
 
