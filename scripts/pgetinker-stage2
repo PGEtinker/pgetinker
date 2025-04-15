@@ -793,7 +793,7 @@ elif [ "$1" == "update" ]; then
             echo
             
             echo "#### Build shared emscripten libraries."
-            scripts/pgetinker exec laravel.test bash -c "(cd /opt/libs; bash build-libs.sh)"
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/opt/emsdk' -v './shared/libs:/var/www/html' pgetinker/app bash build-libs.sh
             if [ ! $? -eq 0 ]; then
                 echo "## Failed to build shared emscripten libraries."
                 exit 1
