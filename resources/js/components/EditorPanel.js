@@ -57,6 +57,7 @@ export default class EditorPanel
         {
             if(codeIds[i] === codeId)
             {
+                this.stopLanguageClient();
                 this.state.editorPanel.setValue(examples[codeId]);
                 this.state.editorPanel.reveal({ column: 1, lineNumber: 1 });
                 
@@ -66,6 +67,7 @@ export default class EditorPanel
                 }
                 
                 createToast(`Set Code to ${codeName}`, ToastType.Info);
+                this.startLanguageClient();
                 return;
             }
         }
