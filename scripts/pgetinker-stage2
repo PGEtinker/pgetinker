@@ -757,7 +757,7 @@ elif [ "$1" == "update" ]; then
             echo
 
             echo "#### Install composer dependencies."
-            scripts/pgetinker composer install
+            docker run --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app composer install --no-interaction
             if [ ! $? -eq 0 ]; then
                 echo "## Composer dependencies failed to install."
                 exit 1
