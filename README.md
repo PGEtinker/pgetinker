@@ -50,7 +50,8 @@ also start the frontend dev server, see below.
 ```bash
 scripts/pgetinker npm run dev
 ```
-**Note:** The frontend needs to be running at the same time as the rest of the services. 
+**Note:** The frontend needs to be running at the same
+time as the rest of the services.
 
 ## Development
 
