@@ -10,6 +10,7 @@ Visit https://pgetinker.com
 * 4GB RAM
 * 40GB Storage
 * Docker Engine with compose and buildx plugins.
+* A **STABLE** Internet Connection.
 
 **Note:** PGEtinker may run on something less powerful or with
 a different configuration than the requirements listed above.
