@@ -51,6 +51,11 @@ has changed, from the web user's perspective.
 
 ### 2025-04-15
 
+- language-server: do sanity checks when commands are run as well.
+- language-server: update typescript
+- language-server: update dotenv
+- language-server: update ws
+- language-server: update node
 - pgetinker: add gitlog command to show the latest, unpushed commits relative to origin/develop
 - pgetinker: add memory limits to the laravel.test service
 - pgetinker: bypass service container for npm run build
