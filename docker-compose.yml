@@ -25,7 +25,7 @@ services:
         tty: true        # Allocates a TTY
         stdin_open: true # Keeps stdin open for input
         healthcheck:
-            test: ["CMD-SHELL", "curl -s -o /dev/null -w '%{http_code}' http://localhost:80/api/health-check | grep -q 200"]
+            test: ["CMD-SHELL", "curl -f http://localhost:80/api/health-check"]
             interval: 1m30s
             timeout: 30s
             retries: 5
