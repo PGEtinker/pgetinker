@@ -5,11 +5,17 @@ Build an olcPixelGameEngine application interactively within your web browsesr!
 
 Visit https://pgetinker.com
 
-## Requirements
-* Linux Dev Environment.
+## System Requirements
+* AMD Ryzen 5 3600X Processor (2 cores assigned).
+* 4GB RAM
+* 40GB Storage
 * Docker Engine with compose and buildx plugins.
 
 ## Installation
+**Note:** PGEtinker may run on something less powerful or with
+a different configuration than the requirements listed above.
+The requirements are simply based upon the spec used on
+PGEtinker's CI/CD runner.
 
 ```bash
 git clone https://github.com/PGEtinker/pgetinker
