@@ -67,6 +67,7 @@ services:
             WWWUSER: '${WWWUSER}'
             APP_KEY: '${APP_KEY}'
             LARAVEL_SAIL: 1
+        command: [ "npm", "run", "dev" ]
         privileged: true
         mem_limit: .75gb
         memswap_limit: .75gb
