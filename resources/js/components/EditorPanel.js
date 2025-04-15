@@ -50,7 +50,7 @@ export default class EditorPanel
         this.monacoWrapper.getEditor().setValue(value);
     }
     
-    setToExample(codeId, codeName)
+    async setToExample(codeId, codeName)
     {
         const codeIds = Object.keys(examples);
         for(let i = 0; i < codeIds.length; i++)
