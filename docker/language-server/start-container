@@ -50,6 +50,9 @@ if [ ! -z "$WWWUSER" ]; then
 fi
 
 if [ $# -gt 0 ]; then
+
+    gosu $WWWUSER bash -c "$(declare -f language_server_init); language_server_init"
+
     if [ "$SUPERVISOR_NPM_USER" = "root" ]; then
         exec "$@"
     else
