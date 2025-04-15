@@ -64,7 +64,14 @@ been in a state where people could reasonably run it on their own
 machines. I don't even know where to begin to give guidance on the
 subject of contribution so if you got questions, send them my way!
 
+
 ## Known issues with the repo
 
-* The services can not be started on arbitrary ports, you get port 80 and that's it. However the reverse proxy service does forward the protocols properly so if it's behind a TLS terminator reverse proxy you can host it publicly on a HTTPS address.
-
+* APP_URL must not contain a port. I spent alot of time trying to
+get all of the services to work when APP_URL contains a port and
+I have yet to figure out a sane way to handle that. For now, APP_URL
+must have a proper address, with no port. Eg: http://localhost.
+However, it does happily work behind a reverse proxy if APP_URL is,
+for eg: https://test.pgetinker.com. This obviously requires a TLS
+terminating reverse proxy configuration which is beyond the scope
+of this manual.
