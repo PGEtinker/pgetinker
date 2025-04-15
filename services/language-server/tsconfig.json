@@ -25,7 +25,7 @@
       "noUnusedParameters": true,
       "noUnusedLocals": true,
       // Enable type checking of declaration files, skip in packages where needed
-      "skipLibCheck": false,
+      "skipLibCheck": true,
        // Disallow inconsistently-cased references to the same file
       "forceConsistentCasingInFileNames": true,
       "noImplicitOverride": true,
