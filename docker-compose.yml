@@ -68,6 +68,8 @@ services:
             APP_KEY: '${APP_KEY}'
             LARAVEL_SAIL: 1
         privileged: true
+        mem_limit: .75gb
+        memswap_limit: .75gb
         volumes:
             - './services/language-server:/var/www/html'
             - './shared/libs:/opt/libs'
