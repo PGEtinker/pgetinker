@@ -12,8 +12,38 @@ please refer to the repository's commit history.
 
 ## Notes
 
-This is an unreleased entry. I will author the notes prior
-publishing and deploying to the PGEtinker website.
+This release sees a fundamental change in the way PGEtinker
+is developed. It is now organized into a 2 repositories and several
+customized docker images and a script that function together to
+provide the development experience.
+
+See the <a href="https://github.com/PGEtinker/pgetinker" target="_blank" rel="noopener noreferrer">README.md</a>
+file on the github repository for the quick start guide.
+
+The purpose of this change was to make it a simple task to deploy a copy
+of PGEtinker for local development. The following is a brief list of what
+has changed, from the web user's perspective.
+
+- Added library version selection.
+- Added library versions example code.
+- Changed emscripten stack size. Set to 128KB, up from 64KB.
+- Added language server support for library version selection.
+- Added olcPixelGameEngine v2.23 and associated repository headers.
+- Added olcPixelGameEngine v2.24 and associated repository headers.
+- Added olcPixelGameEngine v2.25 and associated repository headers.
+- Added olcPixelGameEngine v2.26 and associated repository headers.
+- Added olcPixelGameEngine v2.27 and associated repository headers.
+- Added olcPGEX_GamePad from f5958a5.
+- Added olcPGEX_MiniAudio v1.5.
+- Added olcPGEX_MiniAudio v1.6.
+- Added olcPGEX_MiniAudio v1.7.
+- Added olcSoundWaveEngine v0.2.
+- Added miniaudio 0.11.21.
+- Fix hover effects artifacts when browser is zoomed.
+- Changed settings dialog hover color.
+- Changed to use flex layouts to make checkbox/labels look more sane.
+- Added a more comprehensive changelog.
+- Changed how release notes are displayed on the news dialog.
 
 ## Commits
 
