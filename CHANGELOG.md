@@ -44,8 +44,45 @@ has changed, from the web user's perspective.
 - Changed to use flex layouts to make checkbox/labels look more sane.
 - Added a more comprehensive changelog.
 - Changed how release notes are displayed on the news dialog.
+- Fleshed out system requirements and usage instructions on README.md
 
 ## Commits
+
+
+### 2025-04-15
+
+- pgetinker: add gitlog command to show the latest, unpushed commits relative to origin/develop
+- pgetinker: add memory limits to the laravel.test service
+- pgetinker: bypass service container for npm run build
+- main: add Ubuntu 22.04 or later to system requirements in README.md
+- main: typo in README.md
+- main: add a stable internet connection to the list of system requirements
+- main: fleshout release notes in changelog
+- main: clarification of APP_URL limitations/known issues in README.md
+- main: remove screenshots from the known issues as the screenshot service has been added.
+- main: formatting README.md
+- main: formatting README.md
+- main: add more detailed explanation of scripts/pgetinker up -d in README.md
+- main: add update instructions to README.md
+- main: verbiage change Install PGEtinker, instead of Installation
+- main: flesh out system requirements in README.md
+- pgetinker: run development command for language server service
+- pgetinker: add memory limits to the language server service
+- pgetinker: move wait_for_healthy function so it can be used in initialize and update commands
+- pgetinker: use exit instead of return
+- pgetinker: database migration in update command
+- pgetinker: switch to raw docker command instead of relying on pgetinker script to build emscripten libraries.
+- pgetinker: switch to raw docker command instead of relying on pgetinker script for npm
+- pgetinker: switch to raw docker command instead of relying on the pgetinker script for php composer
+- pgetinker: update now requires services to be down
+- main: use await on start/stop language client
+- main: make setToExample async
+- main: stopLanguageClient before setting example code then startLanguageClient after.
+- main: add startLanguageClient to EditorPanel
+- main: add stopLanguageClient to EditorPanel
+- language-server: typescript config. skip library checks
+- language-server: add npm build to the initializer script
+- language-server: start production mode by default
 
 ### 2025-04-14
 - main: update vite to version 6.2.6
