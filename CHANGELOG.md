@@ -51,6 +51,8 @@ has changed, from the web user's perspective.
 
 ### 2025-04-15
 
+- main: log compiler status on failed health checks
+- pgetinker: use simpler health check command
 - language-server: do sanity checks when commands are run as well.
 - language-server: update typescript
 - language-server: update dotenv
