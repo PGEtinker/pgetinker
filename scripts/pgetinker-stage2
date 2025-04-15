@@ -801,7 +801,16 @@ elif [ "$1" == "update" ]; then
             echo "## Done."
             echo
 
-            echo "#### Run laravel migration scripts."
+            echo "#### Prepare containers."
+            echo "## Phase 1: start services."
+            scripts/pgetinker up -d
+            sleep 10
+            wait_for_healthy
+            sleep 10
+            echo "## Done."
+            echo
+
+            echo "## Phase 2: database migrations."
             scripts/pgetinker artisan migrate
             if [ ! $? -eq 0 ]; then
                 echo "## Failed to run database migrations."
@@ -810,23 +819,16 @@ elif [ "$1" == "update" ]; then
             echo "## Done."
             echo
 
-            echo "#### Restart PGEtinker services."
+            echo "## Phase 3: shutdown services."
             scripts/pgetinker down
-            if [ ! $? -eq 0 ]; then
-                echo "## Failed to bring PGEtinker services down."
-                exit 1
-            fi
-            scripts/pgetinker up -d
-            if [ ! $? -eq 0 ]; then
-                echo "## Failed to bring PGEtinker services up."
-                exit 1
-            fi
             echo "## Done."
             echo
 
             echo "########################################################"
             echo "#"
             echo "#                PGEtinker is ready!"
+            echo "#"
+            echo "#            Run: ./scripts/pgetinker up -d"
             echo "#"
             echo "#     Site will be available at: $APP_URL"
             echo "#"
