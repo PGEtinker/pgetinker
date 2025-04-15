@@ -182,6 +182,35 @@ function sail_is_not_running {
     exit 1
 }
 
+# Function to check if all services are healthy
+wait_for_healthy() {
+    container_id=$("${DOCKER_COMPOSE[@]}" ps -q "$APP_SERVICE")
+    if [ -z "$container_id" ]; then
+        echo "Error: Container for $APP_SERVICE not found."
+        exit 1
+    fi
+
+    # Poll until the service is healthy
+    while true; do
+        health_status=$(docker inspect --format='{{.State.Health.Status}}' "$container_id" 2>/dev/null || echo "no-healthcheck")
+        case "$health_status" in
+            "healthy")
+            break
+            ;;
+            "unhealthy")
+            echo "$APP_SERVICE is unhealthy, exiting..."
+            exit 1
+            ;;
+            "no-healthcheck")
+            break
+            ;;
+            *)
+            sleep 2
+            ;;
+        esac
+    done
+}
+
 # Define Docker Compose command prefix...
 if docker compose &> /dev/null; then
     DOCKER_COMPOSE=(docker compose)
@@ -979,36 +1008,6 @@ elif [ "$1" == "initialize" ]; then
             echo "## Done."
             echo
 
-            # Function to check if all services are healthy
-            wait_for_healthy() {
-                
-                container_id=$("${DOCKER_COMPOSE[@]}" ps -q "$APP_SERVICE")
-                if [ -z "$container_id" ]; then
-                    echo "Error: Container for $APP_SERVICE not found."
-                    exit 1
-                fi
-
-                # Poll until the service is healthy
-                while true; do
-                    health_status=$(docker inspect --format='{{.State.Health.Status}}' "$container_id" 2>/dev/null || echo "no-healthcheck")
-                    case "$health_status" in
-                        "healthy")
-                        break
-                        ;;
-                        "unhealthy")
-                        echo "$APP_SERVICE is unhealthy, exiting..."
-                        exit 1
-                        ;;
-                        "no-healthcheck")
-                        break
-                        ;;
-                        *)
-                        sleep 2
-                        ;;
-                    esac
-                done
-            }
-            
             echo "#### Prepare containers."
             echo "## Phase 1: start services."
             ./scripts/pgetinker up -d
