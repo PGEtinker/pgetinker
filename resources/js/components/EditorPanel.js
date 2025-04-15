@@ -79,6 +79,14 @@ export default class EditorPanel
             return;
         await lcWrapper.disposeLanguageClient(false);
     }
+
+    async startLanguageClient()
+    {
+        await axios.get('/sanctum/csrf-cookie');
+        await lcWrapper.start();
+    }
+    
+
     async restartLanguageClient()
     {
         const lcWrapper = this.monacoWrapper.getLanguageClientWrapper();
