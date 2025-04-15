@@ -7,6 +7,7 @@ Visit https://pgetinker.com
 
 ## System Requirements
 * AMD Ryzen 5 3600X Processor (2 cores assigned).
+* Ubuntu 22.04 or later.
 * 4GB RAM
 * 40GB Storage
 * Docker Engine with compose and buildx plugins.
