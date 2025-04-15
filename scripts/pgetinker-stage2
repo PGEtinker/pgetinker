@@ -1071,6 +1071,11 @@ elif [ "$1" == "language-server" ] || [ "$1" == "ls" ]; then
             sail_is_not_running
         fi
     fi
+
+
+elif [ "$1" == "gitlog" ]; then
+    git log origin/develop..HEAD --pretty="%ad|%s" --date=format:"%Y-%m-%d"
+    exit
 fi
 
 # Run Docker Compose with the defined arguments...
