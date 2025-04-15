@@ -448,6 +448,12 @@ elif [ "$1" == "node" ]; then
 # Proxy NPM commands to the "npm" binary on the application container...
 elif [ "$1" == "npm" ]; then
     shift 1
+    
+    # allow `npm run build` to bypass container memory limitations in a production environment
+    if [ "$1" == "run" ] && [ "$2" == "build" ]; then
+        docker run --rm -e WWWUSER="${WWWUSER}" -v '.:/var/www/html' pgetinker/app npm "$@"
+        exit
+    fi
 
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
