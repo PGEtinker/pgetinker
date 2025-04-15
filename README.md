@@ -66,6 +66,5 @@ subject of contribution so if you got questions, send them my way!
 
 ## Known issues with the repo
 
-* Sharing Screenshots haven't been added yet.
 * The services can not be started on arbitrary ports, you get port 80 and that's it. However the reverse proxy service does forward the protocols properly so if it's behind a TLS terminator reverse proxy you can host it publicly on a HTTPS address.
 
