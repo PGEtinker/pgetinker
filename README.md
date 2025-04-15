@@ -11,11 +11,12 @@ Visit https://pgetinker.com
 * 40GB Storage
 * Docker Engine with compose and buildx plugins.
 
-## Installation
 **Note:** PGEtinker may run on something less powerful or with
 a different configuration than the requirements listed above.
 The requirements are simply based upon the spec used on
 PGEtinker's CI/CD runner.
+
+## Install PGEtinker
 
 ```bash
 git clone https://github.com/PGEtinker/pgetinker
