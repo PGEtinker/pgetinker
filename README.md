@@ -26,6 +26,11 @@ cd pgetinker
 scripts/pgetinker initialize
 ```
 
+### Update PGEtinker
+```bash
+scripts/pgetinker update
+```
+
 ## Usage
 
 ### Bring up the PGEtinker services
