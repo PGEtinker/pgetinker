@@ -106,6 +106,9 @@ class CodeController extends Controller
                 "message" => "healthy"
             ], 200);
         }
+        
+        Log::error("Health check failed");
+        Log::error($compiler->serialize());
 
         return response([
             "statusCode" => 400,
