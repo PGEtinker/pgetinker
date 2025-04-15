@@ -703,9 +703,9 @@ elif [ "$1" == "clean" ]; then
 # Update PGEtinker
 elif [ "$1" == "update" ]; then
 
-    if [ "$EXEC" == "no" ]; then
-        echo "PGEtinker services are not running."
-        echo "Run: ./scripts/pgetinker up -d"
+    if [ "$EXEC" == "yes" ]; then
+        echo "PGEtinker services are running."
+        echo "Run: ./scripts/pgetinker down"
         echo ""
         exit
     fi
