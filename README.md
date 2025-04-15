@@ -37,7 +37,14 @@ scripts/pgetinker update
 ```bash
 scripts/pgetinker up -d
 ```
-PGEtinker should now be available at: http://localhost
+
+This will bring PGEtinker services up in their
+default mode. In this state you can enjoy PGEtinker
+as a general user by visiting: http://localhost, or
+whatever address you configured ``APP_URL`` to be in
+the ``.env`` configuration file. If you wish to make
+changes to the frontend code, then you will need to
+also start the frontend dev server, see below.
 
 ### Bring up the frontend dev server
 ```bash
