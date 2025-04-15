@@ -71,6 +71,14 @@ export default class EditorPanel
         }
     }
 
+    async stopLanguageClient()
+    {
+        const lcWrapper = this.monacoWrapper.getLanguageClientWrapper();
+        
+        if(!lcWrapper.isStarted())
+            return;
+        await lcWrapper.disposeLanguageClient(false);
+    }
     async restartLanguageClient()
     {
         const lcWrapper = this.monacoWrapper.getLanguageClientWrapper();
