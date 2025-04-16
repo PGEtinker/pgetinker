@@ -70,8 +70,8 @@ services:
             LARAVEL_SAIL: 1
         command: [ "npm", "run", "dev" ]
         privileged: true
-        mem_limit: .75gb
-        memswap_limit: .75gb
+        mem_limit: 1.5gb
+        memswap_limit: 1.5gb
         volumes:
             - './services/language-server:/var/www/html'
             - './shared/libs:/opt/libs'
