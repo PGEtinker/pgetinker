@@ -120,7 +120,13 @@ const launchLanguageServer = (runconfig: LanguageServerRunConfig, socket: IWebSo
         nsJailArgs.push("-R");
         nsJailArgs.push(`${libraryDirectories[library]}:/workspace/${library}`);
     });
-
+    
+    if(isProduction())
+    {
+        // run nsjail in "really quiet" mode during production.
+        nsJailArgs.push("-Q");    
+    }
+    
     nsJailArgs.push("--");
     
     // begin clangd specifics
