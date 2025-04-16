@@ -45,12 +45,22 @@ has changed, from the web user's perspective.
 - Added a more comprehensive changelog.
 - Changed how release notes are displayed on the news dialog.
 - Fleshed out system requirements and usage instructions on README.md
+- Add cgroups to nsjail configuration
+- Add cgroups creation and mounting to app/language-server startup scripts
 
 ## Commits
 
-
 ### 2025-04-15
 
+- language-server: ensure cgroups are created no matter if it's server or command
+- pgetinker: bump mem_limit and memswap_limit to 1.5gigs
+- main: nsjail use "really quiet" mode in production environments
+- language-server: nsjail use "really quiet" mode in production environments
+- language-server: add "pgetinker-compile" cgroups to nsjail config
+- language-server: add cgroup commnads to startup script
+- app: add cgroup commands to startup script
+- main,language-server: add "pgetinker-compile" cgroups to nsjail configuration
+- main,language-server: set nsjail default logging to DEBUG
 - main: log compiler status on failed health checks
 - pgetinker: use simpler health check command
 - language-server: do sanity checks when commands are run as well.
