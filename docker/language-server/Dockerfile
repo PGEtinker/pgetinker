@@ -42,7 +42,7 @@ RUN echo "Acquire::http::Pipeline-Depth 0;" > /etc/apt/apt.conf.d/99custom && \
 
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y \
-        ca-certificates curl dnsutils \
+        ca-certificates curl cgroup-tools dnsutils \
         fswatch git gosu gnupg libcap2-bin \
         librsvg2-bin micro python3 sqlite3 \
         supervisor unzip xz-utils zip \
