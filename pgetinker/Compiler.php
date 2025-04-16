@@ -523,6 +523,12 @@ class Compiler
                 $nsJailCommand[] = "{$directory}:/workspace/{$library}";
             }
 
+            if(config("app.env") === "production")
+            {
+                // run nsjail in "really quiet" mode during production.
+                $nsJailCommand[] = "-Q";
+            }
+            
             $nsJailCommand[] = "--";
 
             $this->compilerCommand = $nsJailCommand;
