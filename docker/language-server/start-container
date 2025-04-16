@@ -52,6 +52,15 @@ fi
 if [ $# -gt 0 ]; then
 
     gosu $WWWUSER bash -c "$(declare -f language_server_init); language_server_init"
+    if [ $? -eq 0 ]; then
+        echo "Language Server initialized."
+    else
+        echo "Language Server failed to initialize."
+        exit 1
+    fi
+
+    cgcreate -a sail:sail -g memory,pids,cpu:pgetinker-compile
+    chown sail:root /sys/fs/cgroup/cgroup.procs
 
     if [ "$SUPERVISOR_NPM_USER" = "root" ]; then
         exec "$@"
