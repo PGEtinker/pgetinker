@@ -99,10 +99,6 @@ if [ $# -gt 0 ]; then
 else
     add_application_hostname_to_hosts_file "$APP_URL"
     sanity_check_application
-
-    cgcreate -a sail:sail -g memory,pids,cpu:pgetinker-compile
-    chown sail:root /sys/fs/cgroup/cgroup.procs
-    
     echo "Application initialized."
     exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
 fi
