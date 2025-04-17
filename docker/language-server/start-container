@@ -69,8 +69,5 @@ else
         exit 1
     fi
 
-    cgcreate -a sail:sail -g memory,pids,cpu:pgetinker-compile
-    chown sail:root /sys/fs/cgroup/cgroup.procs
-
     exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
 fi
