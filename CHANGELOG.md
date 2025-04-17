@@ -45,10 +45,19 @@ has changed, from the web user's perspective.
 - Added a more comprehensive changelog.
 - Changed how release notes are displayed on the news dialog.
 - Fleshed out system requirements and usage instructions on README.md
-- Add cgroups to nsjail configuration
-- Add cgroups creation and mounting to app/language-server startup scripts
 
 ## Commits
+
+2025-04-17
+
+- main: add app:update-database cli to facilitate upgrading
+- pgetinker: use effective memory limits
+- language-server: set nsjail default logging to DEBUG
+- Revert "main,language-server: add "pgetinker-compile" cgroups to nsjail configuration"
+- Revert "app: add cgroup commands to startup script"
+- Revert "language-server: add cgroup commnads to startup script"
+- Revert "language-server: add "pgetinker-compile" cgroups to nsjail config"
+- Revert "language-server: ensure cgroups are created no matter if it's server or command"
 
 ### 2025-04-15
 
