@@ -16,7 +16,12 @@ services:
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
         privileged: true
-        mem_limit: 1.5gb
+        deploy:
+            resources:
+                limits:
+                    memory: 1.5g
+        mem_swappiness: 0
+        oom_kill_disable: false
         volumes:
             - '.:/var/www/html'
             - './shared/libs:/opt/libs'
@@ -70,8 +75,12 @@ services:
             LARAVEL_SAIL: 1
         command: [ "npm", "run", "dev" ]
         privileged: true
-        mem_limit: 1.5gb
-        memswap_limit: 1.5gb
+        deploy:
+            resources:
+                limits:
+                    memory: 750m
+        mem_swappiness: 0
+        oom_kill_disable: false
         volumes:
             - './services/language-server:/var/www/html'
             - './shared/libs:/opt/libs'
