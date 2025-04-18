@@ -50,6 +50,8 @@ has changed, from the web user's perspective.
 
 2025-04-17
 
+- pgetinker: add production docker compose script
+- main: set sane defaults for .env.example
 - main: add app:update-database cli to facilitate upgrading
 - pgetinker: use effective memory limits
 - language-server: set nsjail default logging to DEBUG
