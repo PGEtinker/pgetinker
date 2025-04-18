@@ -1,4 +1,5 @@
 #header {
+    background-color: var(--pgetinker-menu-background);
     nav {
         display: flex;
         justify-content: space-between;
@@ -11,6 +12,7 @@
             list-style-type: none;
             padding: 0;
             margin: 0;
+            background-color: var(--pgetinker-menu-background);
 
             &.right-menu {
                 justify-content: flex-end;
@@ -36,7 +38,7 @@
                 a:active,
                 a:link,
                 a:visited {
-                    background-color: var(--pgetinker-background-color);
+                    background-color: var(--pgetinker-menu-background);
                     border: none;
                     color: var(--pgetinker-menu-text-color);
                     cursor: pointer;

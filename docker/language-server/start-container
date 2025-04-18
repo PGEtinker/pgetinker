@@ -50,6 +50,9 @@ if [ ! -z "$WWWUSER" ]; then
 fi
 
 if [ $# -gt 0 ]; then
+
+    gosu $WWWUSER bash -c "$(declare -f language_server_init); language_server_init"
+
     if [ "$SUPERVISOR_NPM_USER" = "root" ]; then
         exec "$@"
     else
@@ -57,6 +60,7 @@ if [ $# -gt 0 ]; then
     fi
 else
     gosu $WWWUSER bash -c "$(declare -f language_server_init); language_server_init"
+    gosu $WWWUSER bash -c "npm run build"
     
     if [ $? -eq 0 ]; then
         echo "Language Server initialized."

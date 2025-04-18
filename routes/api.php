@@ -7,10 +7,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::post("/share",   [CodeController::class, "Share" ])->middleware("auth.session");
 Route::post("/compile", [CodeController::class, "Compile" ])->middleware("auth.session");
+Route::get("/health-check", [CodeController::class, "HealthCheck" ]);
 
 Route::get("/libraries", function(Request $request)
 {
-    if(!file_exists(env("PGETINKER_LIBS_DIRECTORY", "/opt/libs") . "/manifest.json"))
+    if(!file_exists("/opt/libs/manifest.json"))
     {
         return response([
             "statusCode" => 404,
@@ -18,14 +19,12 @@ Route::get("/libraries", function(Request $request)
         ], 404)->header("Content-Type", "application/json");
     }
 
-    $libraries = json_decode(file_get_contents(env("PGETINKER_LIBS_DIRECTORY", "/opt/libs") . "/manifest.json"));
+    $libraries = json_decode(file_get_contents("/opt/libs/manifest.json"));
     unset($libraries->macroToObject);
     $libraries->statusCode = 200;
     
     return response(json_encode($libraries, JSON_PRETTY_PRINT), 200)->header("Content-Type", "application/json");
 })->middleware("auth.session");
-
-Route::get("/health-check", [CodeController::class, "HealthCheck" ]);
 
 Route::get("/news", function(Request $request)
 {

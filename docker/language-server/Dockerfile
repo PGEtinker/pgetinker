@@ -28,12 +28,10 @@ FROM base AS run
 
 ARG WWWGROUP
 ARG NODE_VERSION=22
-ARG MYSQL_CLIENT="mysql-client"
-ARG POSTGRES_VERSION=17
 
 WORKDIR /var/www/html
 
-ENV SUPERVISOR_NPM_COMMAND="/usr/bin/npm run dev"
+ENV SUPERVISOR_NPM_COMMAND="/usr/bin/npm run start"
 ENV SUPERVISOR_NPM_USER="sail"
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -43,35 +41,24 @@ RUN echo "Acquire::http::Pipeline-Depth 0;" > /etc/apt/apt.conf.d/99custom && \
     echo "Acquire::BrokenProxy    true;" >> /etc/apt/apt.conf.d/99custom
 
 RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin python3 dnsutils librsvg2-bin fswatch xz-utils micro \
+    && apt-get install -y \
+        ca-certificates curl cgroup-tools dnsutils \
+        fswatch git gosu gnupg libcap2-bin \
+        librsvg2-bin micro python3 sqlite3 \
+        supervisor unzip xz-utils zip \
     && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
     && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_VERSION.x nodistro main" > /etc/apt/sources.list.d/nodesource.list \
     && apt-get update \
     && apt-get install -y nodejs \
-    && npm install -g npm \
-    && npm install -g pnpm \
-    && npm install -g bun
+    && npm install -g npm
     
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /etc/apt/keyrings/yarn.gpg >/dev/null \
-    && echo "deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
-    && curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/keyrings/pgdg.gpg >/dev/null \
-    && echo "deb [signed-by=/etc/apt/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt noble-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y yarn \
-    && apt-get install -y $MYSQL_CLIENT \
-    && apt-get install -y postgresql-client-$POSTGRES_VERSION \
-    && apt-get -y autoremove \
+RUN apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 
 RUN userdel -r ubuntu
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
-
-RUN (cd /opt; git clone https://github.com/emscripten-core/emsdk.git) \
-    && (cd /opt/emsdk; bash emsdk install 3.1.56; bash emsdk activate 3.1.56) \
-    && bash -c "EMSDK_QUIET=1 source /opt/emsdk/emsdk_env.sh; embuilder build libpng sdl2_mixer"
 
 RUN curl -L -o /opt/clangd-linux-18.1.3.zip https://github.com/clangd/clangd/releases/download/18.1.3/clangd-linux-18.1.3.zip \
     && (cd /opt; unzip clangd-linux-18.1.3.zip) \
@@ -81,8 +68,12 @@ RUN curl -L -o /opt/clangd-linux-18.1.3.zip https://github.com/clangd/clangd/rel
     && rm /opt/clangd-linux-18.1.3.zip
 
 RUN mkdir -p /opt/libs \
+    mkdir -p /opt/emsdk \
     && chown -R $WWWGROUP:sail /opt/libs \
     && chown -R $WWWGROUP:sail /opt/emsdk
+
+VOLUME /opt/emsdk
+VOLUME /opt/libs
 
 COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

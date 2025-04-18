@@ -1,4 +1,13 @@
+import axios from 'axios';
 import { getStorageValue } from './storage';
+
+export async function getLibrariesManifest(): Promise<void>
+{
+    // @ts-ignore
+    await axios.get('/sanctum/csrf-cookie');
+    // @ts-ignore
+    window.librariesManifest = (await axios.get("/api/libraries")).data;
+}
 
 export function getCompilerLibraries(): any
 {

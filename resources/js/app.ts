@@ -50,7 +50,6 @@ export default class PGEtinker
 
     constructor()
     {
-
         this.consolePanel        = new ConsolePanel(this);
         this.compilerOutputPanel = new CompilerOutputPanel(this);
         this.editorPanel         = new EditorPanel(this);

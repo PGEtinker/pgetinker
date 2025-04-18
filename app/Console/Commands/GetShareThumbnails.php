@@ -41,10 +41,10 @@ class GetShareThumbnails extends Command
         }
         
         $controller = new CodeController();
-        
+
         foreach($codes as $code)
         {
-            $result = $controller->compileCode($code->code);
+            $result = $controller->compileCode($code->code, $code->library_versions);
             $code->thumb_url = uploadFileToPit($code->slug . ".png", takeScreenshotOfHtml($result["html"]));
             $code->save();
         }

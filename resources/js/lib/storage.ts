@@ -1,12 +1,20 @@
-import { getCompilerLibraries } from "./compilerLibraries";
+import { getLibrariesManifest, getCompilerLibraries } from "./compilerLibraries";
 // @ts-ignore
 import Cookies from 'js-cookie';
 
+interface Window {
+    librariesManifest: any;
+    localStorage: Storage;
+}
+
+declare const window: Window;
 const prefix: string = "pgetinker_";
 const store: Storage = window.localStorage;
 
-export function conformStorage(): void
+export async function conformStorage(): Promise<void>
 {
+    await getLibrariesManifest();
+
     let agree = store.getItem("pgetinkerAgreedToTerms");
     store.removeItem("pgetinkerAgreedToTerms");
     if(agree)
@@ -47,7 +55,7 @@ export function conformStorage(): void
     
     if(getStorageValue("olcPixelGameEngine") == null)
     {
-        setStorageValue("olcPixelGameEngine", "v2.27");
+        setStorageValue("olcPixelGameEngine", "v2.25");
     }
 
     if(getStorageValue("miniaudio") == null)
@@ -62,7 +70,7 @@ export function conformStorage(): void
     
     if(getStorageValue("olcPGEX_MiniAudio") == null)
     {
-        setStorageValue("olcPGEX_MiniAudio", "v1.7");
+        setStorageValue("olcPGEX_MiniAudio", "v1.5");
     }
 
     if(getStorageValue("olcSoundWaveEngine") == null)

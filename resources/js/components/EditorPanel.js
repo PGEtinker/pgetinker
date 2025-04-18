@@ -50,13 +50,14 @@ export default class EditorPanel
         this.monacoWrapper.getEditor().setValue(value);
     }
     
-    setToExample(codeId, codeName)
+    async setToExample(codeId, codeName)
     {
         const codeIds = Object.keys(examples);
         for(let i = 0; i < codeIds.length; i++)
         {
             if(codeIds[i] === codeId)
             {
+                await this.stopLanguageClient();
                 this.state.editorPanel.setValue(examples[codeId]);
                 this.state.editorPanel.reveal({ column: 1, lineNumber: 1 });
                 
@@ -66,9 +67,37 @@ export default class EditorPanel
                 }
                 
                 createToast(`Set Code to ${codeName}`, ToastType.Info);
+                await this.startLanguageClient();
                 return;
             }
         }
+    }
+
+    async stopLanguageClient()
+    {
+        const lcWrapper = this.monacoWrapper.getLanguageClientWrapper();
+        
+        if(!lcWrapper.isStarted())
+            return;
+        await lcWrapper.disposeLanguageClient(false);
+    }
+
+    async startLanguageClient()
+    {
+        await axios.get('/sanctum/csrf-cookie');
+        await lcWrapper.start();
+    }
+    
+
+    async restartLanguageClient()
+    {
+        const lcWrapper = this.monacoWrapper.getLanguageClientWrapper();
+        
+        if(!lcWrapper.isStarted())
+            return;
+
+        await axios.get('/sanctum/csrf-cookie');
+        await lcWrapper.restartLanguageClient();
     }
 
     async onPreInit()
@@ -81,7 +110,7 @@ export default class EditorPanel
         clearInterval(this.reconnectInterval);
         await this.monacoWrapper.dispose();
     }
-
+    
     async onInit()
     {
         if(!this.monacoWrapper)

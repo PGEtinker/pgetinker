@@ -523,6 +523,12 @@ class Compiler
                 $nsJailCommand[] = "{$directory}:/workspace/{$library}";
             }
 
+            if(config("app.env") === "production")
+            {
+                // run nsjail in "really quiet" mode during production.
+                $nsJailCommand[] = "-Q";
+            }
+            
             $nsJailCommand[] = "--";
 
             $this->compilerCommand = $nsJailCommand;
@@ -559,6 +565,7 @@ class Compiler
             "./emscripten_shell.html",
             "-sASYNCIFY",
             "-sALLOW_MEMORY_GROWTH=1",
+            "-sSTACK_SIZE=131072",
             "-sMAX_WEBGL_VERSION=2",
             "-sMIN_WEBGL_VERSION=2",
             "-sUSE_LIBPNG=1",

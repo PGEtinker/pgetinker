@@ -10,12 +10,10 @@ ARG HUGO_VERSION="0.123.0"
 
 RUN apt-get update && apt-get upgrade -y \
     && mkdir -p /etc/apt/keyrings \
-    && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor dnsutils nano  \
+    && apt-get install -y gnupg gosu curl ca-certificates zip unzip git dnsutils nano  \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python3 dnsutils librsvg2-bin fswatch ffmpeg nano  \
 
 RUN curl -L -o /tmp/hugo.deb "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb" \
     && dpkg -i /tmp/hugo.deb \
@@ -27,11 +25,9 @@ RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
 
 WORKDIR /app
 
-# ENV SUPERVISOR_HUGO_COMMAND=""
 ENV SUPERVISOR_HUGO_USER="sail"
 
 COPY start-container /usr/local/bin/start-container
-# COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chmod +x /usr/local/bin/start-container
 
 

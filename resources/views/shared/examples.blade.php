@@ -14,12 +14,12 @@
                 Bare olcPixelGameEngine
             </a>
         </li>
-        <!-- <li class="subitem">
+        <li class="subitem">
             <a data-code-id="code3">
-                Example 3
+                Library Versions Demo
             </a>
         </li>
-        <li class="subitem">
+        <!-- <li class="subitem">
             <a data-code-id="code4">
                 Example 4
             </a>

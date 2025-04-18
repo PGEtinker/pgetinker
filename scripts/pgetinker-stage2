@@ -182,6 +182,35 @@ function sail_is_not_running {
     exit 1
 }
 
+# Function to check if all services are healthy
+wait_for_healthy() {
+    container_id=$("${DOCKER_COMPOSE[@]}" ps -q "$APP_SERVICE")
+    if [ -z "$container_id" ]; then
+        echo "Error: Container for $APP_SERVICE not found."
+        exit 1
+    fi
+
+    # Poll until the service is healthy
+    while true; do
+        health_status=$(docker inspect --format='{{.State.Health.Status}}' "$container_id" 2>/dev/null || echo "no-healthcheck")
+        case "$health_status" in
+            "healthy")
+            break
+            ;;
+            "unhealthy")
+            echo "$APP_SERVICE is unhealthy, exiting..."
+            exit 1
+            ;;
+            "no-healthcheck")
+            break
+            ;;
+            *)
+            sleep 2
+            ;;
+        esac
+    done
+}
+
 # Define Docker Compose command prefix...
 if docker compose &> /dev/null; then
     DOCKER_COMPOSE=(docker compose)
@@ -419,6 +448,12 @@ elif [ "$1" == "node" ]; then
 # Proxy NPM commands to the "npm" binary on the application container...
 elif [ "$1" == "npm" ]; then
     shift 1
+    
+    # allow `npm run build` to bypass container memory limitations in a production environment
+    if [ "$1" == "run" ] && [ "$2" == "build" ]; then
+        docker run --rm -e WWWUSER="${WWWUSER}" -v '.:/var/www/html' pgetinker/app npm "$@"
+        exit
+    fi
 
     if [ "$EXEC" == "yes" ]; then
         ARGS+=(exec -u sail)
@@ -646,6 +681,208 @@ elif [ "$1" == "open" ]; then
         sail_is_not_running
     fi
 
+# Clean PGEtinker.
+elif [ "$1" == "clean" ]; then
+
+    if [ "$EXEC" == "no" ]; then
+        echo "PGEtinker services are not running."
+        echo "Run: ./scripts/pgetinker up -d"
+        echo ""
+        exit
+    fi
+
+    echo "This command will:"
+    echo "  - Purge logs."
+    echo "  - Purge workspace files."
+    echo "  - Purge redis caches."
+    echo ""
+    echo "This command usually needs to be run once after pulling"
+    echo "the repository. Using it afterwards can result in"
+    echo "unexpected and undesirable data loss."
+    echo ""
+    echo -n "Proceed? (y/N) "; read proceed
+    echo ""
+    
+    proceed=${proceed:-N}
+    
+    case $proceed in
+        [Yy]*)
+            echo "#### Purging laravel.log"
+            rm -rf storage/logs/laravel.log
+            touch storage/logs/laravel.log
+            echo "## Done."
+            echo
+
+            echo "#### Purging workspaces."
+            rm -rf storage/app/workspaces/*
+            echo "## Done."
+            echo
+
+            echo "#### Purging redis cache."
+            scripts/pgetinker exec redis redis-cli FLUSHALL > /dev/null
+            echo "## Done."
+            echo
+            
+            ;;
+        [Nn]*)
+            echo "You chose to exit without doing anything!"
+            echo ""
+            ;;
+        *)
+            echo "You chose to exit without doing anything!"
+            echo ""
+            ;;
+    esac            
+    exit
+
+# Update PGEtinker
+elif [ "$1" == "update" ]; then
+
+    if [ "$EXEC" == "yes" ]; then
+        echo "PGEtinker services are running."
+        echo "Run: ./scripts/pgetinker down"
+        echo ""
+        exit
+    fi
+    if [ "$2" == "ci" ]; then
+        proceed=y
+    else
+        echo "This command will:"
+        echo "  - Run git pull."
+        echo "  - Build changed docker images."
+        echo "  - Install composer dependencies."
+        echo "  - Install NPM dependencies."
+        echo "  - Generate a pre-built frontend."
+        echo "  - Pull wiki repo."
+        echo "  - Build shared emscripten libraries."
+        echo "  - Run laravel migration scripts."
+        echo "  - Restart PGEtinker services."
+        echo ""
+        echo "This command helps streamline the update process"
+        echo "by automatically handling all of the things that"
+        echo "needs to be done each time there's a potentially"
+        echo "breaking change to the project!"
+        echo ""
+        echo -n "Proceed? (y/N) "; read proceed
+        echo ""    
+        
+        proceed=${proceed:-N}
+    fi    
+    
+    case $proceed in
+        [Yy]*)
+            rm -rf public/build public/hot
+
+            echo "#### Run git pull."
+            git pull
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to pull latest version."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+            
+            echo "#### Build changed docker images."
+            scripts/pgetinker build
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to build docker images."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "#### Install composer dependencies."
+            docker run --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app composer install --no-interaction
+            if [ ! $? -eq 0 ]; then
+                echo "## Composer dependencies failed to install."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "#### Install NPM dependencies."
+            docker run --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app npm install --yes
+            if [ ! $? -eq 0 ]; then
+                echo "## NPM dependencies failed to install."
+                exit 1
+            fi            
+            echo "## Done."
+            echo
+
+            echo "#### Generate a pre-built frontend."
+            docker run --rm -e WWWUSER="${WWWUSER}" -v '.:/var/www/html' pgetinker/app npm run build
+            if [ ! $? -eq 0 ]; then
+                echo "## Static files failed to install."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "#### Pull wiki repo."
+            (cd services/wiki; git pull)
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to pull latest wiki."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+            
+            echo "#### Build shared emscripten libraries."
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/opt/emsdk' -v './shared/libs:/var/www/html' pgetinker/app bash build-libs.sh
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to build shared emscripten libraries."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "#### Prepare containers."
+            echo "## Phase 1: start services."
+            scripts/pgetinker up -d
+            sleep 10
+            wait_for_healthy
+            sleep 10
+            echo "## Done."
+            echo
+
+            echo "## Phase 2: database migrations."
+            scripts/pgetinker artisan migrate
+            if [ ! $? -eq 0 ]; then
+                echo "## Failed to run database migrations."
+                exit 1
+            fi
+            echo "## Done."
+            echo
+
+            echo "## Phase 3: shutdown services."
+            scripts/pgetinker down
+            echo "## Done."
+            echo
+
+            echo "########################################################"
+            echo "#"
+            echo "#                PGEtinker is ready!"
+            echo "#"
+            echo "#            Run: ./scripts/pgetinker up -d"
+            echo "#"
+            echo "#     Site will be available at: $APP_URL"
+            echo "#"
+            echo "########################################################"
+            echo ""
+
+            ;;
+        [Nn]*)
+            echo "You chose to exit without doing anything!"
+            echo ""
+            ;;
+        *)
+            echo "You chose to exit without doing anything!"
+            echo ""
+            ;;
+    esac
+
+    exit
+
 # Initialize PGEtinker.
 elif [ "$1" == "initialize" ]; then
 
@@ -674,7 +911,8 @@ elif [ "$1" == "initialize" ]; then
         echo "  - Generate a pre-built frontend."
         echo "  - Clone wiki repo."
         echo "  - Create wiki symlinks."
-        echo "  - Build emscripten libraries."
+        echo "  - Pull and install emscripten."
+        echo "  - Build shared emscripten libraries."
         echo "  - Run laravel migration scripts."
         echo ""
         echo "This command usually needs to be run once after pulling"
@@ -710,7 +948,7 @@ elif [ "$1" == "initialize" ]; then
             docker run --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app composer install --no-interaction
             if [ ! $? -eq 0 ]; then
                 echo "## Composer dependencies failed to install."
-                return 3
+                exit 1
             fi
             echo "## Done."
             echo
@@ -719,7 +957,7 @@ elif [ "$1" == "initialize" ]; then
             docker run --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app npm install --yes
             if [ ! $? -eq 0 ]; then
                 echo "## NPM dependencies failed to install."
-                return 4
+                exit 1
             fi
             echo "## Done."
             echo
@@ -728,7 +966,7 @@ elif [ "$1" == "initialize" ]; then
             docker run --rm -e WWWUSER="${WWWUSER}" -v .:/var/www/html pgetinker/app php artisan key:generate > /dev/null 2>&1
             if [ ! $? -eq 0 ]; then
                 echo "## Application key failed to generate."
-                return 4
+                exit 1
             fi
             echo "## Done."
             echo
@@ -737,13 +975,13 @@ elif [ "$1" == "initialize" ]; then
             docker run --rm -e WWWUSER="${WWWUSER}" -v '.:/var/www/html' pgetinker/app npm run build
             if [ ! $? -eq 0 ]; then
                 echo "## Static files failed to install."
-                return 4
+                exit 1
             fi
             echo "## Done."
             echo
             
             echo "#### Clone wiki repo."
-            (mkdir -p services; cd services; git clone git@github.com:PGEtinker/wiki.git)
+            (mkdir -p services; cd services; git clone https://github.com/PGEtinker/wiki.git)
             echo "## Done."
             echo
 
@@ -751,46 +989,31 @@ elif [ "$1" == "initialize" ]; then
             ln -s /var/www/html/services/wiki/public public/wiki
             echo "## Done."
             echo
+            
+            echo "#### Pull and install emscripten."
+            if [ -f "shared/emsdk/emsdk_env.sh" ]; then
+                echo "## emsdk has already been pulled."
+            else
+                echo "## emsdk not found, pulling."
+                (mkdir -p shared; cd shared; git clone https://github.com/emscripten-core/emsdk.git)
+            fi
 
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk install 3.1.56
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk activate 3.1.56
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/opt/emsdk' pgetinker/app bash -c "EMSDK_QUIET=1 source /opt/emsdk/emsdk_env.sh; embuilder build libpng sdl2_mixer"
+            
+            echo "## Done."
+            echo
+            
             echo "#### Build emscripten libraries."
-            docker run --rm -e WWWUSER="${WWWUSER}" -v './services/libs:/var/www/html' pgetinker/app bash build-libs.sh
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/opt/emsdk' -v './shared/libs:/var/www/html' pgetinker/app bash build-libs.sh
             if [ ! $? -eq 0 ]; then
                 echo "## Emscripten libraries failed to build."
-                return 4
+                exit 1
             fi
             echo "## Done."
             echo
 
-            # Function to check if all services are healthy
-            wait_for_healthy() {
-                
-                container_id=$("${DOCKER_COMPOSE[@]}" ps -q "$APP_SERVICE")
-                if [ -z "$container_id" ]; then
-                    echo "Error: Container for $APP_SERVICE not found."
-                    exit 1
-                fi
-
-                # Poll until the service is healthy
-                while true; do
-                    health_status=$(docker inspect --format='{{.State.Health.Status}}' "$container_id" 2>/dev/null || echo "no-healthcheck")
-                    case "$health_status" in
-                        "healthy")
-                        break
-                        ;;
-                        "unhealthy")
-                        echo "$APP_SERVICE is unhealthy, exiting..."
-                        exit 1
-                        ;;
-                        "no-healthcheck")
-                        break
-                        ;;
-                        *)
-                        sleep 2
-                        ;;
-                    esac
-                done
-            }
-            
             echo "#### Prepare containers."
             echo "## Phase 1: start services."
             ./scripts/pgetinker up -d
@@ -814,9 +1037,9 @@ elif [ "$1" == "initialize" ]; then
             echo "#"
             echo "#                PGEtinker is ready!"
             echo "#"
-            echo "#            Run: ./scripts/pgetinker up"
+            echo "#            Run: ./scripts/pgetinker up -d"
             echo "#"
-            echo "#     Site will be available at: http://localhost"
+            echo "#     Site will be available at: $APP_URL"
             echo "#"
             echo "########################################################"
             echo ""
@@ -846,8 +1069,13 @@ elif [ "$1" == "language-server" ] || [ "$1" == "ls" ]; then
             ARGS+=("$LANGUAGE_SERVER_SERVICE" "$CMD")
         else
             sail_is_not_running
-        fi    
+        fi
     fi
+
+
+elif [ "$1" == "gitlog" ]; then
+    git log origin/develop..HEAD --pretty="%ad|%s" --date=format:"%Y-%m-%d"
+    exit
 fi
 
 # Run Docker Compose with the defined arguments...

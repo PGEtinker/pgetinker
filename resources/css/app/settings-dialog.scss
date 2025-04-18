@@ -2,7 +2,7 @@
 
     .content {
         font-family: "Droid Sans Mono", "monospace", monospace;
-
+        
         button {
             width: 100%;
             margin: .6rem 0;
@@ -26,24 +26,40 @@
 
         .form-description {
             padding: .6rem 0;
+            
+            .library-version {
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+                span:first-child {
+                    width: 15rem;
+                    font-weight: bolder;
+                }
+                
+                span:first-child:after {
+                    content: ": "
+                }
+            } 
         }
 
         input[type="checkbox"] {
+            flex: 0 0 1.6rem;
             display: inline-block;
             width: 1.6rem;
             height: 1.6rem;
+            margin-right: .6rem;
         }
 
         label {
-            display: block;
+            display: flex;
+            flex-direction: row;
             font-size: 1.2rem;
             line-height: 1.6rem;
         }
     }
 
     .form-group:hover {
-        border: 1px solid rgba(0, 0, 255,0.7);
-        margin: -1px;
+        outline: 1px solid var(--pgetinker-settings-dialog-hover);
     }
 
 

@@ -1,0 +1,38 @@
+@import "github-markdown-css/github-markdown.css";
+@import "./common.scss";
+
+html {
+    font-size: 24px;
+    padding: .6rem;
+}
+
+.markdown-body {
+    background-color: var(--pgetinker-background-color)
+}
+
+.markdown-body h1:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+a:active,
+a:link,
+a:visited {
+    color: var(--pgetinker-link-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--pgetinker-link-hover-color);
+    text-decoration: underline;
+}
+
+.container {
+    width: 100%;
+    max-width: 32rem;
+    margin: 0 auto;
+}
+
+body.framed .container {
+    max-width: none;
+}
