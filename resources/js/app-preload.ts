@@ -6,6 +6,13 @@ import agreeDialog from './lib/agreeDialog';
 
 conformStorage();
 
+const theme = getStorageValue("theme");
+if(theme === "light")
+{
+    document.body.classList.toggle("light", true)
+    document.body.setAttribute("data-theme", "light");
+}
+
 const preloader = () =>
 {
     import("./app.ts")
