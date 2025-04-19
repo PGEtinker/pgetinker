@@ -8,6 +8,30 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - 2025-04-18</u>
+
+## Notes
+
+This release fixes a bug where browser selected
+themes weren't handled properly and caused styling
+anamolies which, among other things, made the "What's New"
+dialog look awful. 
+
+PGEtinker now responds to and respects changes to
+the browser theme.
+
+## Commits
+
+### 2025-04-18
+
+- main: formatting
+- main: add mardown.js to rollup
+- main: handle browser theme changes
+- main: apply theme in preload
+- main: handle theme changes in markdown pages
+- main: remove github-markdown.css
+- main: add markdown dark and light styles
+
 # <u>Release Notes - 2025-04-17</u>
 
 ## Notes
