@@ -164,6 +164,28 @@ export default class PGEtinker
         this.SetupLayout();
         this.setActiveTab("editor");
         this.setActiveTab("problems");
+
+        // Create a media query for prefers-color-scheme
+        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // Function to handle theme change
+        const handleThemeChange = (e: any) =>
+        {
+            if (e.matches) {
+                setStorageValue("theme", "dark");
+                console.log('Dark mode is active');
+                // Apply dark mode styles or logic
+            } else {
+                setStorageValue("theme", "light");
+                console.log('Light mode is active');
+                // Apply light mode styles or logic
+            }
+            
+            this.UpdateTheme();
+        }
+
+        // Add event listener for theme changes
+        darkModeMediaQuery.addEventListener('change', handleThemeChange);
     }
 
     setActiveTab(id: string)
