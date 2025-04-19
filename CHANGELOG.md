@@ -8,6 +8,12 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - UNRELEASED</u>
+
+## Notes
+
+## Commits
+
 # <u>Release Notes - 2025-04-18</u>
 
 ## Notes
