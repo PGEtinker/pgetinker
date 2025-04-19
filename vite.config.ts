@@ -26,6 +26,7 @@ export default defineConfig(({ mode }) =>
                     'resources/css/markdown-dark.scss',
                     'resources/css/markdown-light.scss',
                     'resources/css/markdown.scss',
+                    'resources/js/markdown.js',
                     'resources/css/app.scss',
                     'resources/js/app-preload.ts'
                 ],
