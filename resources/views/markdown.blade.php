@@ -7,6 +7,9 @@
     <link rel="icon" type="text/svg" href="/favicon.svg">
     
     <link rel="stylesheet" type="text/css" href="{{ Vite::asset('resources/css/normalize.scss')}}">
+
+    <link rel="stylesheet" type="text/css" href="{{ Vite::asset('resources/css/markdown-dark.scss')}}" id="dark-theme">
+    <link rel="stylesheet" type="text/css" href="{{ Vite::asset('resources/css/markdown-light.scss')}}" id="light-theme" disabled>
     <link rel="stylesheet" type="text/css" href="{{ Vite::asset('resources/css/markdown.scss')}}">
 </head>
 <body class="markdown-body {!! $framed !!}">
@@ -15,5 +18,6 @@
     </div>
     
     @include("shared.analytics")
+    @vite('resources/js/markdown.js')
 </body>
 </html>
