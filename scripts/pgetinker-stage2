@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [ "$EUID" -eq 0 ]; then
+    echo "Error: This script must not be run as root."
+    exit 1
+fi
+
 UNAMEOUT="$(uname -s)"
 
 # Verify operating system is supported...
