@@ -18,26 +18,34 @@ a different configuration than the requirements listed above.
 The requirements are simply based upon the spec used on
 PGEtinker's CI/CD runner.
 
+## An Important Note About Root
+PGEtinker and all of it's scripts expect that the directories
+and files are owned by a normal user. The docker images that
+are built by the scripts bake-in the permissions of a normal
+user. Basically, trying to run it as `root` will permissions
+problems. 
+
+Remember with great power comes... I don't know, a big friggen
+headache! Just, don't try to run this as `root`. Okay?
+
 ## Install PGEtinker
 
 ```bash
-git clone https://github.com/PGEtinker/pgetinker
-
-cd pgetinker
-
-scripts/pgetinker initialize
+normal@host:~$ git clone https://github.com/PGEtinker/pgetinker
+normal@host:~$ cd pgetinker
+normal@host:~/pgetinker$ scripts/pgetinker initialize
 ```
 
 ### Update PGEtinker
 ```bash
-scripts/pgetinker update
+normal@host:~/pgetinker$ scripts/pgetinker update
 ```
 
 ## Usage
 
 ### Bring up the PGEtinker services
 ```bash
-scripts/pgetinker up -d
+normal@host:~/pgetinker$ scripts/pgetinker up -d
 ```
 
 This will bring PGEtinker services up in their
@@ -50,7 +58,7 @@ also start the frontend dev server, see below.
 
 ### Bring up the frontend dev server
 ```bash
-scripts/pgetinker npm run dev
+normal@host:~/pgetinker$ scripts/pgetinker npm run dev
 ```
 **Note:** The frontend needs to be running at the same
 time as the rest of the services.
