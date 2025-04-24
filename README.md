@@ -22,8 +22,8 @@ PGEtinker's CI/CD runner.
 PGEtinker and all of it's scripts expect that the directories
 and files are owned by a normal user. The docker images that
 are built by the scripts bake-in the permissions of a normal
-user. Basically, trying to run it as `root` will permissions
-problems. 
+user. Basically, trying to run it as `root` will cause
+permissions problems.
 
 Remember with great power comes... I don't know, a big friggen
 headache! Just, don't try to run this as `root`. Okay?
