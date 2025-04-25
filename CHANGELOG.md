@@ -8,6 +8,27 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - 2024-04-25</u>
+
+## Notes
+
+This release fixes a few bugs in the infrastructure and with
+the way shares were handled.
+
+- Fix library_versions in shares. Wasn't applying them to the share.
+- Added sanity check to the bulk screenshot command line utility
+- Changed proxy image name to 'pgetinker/proxy', 'nginx' was colliding
+with the official 'nginx' package and caused problems in unrelated
+deployments using the 'nginx' image.
+
+## Commits
+
+### 2025-04-25
+
+- main: include library_versions in share data.
+- main: only grab a screenshot if it compiled successfully.
+- pgetinker: change proxy image from 'nginx' to 'pgetinker/proxy'
+
 # <u>Release Notes - 2025-04-18</u>
 
 ## Notes

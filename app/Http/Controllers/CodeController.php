@@ -32,7 +32,8 @@ class CodeController extends Controller
     function Share(Request $request)
     {
         $code   = $request->input("code", null);
-        $result = $this->compileCode($code, $request->input("libraries", null));
+        $libraries = $request->input("libraries", null);
+        $result = $this->compileCode($code, $libraries);
     
         // if failed to compile, bail
         if($result["statusCode"] !== 200)
@@ -76,12 +77,11 @@ class CodeController extends Controller
         } while($tryAgain);
         
         $share = new Code();
-    
         $share->code = $code;
         $share->hash = $result["hash"];
         $share->slug = $slug;
-        
         $share->thumb_url = uploadFileToPit($share->slug . ".png", takeScreenshotOfHtml($result["html"]));
+        $share->library_versions = $libraries;
         
         if($share->save())
         {
