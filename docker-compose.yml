@@ -113,7 +113,7 @@ services:
         build:
             context: './docker/nginx'
             dockerfile: Dockerfile
-        image: nginx
+        image: pgetinker/proxy
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
