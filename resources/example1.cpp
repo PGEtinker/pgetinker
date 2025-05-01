@@ -37,7 +37,7 @@ public:
     bool OnUserCreate() override
     {
         // load "assets/gfx/broken.png" from a URL
-        FILE_RESOLVE("https://pit.pgetinker.com/MwpptUlwPhnc.png", "assets/gfx/broken.png");
+        FILE_RESOLVE("https://i.imgur.com/KdWjkwC.png", "assets/gfx/broken.png");
         
         renImageFromUrl.Load("assets/gfx/broken.png");
 
