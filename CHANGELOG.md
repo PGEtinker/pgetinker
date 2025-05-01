@@ -14,12 +14,16 @@ please refer to the repository's commit history.
 
 This release simplifies local deployments by removing the ``docker-compose.yml``
 file from the git tracking. This will enable customizations without causing
-conflicts when using the ``update`` command.
+conflicts when using the ``update`` command. Also, there's certain workflow
+steps that are no longer needed that have been removed.
 
 ## Commits
 
 ### 2025-05-01
 
+- github: long overdue removal of unused version handling steps
+- github: remove step that takes down the services, we know they can't exist now (see PGEtinker/webhooks)
+- github: remove cleanup that is not required since updated infra (see PGEtinker/webhooks)
 - pgetinker: add remove docker-compose.yml, use docker-compose.sail.yml in initialize
 - main: remove COMPOSE_FILE variable from .env.example
 - main: add docker-compose.yml to ignored files
