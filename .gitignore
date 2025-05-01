@@ -25,3 +25,4 @@ yarn-error.log
 third_party/v*/lib
 third_party/v*/model.h
 tests/Feature/test_*
+docker-compose.yml
