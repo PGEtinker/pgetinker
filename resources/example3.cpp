@@ -39,9 +39,6 @@ public:
     // initilize variables.
     bool OnUserCreate() override
     {
-        // load "assets/gfx/broken.png" from a URL
-        FILE_RESOLVE("https://pit.pgetinker.com/MwpptUlwPhnc.png", "assets/gfx/broken.png");
-        
         color = RandomColor();
         
         // PGE version

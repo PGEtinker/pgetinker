@@ -933,10 +933,11 @@ elif [ "$1" == "initialize" ]; then
     
     case $proceed in
         [Yy]*)
-            rm -rf vendor node_modules public/build public/hot .env services/wiki public/wiki
+            rm -rf docker-compose.yml vendor node_modules public/build public/hot .env services/wiki public/wiki
             
             echo "#### Creating default environment configuration."
             cp .env.sail .env > /dev/null 2>&1
+            cp docker-compose.sail.yml docker-compose.yml
             echo "## Done."
             echo
 

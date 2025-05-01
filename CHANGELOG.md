@@ -8,6 +8,32 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - 2024-05-01</u>
+
+## Notes
+
+This release simplifies local deployments by removing the ``docker-compose.yml``
+file from the git tracking. This will enable customizations without causing
+conflicts when using the ``update`` command. Also, there's certain workflow
+steps that are no longer needed that have been removed.
+
+## Commits
+
+### 2025-05-01
+
+- github: long overdue removal of unused version handling steps
+- github: remove step that takes down the services, we know they can't exist now (see PGEtinker/webhooks)
+- github: remove cleanup that is not required since updated infra (see PGEtinker/webhooks)
+- pgetinker: add remove docker-compose.yml, use docker-compose.sail.yml in initialize
+- main: remove COMPOSE_FILE variable from .env.example
+- main: add docker-compose.yml to ignored files
+- main: move docker-compoose.yml to docker-compose.sail.yml
+- main: add console command app:find-broken-shares
+- main: remove unused console command app:identify-database
+- main: remove unused console command app:compute-code-hashes
+- main: remove unused FILE_RESOLVE from libraries example code
+- main: update examples to use imgur hosted broken.png for now
+
 # <u>Release Notes - 2024-04-25</u>
 
 ## Notes

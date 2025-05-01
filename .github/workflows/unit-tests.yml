@@ -17,19 +17,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: 'Cleanup build folder'
-        run: |
-          ls -la ./
-          rm -rf ./* || true
-          rm -rf ./.??* || true
-          ls -la ./
-
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Ensure PGEtinker is down
-        run: ./scripts/pgetinker down
-
       - name: Initialize PGEtinker
         run: ./scripts/pgetinker initialize ci
       
@@ -44,10 +34,3 @@ jobs:
 
       - name: Stop PGEtinker
         run: ./scripts/pgetinker down
-
-      # - name: Get Commit Hash
-      #   id: vars
-      #   run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-
-      # - name: Add "VERSION" hashes to .env
-      #   run: echo -e "VERSION=${{ steps.vars.outputs.sha }}\nVITE_VERSION=${{ steps.vars.outputs.sha }}" >> .env.example
