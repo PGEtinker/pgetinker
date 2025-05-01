@@ -34,10 +34,3 @@ jobs:
 
       - name: Stop PGEtinker
         run: ./scripts/pgetinker down
-
-      # - name: Get Commit Hash
-      #   id: vars
-      #   run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-
-      # - name: Add "VERSION" hashes to .env
-      #   run: echo -e "VERSION=${{ steps.vars.outputs.sha }}\nVITE_VERSION=${{ steps.vars.outputs.sha }}" >> .env.example
