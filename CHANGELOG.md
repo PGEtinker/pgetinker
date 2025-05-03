@@ -24,8 +24,11 @@ way. The exception to this is PGE itself, and PGE with the geometry definitions
 baked into it! Anyways.. that problem should now be solved.
 
 The next problem involves shares and library versions. The editor, settings, and
-language server were blissfully unaware of a share's library versions. This causes
-problems when there is compatibility issues 
+language server were blissfully unaware of a share's library versions. This is a
+problem because the editor and the langauge server are at odds with what the code
+expects to be compiled with. Sometimes it'll go un-noticed. Other times it will
+break things in ways that aren't obvious to the end user. Now, the share forces
+a change of library versions before the editor is fully loaded.
 
 ## Commits
 
