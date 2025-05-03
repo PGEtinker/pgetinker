@@ -80,7 +80,6 @@
         "MINIAUDIO_IMPLEMENTATION": "miniaudio/miniaudio.o",
         "OLC_PGE_GAMEPAD":          "olcPGEX_Gamepad/olcPGEX_Gamepad.o",
         "OLC_PGEX_MINIAUDIO":       "olcPGEX_MiniAudio/olcPGEX_MiniAudio.o",
-        "OLC_PGEX_SOUND":           "olcPixelGameEngine/extensions/olcPGEX_Sound.o",
         "OLC_SOUNDWAVE_ENGINE":     "olcSoundWaveEngine/olcSoundWaveEngine.o"
     }
 }
