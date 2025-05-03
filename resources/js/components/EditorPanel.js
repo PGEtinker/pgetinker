@@ -4,31 +4,33 @@ import { configureMonacoWorkers, runCppWrapper } from "../lib/monacoWrapper";
 import { getStorageValue, setStorageValue } from "../lib/storage";
 import * as vscode from "vscode";
 import { createToast, ToastType } from '../lib/createToast';
+import axios from "axios";
+import Cookies from 'js-cookie';
+
+function extractSlugFromURI(uri)
+{
+    // Check if /s/ exists in the URI
+    if (uri.includes('/s/'))
+    {
+        const parts = uri.split('/s/');
+        const slug = parts[1]?.split('/')[0];
+        return slug || null;
+    }
+    return null; // Return null if /s/ is not found
+}
 
 export default class EditorPanel
 {
     state;
     autoConnect = true;
-    code = "";
-
     monacoWrapper = null;
-
     maxFileSize = 50000;
-    
     reconnectInterval = null;
+    sharedSlug = null;
 
-    sharedFlag = false;
-    staging = false;
-    
     constructor(state)
     {
         this.state = state;
-        this.sharedFlag = (
-            window.location.pathname.indexOf("/s/") === 0 ||
-            window.location.pathname.indexOf("/staging/s/") === 0
-        );
-        
-        this.staging = (window.location.pathname.indexOf("/staging/s/") === 0);
         
         // reset editor font zoom
         window.addEventListener("keydown", (event) => {
@@ -38,6 +40,8 @@ export default class EditorPanel
         });
         
         configureMonacoWorkers();
+        
+        this.sharedSlug = extractSlugFromURI(window.location.href);
     }
     
     getValue()
@@ -130,17 +134,38 @@ export default class EditorPanel
         }
             
         let code = "";
-        if(this.sharedFlag)
-        {
-            code = document.querySelector('#code').value;
-        }
-        else if(getStorageValue("code"))
+        if(getStorageValue("code"))
         {
             code = getStorageValue("code");
         }
         else
         {
             code = examples.code1;
+        }        
+        
+        // at this point we have a sane default value for code.
+
+        // check if we're dealing with a share?
+        if(this.sharedSlug)
+        {
+            await axios.get('/sanctum/csrf-cookie');
+            try
+            {
+                const share = (await axios.get(`/api/share/${this.sharedSlug}`)).data;
+                code = share.code;
+
+                const keys = Object.keys(share.library_versions);
+                keys.forEach((key) =>
+                {
+                    setStorageValue(key, share.library_versions[key]);
+                });
+                
+                Cookies.set("pgetinker_libraries", encodeURIComponent(share.library_versions));
+            }
+            catch(err)
+            {
+                console.error(err);
+            }
         }
 
         /**
@@ -186,16 +211,9 @@ export default class EditorPanel
         {
             setStorageValue("code", this.monacoWrapper.getEditor().getValue());
             
-            if(this.sharedFlag)
+            if(this.sharedSlug)
             {
-                this.sharedFlag = false;
-                document.querySelector("#code").innerHTML = "";
-
-                if(this.staging)
-                {
-                    window.history.replaceState({}, "", "/staging/");
-                    return;
-                }
+                this.sharedSlug = null;
                 window.history.replaceState({}, "", "/");
             }
         });
