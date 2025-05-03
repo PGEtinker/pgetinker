@@ -193,8 +193,6 @@
             </p>
         </div>
     </div>
-    <textarea id="code" style="display: none;"><?php echo $code ?></textarea>
-    
     <template id="examples">
         @include("shared.examples")
     </template>
