@@ -8,6 +8,39 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - 2025-05-03</u>
+
+## Notes
+
+This release fixes a couple of bugs. First there are several complications
+surrounding the pre-compiled libraries, in particular extensions that made
+use of the 2d vector classes. The pre-compiled extensions have no way of
+knowing when the geometry PGEX was in use and would end up with a dizzying
+array of redefine/redeclaration errors that seem to come out of nowhere.
+
+My solution to this problem was to restrict pre-compiled libraries to libraries
+that do not make direct use of the v*2d classes or attempt to extend them in any
+way. The exception to this is PGE itself, and PGE with the geometry definitions
+baked into it! Anyways.. that problem should now be solved.
+
+The next problem involves shares and library versions. The editor, settings, and
+language server were blissfully unaware of a share's library versions. This causes
+problems when there is compatibility issues 
+
+## Commits
+
+### 2025-05-03
+
+- libraries: missed the sound pgex!
+- pgetinker: whoops, check for NOT empty...
+- libraries: due to heavy hassle with the v2d classes, no longer pre-compiling extensions
+- pgetinker: fix empty forceMigrate handling
+- main: remove "code" from route and views
+- main: revamp share handling, use new get share api to set code and libraries
+- main: add api to get a share by slug
+- pgetinker: bump default language server memory to 1.5G
+- pgetinker: add forceMigrate if update is called with ci
+
 # <u>Release Notes - 2024-05-01</u>
 
 ## Notes

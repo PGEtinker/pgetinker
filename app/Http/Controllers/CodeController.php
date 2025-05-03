@@ -29,6 +29,17 @@ class CodeController extends Controller
         return response($result, $result["statusCode"])->header("Content-Type", "application/json");
     }
     
+    function GetShare(Request $request, string $slug)
+    {
+        $code = Code::where("slug", $slug)->first();
+        if($code)
+            return $code;
+
+        return response(["message" => "not found"], 404, [
+            "Content-Type" => "application/json"
+        ]);
+    }
+
     function Share(Request $request)
     {
         $code   = $request->input("code", null);

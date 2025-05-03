@@ -79,16 +79,7 @@
         "OLC_PGE_APPLICATION":      "olcPixelGameEngine/olcPixelGameEngine.o",
         "MINIAUDIO_IMPLEMENTATION": "miniaudio/miniaudio.o",
         "OLC_PGE_GAMEPAD":          "olcPGEX_Gamepad/olcPGEX_Gamepad.o",
-        "OLC_PGEX_GRAPHICS2D":      "olcPixelGameEngine/extensions/olcPGEX_Graphics2D.o",
-        "OLC_PGEX_GRAPHICS3D":      "olcPixelGameEngine/extensions/olcPGEX_Graphics3D.o",
         "OLC_PGEX_MINIAUDIO":       "olcPGEX_MiniAudio/olcPGEX_MiniAudio.o",
-        "OLC_PGEX_POPUPMENU":       "olcPixelGameEngine/extensions/olcPGEX_PopUpMenu.o",
-        "OLC_PGEX_QUICKGUI":        "olcPixelGameEngine/extensions/olcPGEX_QuickGUI.o",
-        "OLC_PGEX_RAYCASTWORLD":    "olcPixelGameEngine/extensions/olcPGEX_RayCastWorld.o",
-        "OLC_PGEX_SOUND":           "olcPixelGameEngine/extensions/olcPGEX_Sound.o",
-        "OLC_PGEX_SPLASHSCREEN":    "olcPixelGameEngine/extensions/olcPGEX_SplashScreen.o",
-        "OLC_PGEX_TRANSFORMEDVIEW": "olcPixelGameEngine/extensions/olcPGEX_TransformedView.o",
-        "OLC_PGEX_WIREFRAME":       "olcPixelGameEngine/extensions/olcPGEX_Wireframe.o",
         "OLC_SOUNDWAVE_ENGINE":     "olcSoundWaveEngine/olcSoundWaveEngine.o"
     }
 }

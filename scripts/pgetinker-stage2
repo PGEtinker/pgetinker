@@ -742,6 +742,8 @@ elif [ "$1" == "clean" ]; then
 
 # Update PGEtinker
 elif [ "$1" == "update" ]; then
+    
+    forceMigrate=""
 
     if [ "$EXEC" == "yes" ]; then
         echo "PGEtinker services are running."
@@ -750,6 +752,7 @@ elif [ "$1" == "update" ]; then
         exit
     fi
     if [ "$2" == "ci" ]; then
+        forceMigrate="--force"
         proceed=y
     else
         echo "This command will:"
@@ -851,7 +854,12 @@ elif [ "$1" == "update" ]; then
             echo
 
             echo "## Phase 2: database migrations."
-            scripts/pgetinker artisan migrate
+            if [ ! -z "$forceMigrate" ]; then
+                scripts/pgetinker artisan migrate "$forceMigrate"
+            else
+                scripts/pgetinker artisan migrate
+            fi
+
             if [ ! $? -eq 0 ]; then
                 echo "## Failed to run database migrations."
                 exit 1
