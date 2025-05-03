@@ -73,7 +73,7 @@ services:
         deploy:
             resources:
                 limits:
-                    memory: 750m
+                    memory: 1.5G
         mem_swappiness: 0
         oom_kill_disable: false
         volumes:
