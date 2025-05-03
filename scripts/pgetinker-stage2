@@ -854,12 +854,12 @@ elif [ "$1" == "update" ]; then
             echo
 
             echo "## Phase 2: database migrations."
-            if [ -z "$forceMigrate" ]; then
+            if [ ! -z "$forceMigrate" ]; then
                 scripts/pgetinker artisan migrate "$forceMigrate"
             else
                 scripts/pgetinker artisan migrate
             fi
-            
+
             if [ ! $? -eq 0 ]; then
                 echo "## Failed to run database migrations."
                 exit 1
