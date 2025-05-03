@@ -157,17 +157,19 @@ class CodeController extends Controller
         }
 
         $hashedCode = hashCode($code);
-        
+        $hashedLibraries = hash("sha256", json_encode($libraries));
+        $cacheKey = "compiler_{$hashedCode}_{$hashedLibraries}";
+
         if(env("COMPILER_CACHING", false))
         {
             try
             {
-                $cachedCode = Redis::get("compiler_{$hashedCode}");
+                $cachedCode = Redis::get($cacheKey);
             
                 if(isset($cachedCode))
                 {
-                    Redis::expire("compiler_{$hashedCode}", env("REDIS_TTL", 60));
-                    Log::debug("Compile: cache hit", ["hashedCode" => $hashedCode]);
+                    Redis::expire($cacheKey, env("REDIS_TTL", 60));
+                    Log::debug("Compile: cache hit", ["hashedCode" => $hashedCode, "hashedLibraries" => $hashedLibraries]);
                     
                     $compiler = new Compiler();
                     $compiler->deserialize($cachedCode);
@@ -187,7 +189,7 @@ class CodeController extends Controller
                 Log::emergency("Compiler Caching enabled and Redis failed.");
             }
             
-            Log::debug("Compile: cache miss", ["hashedCode" => $hashedCode]);
+            Log::debug("Compile: cache miss", ["hashedCode" => $hashedCode, "hashedLibraries" => $hashedLibraries]);
         }
         
         if(Storage::directoryMissing("workspaces"))
@@ -217,7 +219,7 @@ class CodeController extends Controller
             {
                 try
                 {
-                    Redis::setex("compiler_{$hashedCode}", env("REDIS_TTL", 60), $compiler->serialize());
+                    Redis::setex($cacheKey, env("REDIS_TTL", 60), $compiler->serialize());
                 }
                 catch(Exception $e)
                 {
@@ -239,7 +241,7 @@ class CodeController extends Controller
         {
             try
             {
-                Redis::setex("compiler_{$hashedCode}", env("REDIS_TTL", 60), $compiler->serialize());
+                Redis::setex($cacheKey, env("REDIS_TTL", 60), $compiler->serialize());
             }
             catch(Exception $e)
             {

@@ -25,15 +25,20 @@ baked into it! Anyways.. that problem should now be solved.
 
 The next problem involves shares and library versions. The editor, settings, and
 language server were blissfully unaware of a share's library versions. This is a
-problem because the editor and the langauge server are at odds with what the code
+problem because the editor and the language server are at odds with what the code
 expects to be compiled with. Sometimes it'll go un-noticed. Other times it will
 break things in ways that aren't obvious to the end user. Now, the share forces
 a change of library versions before the editor is fully loaded.
+
+Finally, the compiler caching mechanism didn't account for changes in library
+versions. Now any difference in code or library version will be a unique entry
+in the cache.
 
 ## Commits
 
 ### 2025-05-03
 
+- main: hash library versions, combine it with code hash to ensure cache keys account for library versions as well as code
 - libraries: missed the sound pgex!
 - pgetinker: whoops, check for NOT empty...
 - libraries: due to heavy hassle with the v2d classes, no longer pre-compiling extensions
