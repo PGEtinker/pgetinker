@@ -78,6 +78,11 @@ export async function conformStorage(): Promise<void>
         setStorageValue("olcSoundWaveEngine", "v0.02");
     }
 
+    if(getStorageValue("raylib") == null)
+    {
+        setStorageValue("raylib", "5.5");
+    }
+    
     Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
 }
 
