@@ -76,18 +76,12 @@ const launchLanguageServer = (runconfig: LanguageServerRunConfig, socket: IWebSo
      */
     let baseLibraryDirectory = process.env.PGETINKER_LIBS_DIRECTORY || "/opt/libs";
 
-    baseLibraryDirectory += "/olcPixelGameEngine/" + libraries["olcPixelGameEngine"];
-    
     const libraryDirectories: any = {};
-    libraryDirectories["olcPixelGameEngine"] = baseLibraryDirectory + "/olcPixelGameEngine";
 
     const libraryKeys = Object.keys(libraries);
 
     libraryKeys.forEach((library) =>
     {
-        if(library == "olcPixelGameEngine")
-            return;
-        
         libraryDirectories[library] = baseLibraryDirectory + "/" + library + "/" + libraries[library];
     });
 
@@ -120,7 +114,7 @@ const launchLanguageServer = (runconfig: LanguageServerRunConfig, socket: IWebSo
         nsJailArgs.push("-R");
         nsJailArgs.push(`${libraryDirectories[library]}:/workspace/${library}`);
     });
-    
+
     if(isProduction())
     {
         // run nsjail in "really quiet" mode during production.
