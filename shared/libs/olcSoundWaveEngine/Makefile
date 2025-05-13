@@ -3,7 +3,7 @@
 all: olcSoundWaveEngine
 
 olcSoundWaveEngine:
-	$(MAKE) -C v.0.02
+	$(MAKE) -C v0.02
 
 clean:
 	$(MAKE) -C v0.02 clean
