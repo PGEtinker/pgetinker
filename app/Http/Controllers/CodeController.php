@@ -261,13 +261,7 @@ class CodeController extends Controller
     
     function validateLibraries($libraries)
     {
-        if(!isset($libraries["olcPixelGameEngine"]))
-        {
-            Log::error("Library `olcPixelGameEngine` isn't in the set of libraries.");
-            return false;
-        }
-            
-        $libraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs") . "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
+        $libraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
         
         if(!file_exists($libraryDirectory))
         {

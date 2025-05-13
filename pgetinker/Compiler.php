@@ -470,9 +470,6 @@ class Compiler
         $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
         
         $libraries = $this->libraryVersions;
-        $baseLibraryDirectory .= "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
-        unset($libraries["olcPixelGameEngine"]);
-        $this->libraryDirectories["olcPixelGameEngine"] = $baseLibraryDirectory . "/olcPixelGameEngine";
 
         foreach($libraries as $library => $version)
         {
