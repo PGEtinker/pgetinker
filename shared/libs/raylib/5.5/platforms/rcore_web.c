@@ -1369,6 +1369,10 @@ int InitPlatform(void)
     //----------------------------------------------------------------------------
 
     TRACELOG(LOG_INFO, "PLATFORM: WEB: Initialized successfully");
+    
+    EM_ASM({
+        Module.canvas.dispatchEvent(new Event("pgetinker-screenshot-ready"));
+    });
 
     return 0;
 }

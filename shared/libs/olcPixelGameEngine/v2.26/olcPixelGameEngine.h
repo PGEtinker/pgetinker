@@ -6884,11 +6884,6 @@ namespace olc
 		static void MainLoop()
 		{
 			olc::Platform::ptrPGE->olc_CoreUpdate();
-			EM_ASM({
-				Module.canvas.dispatchEvent(new Event("pge-core-update"));
-			});
-
-			
 			if (!ptrPGE->olc_IsRunning())
 			{
 				if (ptrPGE->OnUserDestroy())
@@ -6932,6 +6927,9 @@ namespace olc
 
 		//This causes a heap memory corruption in Emscripten for some reason
 		//Platform_Emscripten::bActiveRef = &bAtomActive;
+		EM_ASM({
+			Module.canvas.dispatchEvent(new Event("pgetinker-screenshot-ready"));
+		});
 		emscripten_set_main_loop(&Platform_Emscripten::MainLoop, 0, 1);
 
 		// Wait for thread to be exited
