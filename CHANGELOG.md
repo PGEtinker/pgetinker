@@ -8,6 +8,37 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - 2025-05-13</u>
+
+## Notes
+
+This release overhauls the way libraries are handled. The PGE version is no longer
+tied to the versions of the other libraries. This simplifies library selection and
+backend sanity checks. It also lightens the load when building the libraries as
+fewer wasm objects are required for the same version combinations.
+
+This release now includes newer versions of PGE up to v2.29, currently the latest
+version available from OneLoneCoder!
+
+This is also something of an experimental release that includes RayLib 5.5.
+
+## Commits
+
+### 2025-05-13
+
+- main: add raylib to getCompilerLibraries
+- main: add default raylib version
+- main: add raylib code detector and handler to the compiler
+- main: pge no longer requires special handling in librariesDialog
+- libraries: remove PGE v2.30 entry from manifest
+- main: pge no longer requires special handling
+- language-server: pge no longer requires special handling
+- libraries: more PGE compatibility changes
+- libraries: tweak makefiles and make PGE compatibility changes
+- libraries: recover PGE compile units
+- libraries: recover PGE
+- libraries: overhaul library handling
+
 # <u>Release Notes - 2025-05-03</u>
 
 ## Notes
