@@ -26,6 +26,10 @@ This is also something of an experimental release that includes RayLib 5.5.
 
 ### 2025-05-13
 
+- main: add update-code-hashes command to recalculate share hashes
+- main: consolidate hashing of code and libraries, easier cache handling
+- screenshot: use pgetinker-screenshot-ready event
+- libraries: add pgetinker-screenshot-ready event to libraries
 - main: add raylib to getCompilerLibraries
 - main: add default raylib version
 - main: add raylib code detector and handler to the compiler
