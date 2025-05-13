@@ -6410,7 +6410,7 @@ namespace olc
 					Module._olc_PGE_UpdateWindowSize(viewWidth, viewHeight);
 					
 					// force focus on our PGE canvas
-					Module.canvas.focus();
+					// Module.canvas.focus();
 				}, 200);
 			};
 
@@ -6578,6 +6578,10 @@ namespace olc
 		static void MainLoop()
 		{
 			olc::Platform::ptrPGE->olc_CoreUpdate();
+			EM_ASM({
+				Module.canvas.dispatchEvent(new Event("pge-core-update"));
+			});
+
 			if (!ptrPGE->olc_IsRunning())
 			{
 				if (ptrPGE->OnUserDestroy())

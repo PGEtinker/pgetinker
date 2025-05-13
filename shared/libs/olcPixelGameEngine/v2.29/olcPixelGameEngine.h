@@ -7631,7 +7631,7 @@ namespace olc
 					Module._olc_PGE_UpdateWindowSize(viewWidth, viewHeight);
 
 					// force focus on our PGE canvas
-					Module.canvas.focus();
+					// Module.canvas.focus();
 				}, 200);
 			};
 
@@ -7641,7 +7641,7 @@ namespace olc
 			// set up resize observer and fullscreenchange event handler
 			var olc_Init = function()
 			{
-				if (Module.olc_AspectRatio == = undefined)
+				if (Module.olc_AspectRatio === undefined)
 				{
 					setTimeout(function() { Module.olc_Init(); }, 50);
 					return;
@@ -7805,6 +7805,10 @@ namespace olc
 		static void MainLoop()
 		{
 			olc::Platform::ptrPGE->olc_CoreUpdate();
+			EM_ASM({
+				Module.canvas.dispatchEvent(new Event("pge-core-update"));
+			});
+
 			if (!ptrPGE->olc_IsRunning())
 			{
 				if (ptrPGE->OnUserDestroy())
