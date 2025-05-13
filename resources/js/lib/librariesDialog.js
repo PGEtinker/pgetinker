@@ -25,79 +25,42 @@ export default function librariesDialog(state)
                 </div>                
             </div>`;
 
-        dialog.addEventListener("update-bundle", (event) =>
+        const libraries = Object.keys(librariesManifest.libraries);
+        
+        resetFieldId();
+
+        // ensure fresh versions
+        let currentLibraries = getCompilerLibraries();
+
+        libraries.forEach((library) =>
         {
-            event.preventDefault();
-            
-            resetFieldId();
-
-            // ensure fresh versions
-            let currentLibraries = getCompilerLibraries();
-
             const options = [];
-            for(let i = 0; i < librariesManifest.bundles["olcPixelGameEngine"].length; i++)
+
+            librariesManifest.libraries[library].forEach((version) =>
             {
                 options.push({
-                    label: librariesManifest.bundles["olcPixelGameEngine"][i].version,
-                    value: librariesManifest.bundles["olcPixelGameEngine"][i].version
-                });
-            }
-
-            dialog.querySelector(".content").innerHTML = "";
+                    label: version,
+                    value: version
+                });                
+            });
 
             dialog.querySelector(".content").append(select(
-                "olcPixelGameEngine",
-                "Choose from the available versions of olcPixelGameEngine",
+                library,
+                `Choose from the available versions of ${library}`,
                 (event) =>
                 {
                     // TODO: sanity check this
-                    setStorageValue("olcPixelGameEngine", event.target.value);
-                    createToast(`Changing olcPixelGameEngine to : ${event.target.value}`, ToastType.Info);
+                    setStorageValue(library, event.target.value);
+                    createToast(`Changing ${library} to : ${event.target.value}`, ToastType.Info);
                     Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
                     state.editorPanel.restartLanguageClient();
-
-                    dialog.dispatchEvent(new Event("update-bundle"));
                 },
                 options,
-                currentLibraries["olcPixelGameEngine"],
+                currentLibraries[library],
             ));
-                
-            for(let i = 0; i < librariesManifest.bundles["olcPixelGameEngine"].length; i++)
-            {
-                if(librariesManifest.bundles["olcPixelGameEngine"][i].version != currentLibraries["olcPixelGameEngine"])
-                    continue;
-                
-                const currentBundle = librariesManifest.bundles["olcPixelGameEngine"][i];
 
-                for(let i = 0; i < currentBundle.libraries.length; i++)
-                {
-                    const options = [];
-                    
-                    currentBundle[currentBundle.libraries[i]].forEach((item) =>
-                    {
-                        options.push({
-                            label: item,
-                            value: item
-                        });
-                    });
-            
-                    dialog.querySelector(".content").append(select(
-                        currentBundle.libraries[i],
-                        `Choose from the available versions of ${currentBundle.libraries[i]}`,
-                        (event) =>
-                        {
-                            setStorageValue(currentBundle.libraries[i], event.target.value);
-                            createToast(`Changing ${currentBundle.libraries[i]} to : ${event.target.value}`, ToastType.Info);
-                            Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
-                            state.editorPanel.restartLanguageClient();
-                        },
-                        options,
-                        currentLibraries[currentBundle.libraries[i]],
-                    ));
-                }
-            }
         });
-        
+
         dialog.querySelector(".back").addEventListener("click", (event) =>
         {
             settingsDialog(state);
@@ -111,8 +74,6 @@ export default function librariesDialog(state)
             resolve();
         });
         
-        dialog.dispatchEvent(new Event("update-bundle"));
-
         document.body.appendChild(dialog);
     });
 }
