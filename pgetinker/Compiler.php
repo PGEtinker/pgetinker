@@ -26,6 +26,8 @@ class Compiler
     private $errors = [];
 
     private $foundGeometryHeader = false;
+    
+    private $foundRaylibHeader = false;
 
     private $html = "";
 
@@ -190,6 +192,24 @@ class Compiler
         return false;
     }
     
+    private function processCodeDetectRaylib($index)
+    {
+        preg_match(
+            '/^\s*#\s*i(nclude|mport)(_next)?\s+["<](.*)raylib.h[">]/',
+            $this->code[$index],
+            $match,
+            PREG_OFFSET_CAPTURE,
+            0
+        );
+
+        if(count($match) > 0)
+        {
+            $this->foundRaylibHeader = true;
+            return true;
+        }
+
+    }
+
     private function processCodeDetectGeometryUtility($index)
     {
         preg_match(
@@ -246,7 +266,7 @@ class Compiler
         
         return false;
     }
-
+    
     private function processCodeRemoteInclude($index)
     {
         preg_match(
@@ -427,6 +447,9 @@ class Compiler
             if($this->processCodeDetectGeometryUtility($i))
                 continue;
             
+            if($this->processCodeDetectRaylib($i))
+                continue;
+
             if($this->processCodeAbsoluteOrRelativePaths($i))
                 continue;
 
@@ -458,6 +481,12 @@ class Compiler
             }
         }
         
+        if($this->foundRaylibHeader)
+        {
+            $this->logger->info("found raylib header");
+            $this->linkerInputFiles[] = "raylib/libraylib.a";
+        }
+
         $this->logger->info("finished processing code");
         
         return (count($this->errors) == 0);
@@ -537,6 +566,7 @@ class Compiler
             "/opt/emsdk/upstream/emscripten/em++",
             "-c",
             "-O1",
+            "-I./raylib",
             "-I./miniaudio",
             "-I./olcPGEX_Gamepad",
             "-I./olcPGEX_MiniAudio",
@@ -549,6 +579,15 @@ class Compiler
             "pgetinker.o",
             "-std=c++20",
         ]);
+
+        if($this->foundRaylibHeader)
+        {
+            $this->compilerCommand = array_merge($this->compilerCommand, [
+                "-DPLATFORM_WEB",
+            ]);
+        }
+
+
         $this->logger->info("Compiler command:\n\n" . implode("\n", $this->compilerCommand) . "\n");
 
         $this->logger->info("preparing linker command");
@@ -571,6 +610,15 @@ class Compiler
             "-sSINGLE_FILE",
             "-std=c++20",
         ]);
+        
+        if($this->foundRaylibHeader)
+        {
+            $this->linkerCommand = array_merge($this->linkerCommand, [
+                "-sUSE_GLFW=3",
+                "-DPLATFORM_WEB",
+            ]);
+        }
+
         $this->logger->info("Linker command:\n\n" . implode("\n", $this->linkerCommand) . "\n");
 
         
