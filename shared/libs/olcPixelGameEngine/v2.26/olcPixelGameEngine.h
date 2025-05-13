@@ -513,13 +513,6 @@ int main()
 	#endif
 #endif
 
-// File resolver for runtime FS access of emscripten builds
-#if defined(__EMSCRIPTEN__)
-#include <emscripten.h>
-#define FILE_RESOLVE(url, file) emscripten_wget(url, file); emscripten_sleep(0)
-#else
-#define FILE_RESOLVE(url, file)
-#endif
 
 // O------------------------------------------------------------------------------O
 // | PLATFORM-SPECIFIC DEPENDENCIES                                               |
