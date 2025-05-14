@@ -1030,7 +1030,6 @@ elif [ "$1" == "initialize" ]; then
                 (mkdir -p shared; cd shared; git clone https://github.com/emscripten-core/emsdk.git)
             fi
 
-            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/opt/emsdk' pgetinker/app bash -c "EMSDK_QUIET=1 source /opt/emsdk/emsdk_env.sh; embuilder build libpng sdl2_mixer"
             docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk install "$EMSCRIPTEN_VERSION"
             docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk activate "$EMSCRIPTEN_VERSION"
             
