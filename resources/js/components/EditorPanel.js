@@ -6,6 +6,7 @@ import * as vscode from "vscode";
 import { createToast, ToastType } from '../lib/createToast';
 import axios from "axios";
 import Cookies from 'js-cookie';
+import { getCompilerLibraries } from "../lib/compilerLibraries";
 
 function extractSlugFromURI(uri)
 {
@@ -160,7 +161,7 @@ export default class EditorPanel
                     setStorageValue(key, share.library_versions[key]);
                 });
                 
-                Cookies.set("pgetinker_libraries", encodeURIComponent(share.library_versions));
+                Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
             }
             catch(err)
             {
