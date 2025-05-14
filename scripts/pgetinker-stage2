@@ -763,6 +763,7 @@ elif [ "$1" == "update" ]; then
         echo "  - Install NPM dependencies."
         echo "  - Generate a pre-built frontend."
         echo "  - Pull wiki repo."
+        echo "  - Update esmcripten."
         echo "  - Build shared emscripten libraries."
         echo "  - Run laravel migration scripts."
         echo "  - Restart PGEtinker services."
@@ -835,7 +836,22 @@ elif [ "$1" == "update" ]; then
             fi
             echo "## Done."
             echo
+
+            echo "#### Clone and install emscripten."
+            if [ -f "shared/emsdk/emsdk_env.sh" ]; then
+                echo "## emsdk has already been cloned. pulling"
+                (cd shared/emsdk; git pull)
+            else
+                echo "## emsdk not found, cloning."
+                (mkdir -p shared; cd shared; git clone https://github.com/emscripten-core/emsdk.git)
+            fi
+
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk install "$EMSCRIPTEN_VERSION"
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk activate "$EMSCRIPTEN_VERSION"
             
+            echo "## Done."
+            echo
+
             echo "#### Build shared emscripten libraries."
             docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/opt/emsdk' -v './shared/libs:/var/www/html' pgetinker/app bash build-libs.sh
             if [ ! $? -eq 0 ]; then
