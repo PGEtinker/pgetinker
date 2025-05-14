@@ -6,17 +6,17 @@
     <ul class="submenu">
         <li class="subitem">
             <a data-code-id="code1">
-                PGEtinker Classic Demo
+                PGE - Classic Demo
             </a>
         </li>
         <li class="subitem">
             <a data-code-id="code2">
-                Bare olcPixelGameEngine
+                PGE - Bare
             </a>
         </li>
         <li class="subitem">
             <a data-code-id="code3">
-                Library Versions Demo
+                PGE - Library Versions Demo
             </a>
         </li>
         <!-- <li class="subitem">
