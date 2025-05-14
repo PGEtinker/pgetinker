@@ -38,6 +38,9 @@ class UpdateCodeHashes extends Command
         foreach($codes as $code)
         {
             $libraries = $code->library_versions;
+            if(!isset($libraries["raylib"]))
+                $libraries["raylib"] = "5.5";
+            
             ksort($libraries);
 
             $code->hash = hash("sha256", hashCode($code->code) . json_encode($libraries));
