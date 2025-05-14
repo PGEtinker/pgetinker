@@ -26,6 +26,10 @@ This is also something of an experimental release that includes raylib 5.5 and r
 
 ### 2025-05-14
 
+- main: add raylib classic demo
+- main: denote PGE examples
+- main: update broken.png url in examples
+- main: change GetShareThumbnails to get all with no clause
 - libraries: add rlights.h
 - pgetinker: embuilder here is not needed, same command is run in build-libs.sh
 - pgetinker: add emscripten update to the update command
