@@ -20,12 +20,18 @@ fewer wasm objects are required for the same version combinations.
 This release now includes newer versions of PGE up to v2.29, currently the latest
 version available from OneLoneCoder!
 
-This is also something of an experimental release that includes RayLib 5.5.
+This is also something of an experimental release that includes raylib 5.5 and raygui 4.0.
 
 ## Commits
 
 ### 2025-05-14
 
+- pgetinker: embuilder here is not needed, same command is run in build-libs.sh
+- pgetinker: add emscripten update to the update command
+- pgetinker: use EMSCRIPTEN_VERSION variable to configure version by environment vars
+- libraries: clean artifacts before building
+- main: capture F1 presses and ignore them
+- main: add raylib to libraries while recalculating hashes
 - libraries: add raygui 4.0 to raylib 5.5
 
 ### 2025-05-13
