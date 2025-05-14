@@ -26,6 +26,7 @@ This is also something of an experimental release that includes raylib 5.5 and r
 
 ### 2025-05-14
 
+- libraries: add rlights.h
 - pgetinker: embuilder here is not needed, same command is run in build-libs.sh
 - pgetinker: add emscripten update to the update command
 - pgetinker: use EMSCRIPTEN_VERSION variable to configure version by environment vars
