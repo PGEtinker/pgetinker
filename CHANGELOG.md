@@ -26,6 +26,8 @@ This is also something of an experimental release that includes RayLib 5.5.
 
 ### 2025-05-13
 
+- main: ensure player html is empty if the player isn't running when layout reset
+- main: set libraries cookie correctly on shares
 - main: add update-code-hashes command to recalculate share hashes
 - main: consolidate hashing of code and libraries, easier cache handling
 - screenshot: use pgetinker-screenshot-ready event
