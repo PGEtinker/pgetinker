@@ -32,7 +32,7 @@ class GetShareThumbnails extends Command
      */
     public function handle()
     {
-        $codes = Code::where("thumb_url", "")->get();
+        $codes = Code::all();
         
         if(count($codes) == 0)
         {
