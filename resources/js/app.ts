@@ -311,6 +311,7 @@ export default class PGEtinker
         }
         
         this.SetupLayout();
+
     }
 
     preCompile()
@@ -437,6 +438,12 @@ export default class PGEtinker
             {
                 this.layout.updateSize();
             });
+            
+            if(!this.playerPanel.isRunning())
+            {
+                this.playerPanel.lastPlayerHtml = "";
+            }
+            
             
             this.consolePanel.onInit();
             await this.editorPanel.onInit();
