@@ -19,11 +19,12 @@
                 PGE - Library Versions Demo
             </a>
         </li>
-        <!-- <li class="subitem">
+        <li class="subitem">
             <a data-code-id="code4">
-                Example 4
+                Raylib - Classic Demo
             </a>
         </li>
+        <!--
         <li class="subitem">
             <a data-code-id="code5">
                 Example 5
@@ -33,7 +34,8 @@
             <a data-code-id="code6">
                 Example 6
             </a>
-        </li> -->
+        </li>
+        -->
     </ul>
 </li>
 
