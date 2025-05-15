@@ -10,13 +10,13 @@
 //------------------------------------------------------------------------------------
 // Allow loading of URL assets on PLATFORM_WEB
 //------------------------------------------------------------------------------------
-#if defined(PLATFORM_WEB)
+#if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
 #endif
 
 void FILE_RESOLVE(const char* url, const char* file)
 {
-    #if defined(PLATFORM_WEB)
+    #if defined(__EMSCRIPTEN__)
     emscripten_wget(url, file);
     emscripten_sleep(0);
     #endif
