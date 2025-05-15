@@ -49,8 +49,8 @@ export default class PlayerPanel
         if(this.lastPlayerHtml != "")
         {
             let playerFrame = document.createElement('iframe');
+            playerFrame.setAttribute("sandbox", "allow-pointer-lock allow-scripts");
             playerFrame.setAttribute("srcdoc", this.lastPlayerHtml);
-            playerFrame.setAttribute("sandbox", "allow-scripts");
             document.querySelector("#player-panel .iframe-container").append(playerFrame);
             
             playerFrame.classList.toggle("display-block", true);
@@ -126,7 +126,7 @@ export default class PlayerPanel
     {
         let playerFrame = document.createElement('iframe');
         playerFrame.setAttribute("srcdoc", this.lastPlayerHtml);
-        playerFrame.setAttribute("sandbox", "allow-scripts");
+        playerFrame.setAttribute("sandbox", "allow-pointer-lock allow-scripts");
         document.querySelector("#player-panel .iframe-container").append(playerFrame);
         
         playerFrame.classList.toggle("display-block", true);
