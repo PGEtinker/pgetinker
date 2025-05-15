@@ -61,6 +61,22 @@ Route::get("/changelog", function(Request $request)
     }
 });
 
+Route::get("/examples", function(Request $request)
+{
+    $isFramed = filter_var(
+        $request->query("framed", "false"),
+        FILTER_VALIDATE_BOOLEAN
+    );
+
+    $html = Markdown::parse("Oh you thought there'd be content!");
+
+    return view("markdown", [
+        "title" => "Release Notes",
+        "content" => $html,
+        "framed" => ($isFramed) ? "framed" : ""
+    ]);
+});
+
 Route::get("/release-notes", function(Request $request)
 {
     $path = base_path("/CHANGELOG.md");

@@ -4,6 +4,8 @@ import './lib/goldenLayout';
 
 import version from "./lib/version";
 // @ts-ignore
+import examplesDialog from './lib/examplesDialog';
+// @ts-ignore
 import mobileMenuDialog from './lib/mobileMenuDialog';
 // @ts-ignore
 import newsDialog from './lib/newsDialog';
@@ -85,6 +87,7 @@ export default class PGEtinker
         });
         
         document.querySelectorAll("#examples-menu a").forEach((item) =>
+        document.querySelector("#examples-menu")?.addEventListener("click", (event) =>
         {
             item.addEventListener("click", () =>
             {
@@ -96,6 +99,8 @@ export default class PGEtinker
                     this.editorPanel.setToExample(selectedId, selectedName);
                 }
             });
+            event.preventDefault();
+            examplesDialog(this);
         });
     
         // Download Button
