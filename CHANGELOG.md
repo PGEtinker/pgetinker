@@ -8,7 +8,7 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
-# <u>Release Notes - 2025-05-14</u>
+# <u>Release Notes - 2025-05-15</u>
 
 ## Notes
 
@@ -23,6 +23,11 @@ version available from OneLoneCoder!
 This is also something of an experimental release that includes raylib 5.5 and raygui 4.0.
 
 ## Commits
+
+### 2025-05-15
+
+- main: flesh out the raylib classic example
+- main: emscripten shell uses blank background color instead of black for canvas
 
 ### 2025-05-14
 
