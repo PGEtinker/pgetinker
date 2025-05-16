@@ -499,11 +499,12 @@ class Compiler
         $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
         
         $libraries = $this->libraryVersions;
-
+        
         foreach($libraries as $library => $version)
         {
             $this->libraryDirectories["{$library}"] = "{$baseLibraryDirectory}/{$library}/{$version}";
         }
+        $this->libraryDirectories["pgetinker"] = "{$baseLibraryDirectory}/pgetinker/latest";
 
         $this->logger->info("writing linesOfCode to {$this->workingDirectory}/pgetinker.cpp");
         file_put_contents(
@@ -566,6 +567,7 @@ class Compiler
             "/opt/emsdk/upstream/emscripten/em++",
             "-c",
             "-O1",
+            "-I./pgetinker",
             "-I./raylib",
             "-I./miniaudio",
             "-I./olcPGEX_Gamepad",
