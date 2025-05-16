@@ -31,6 +31,7 @@ Hitting "escape" now closes dialogs.
 
 ### 2025-05-16
 
+- main: use restartLanguageClient and setValue directly to fix LSP bug
 - main: set libraries to "latest" when loading an example
 - libraries: set latest to ACTUAL latest
 - main: hitting escape closes dialogs
