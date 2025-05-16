@@ -14,8 +14,9 @@ export default function examplesDialog(state)
             <div class="header">Examples</div>
             <div class="content">
                 <div class="search-bar">
-                    <input type="text" id="search" placeholder="Search examples..." aria-label="Search examples by keyword or name">
+                    <input type="text" id="search" placeholder="Search examples by name, function, or keyword..." aria-label="Search examples by keyword or name">
                     <div class="search-filters">
+                        Filters:
                         <input id="show-pge" type="checkbox" checked> olcPixelGameEngine
                         <input id="show-raylib" type="checkbox" checked> raylib
                     </div>
