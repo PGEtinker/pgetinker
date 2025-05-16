@@ -763,6 +763,8 @@ elif [ "$1" == "update" ]; then
         echo "  - Install NPM dependencies."
         echo "  - Generate a pre-built frontend."
         echo "  - Pull wiki repo."
+        echo "  - Create wiki symlinks."
+        echo "  - Create examples symlinks."
         echo "  - Update esmcripten."
         echo "  - Build shared emscripten libraries."
         echo "  - Run laravel migration scripts."
@@ -781,7 +783,7 @@ elif [ "$1" == "update" ]; then
     
     case $proceed in
         [Yy]*)
-            rm -rf public/build public/hot
+            rm -rf public/build public/hot public/wiki public/examples
 
             echo "#### Run git pull."
             git pull
@@ -834,6 +836,16 @@ elif [ "$1" == "update" ]; then
                 echo "## Failed to pull latest wiki."
                 exit 1
             fi
+            echo "## Done."
+            echo
+
+            echo "#### Create wiki symlinks."
+            ln -s /var/www/html/services/wiki/public public/wiki
+            echo "## Done."
+            echo
+            
+            echo "#### Create examples symlinks."
+            ln -s /var/www/html/examples public/examples
             echo "## Done."
             echo
 
@@ -941,6 +953,7 @@ elif [ "$1" == "initialize" ]; then
         echo "  - Generate a pre-built frontend."
         echo "  - Clone wiki repo."
         echo "  - Create wiki symlinks."
+        echo "  - Create examples symlinks."
         echo "  - Clone and install emscripten."
         echo "  - Build shared emscripten libraries."
         echo "  - Run laravel migration scripts."
@@ -958,7 +971,7 @@ elif [ "$1" == "initialize" ]; then
     
     case $proceed in
         [Yy]*)
-            rm -rf docker-compose.yml vendor node_modules public/build public/hot .env services/wiki public/wiki
+            rm -rf docker-compose.yml vendor node_modules public/build public/hot .env services/wiki public/wiki public/examples
             
             echo "#### Creating default environment configuration."
             cp .env.sail .env > /dev/null 2>&1
@@ -1021,6 +1034,11 @@ elif [ "$1" == "initialize" ]; then
             echo "## Done."
             echo
             
+            echo "#### Create examples symlinks."
+            ln -s /var/www/html/examples public/examples
+            echo "## Done."
+            echo
+
             echo "#### Clone and install emscripten."
             if [ -f "shared/emsdk/emsdk_env.sh" ]; then
                 echo "## emsdk has already been cloned. pulling"
