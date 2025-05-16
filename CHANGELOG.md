@@ -25,10 +25,13 @@ This is also something of an experimental release that includes raylib 5.5 and r
 Also examples are now in a dialog rather than a drop down. It has filters and keyword
 search capabilities.
 
+Hitting "escape" now closes dialogs.
+
 ## Commits
 
 ### 2025-05-16
 
+- main: hitting escape closes dialogs
 - examples: add pge animate2d, camera2d, hardware3d, and quickgui examples
 - main: add padding to the bottom of the examples-container
 - main: add responsive width to examples dialog
