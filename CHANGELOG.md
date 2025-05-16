@@ -31,6 +31,8 @@ Hitting "escape" now closes dialogs.
 
 ### 2025-05-16
 
+- main: set libraries to "latest" when loading an example
+- libraries: set latest to ACTUAL latest
 - main: hitting escape closes dialogs
 - examples: add pge animate2d, camera2d, hardware3d, and quickgui examples
 - main: add padding to the bottom of the examples-container
