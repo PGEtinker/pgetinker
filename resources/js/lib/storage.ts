@@ -53,36 +53,15 @@ export async function conformStorage(): Promise<void>
         setStorageValue("editor.inlayHints.enabled", false);
     }
     
-    if(getStorageValue("olcPixelGameEngine") == null)
+    const libraries = Object.keys(window.librariesManifest.latest);
+    libraries.forEach((library) =>
     {
-        setStorageValue("olcPixelGameEngine", "v2.25");
-    }
+        if(getStorageValue(library) == null)
+        {
+            setStorageValue(library, window.librariesManifest.latest[library]);
+        }
+    });
 
-    if(getStorageValue("miniaudio") == null)
-    {
-        setStorageValue("miniaudio", "0.11.21");
-    }
-    
-    if(getStorageValue("olcPGEX_Gamepad") == null)
-    {
-        setStorageValue("olcPGEX_Gamepad", "f5958a5");
-    }
-    
-    if(getStorageValue("olcPGEX_MiniAudio") == null)
-    {
-        setStorageValue("olcPGEX_MiniAudio", "v1.5");
-    }
-
-    if(getStorageValue("olcSoundWaveEngine") == null)
-    {
-        setStorageValue("olcSoundWaveEngine", "v0.02");
-    }
-
-    if(getStorageValue("raylib") == null)
-    {
-        setStorageValue("raylib", "5.5");
-    }
-    
     Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
 }
 
