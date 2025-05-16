@@ -1,0 +1,16 @@
+[
+    {
+        "name": "PGEtinker Classic Example",
+        "library": "pge",
+        "codeFile": "/examples/files/pgetinker-pge-classic-example.cpp",
+        "screenshot": "/examples/files/pgetinker-pge-classic-example.png",
+        "keywords": "olcPixelGameEngine.h pgetinker.h PGEtinkerClassicExample olc::PixelGameEngine sAppName OnUserCreate pgetinker_file_resolve Load RandomColor OnUserUpdate GetMouse GetMousePos Clear DrawRect DrawStringDropShadow DrawSprite FillCircle Draw DrawStringDropShadow DrawString"
+    },
+    {
+        "name": "PGEtinker Classic Example",
+        "library": "raylib",
+        "codeFile": "/examples/files/pgetinker-raylib-classic-example.cpp",
+        "screenshot": "/examples/files/pgetinker-raylib-classic-example.png",
+        "keywords": "raylib.h pgetinker.h algorithm iostream stdlib.h DrawText SetConfigFlags InitWindow SetTargetFPS LoadRenderTexture SetTextureFilter pgetinker_file_resolve LoadTexture GetRandomColor WindowShouldClose CalculateCanvasDestination GetMousePosition IsMouseButtonPressed BeginDrawing BeginTextureMode ClearBackground DrawRectangleLinesEx DrawTextDropShadow DrawRectangle DrawTexture DrawCircle DrawPixel EndTextureMode ClearBackground DrawTexturePro EndDrawing UnloadTexture UnloadRenderTexture CloseWindo"
+    }
+]
