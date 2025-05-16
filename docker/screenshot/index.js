@@ -115,20 +115,11 @@ app.post("/", async(request, response) =>
         // wait for 5 second after ready
         await sleep(5);
         
-        // get the PGE canvas
-        const canvas = await page.$('canvas');
-        console.log("Screenshot:", "get the canvas");
-
-        // get the size of the PGE canvas
-        const boundingBox = await canvas.boundingBox();
-        console.log("Screenshot:", "get bounding box", boundingBox);
-        
         // change the size of the viewport to match the PGE canvas size
         await page.setViewport({
-            width: boundingBox.width,
-            height: boundingBox.height
+            width: 800,
+            height: 600
         });
-        console.log("Screenshot:", "resize window to size of bounding box");
 
         // shutter --- click 
         const screenshot = await page.screenshot({
