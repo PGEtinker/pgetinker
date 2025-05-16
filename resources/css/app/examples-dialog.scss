@@ -71,4 +71,10 @@
     .example:hover {
         outline: 0.6rem solid var(--pgetinker-settings-dialog-hover);
     }
+
+    @media screen and (max-width: 750px) {
+        .example {
+            width: 90%;
+        }
+    }
 }
