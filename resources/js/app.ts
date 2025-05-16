@@ -432,7 +432,7 @@ export default class PGEtinker
             {
                 this.layout.updateSize();
             });
-            
+
             if(!this.playerPanel.isRunning())
             {
                 this.playerPanel.lastPlayerHtml = "";

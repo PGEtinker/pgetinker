@@ -1,4 +1,5 @@
 import version from "./version";
+
 export default function newsDialog()
 {
     return new Promise((resolve) =>
@@ -32,6 +33,16 @@ export default function newsDialog()
             resolve();
         });
                 
+        function escapeKeyHandler(event)
+        {
+            if(event.key === 'Escape')
+            {
+                document.removeEventListener("keydown", escapeKeyHandler);
+                dialog.remove();
+                resolve();
+            }
+        }
+        document.addEventListener('keydown', escapeKeyHandler);
         document.body.appendChild(dialog);
     });
 
