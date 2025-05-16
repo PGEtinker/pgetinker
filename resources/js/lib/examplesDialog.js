@@ -1,4 +1,8 @@
+import { getCompilerLibraries } from './compilerLibraries';
 import { createToast, ToastType } from './createToast';
+import librariesDialog from './librariesDialog';
+import { setStorageValue } from './storage';
+import Cookies from 'js-cookie';
 
 export default function examplesDialog(state)
 {
@@ -73,6 +77,13 @@ export default function examplesDialog(state)
                             .then((response) => response.text())
                             .then(async(code) =>
                             {
+                                const libKeys = Object.keys(librariesManifest.latest);
+                                libKeys.forEach((key) =>
+                                {
+                                    setStorageValue(key, librariesManifest.latest[key]);
+                                });
+                                Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
+                                
                                 await state.editorPanel.setValueAndRestartLanguageClient(code)
                                 dialog.remove();
                                 resolve();
@@ -133,7 +144,7 @@ export default function examplesDialog(state)
             }
         }
         document.addEventListener('keydown', escapeKeyHandler);
-                
+
         document.body.appendChild(dialog);
     });
 
