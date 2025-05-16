@@ -85,6 +85,7 @@ export default function examplesDialog(state)
                                 Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
                                 await state.editorPanel.restartLanguageClient()
                                 state.editorPanel.setValue(code);
+                                state.editorPanel.reveal({ column: 1, lineNumber: 1 });
                                 dialog.remove();
                                 resolve();
                             });
