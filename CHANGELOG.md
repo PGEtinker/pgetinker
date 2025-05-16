@@ -29,6 +29,13 @@ search capabilities.
 
 ### 2025-05-16
 
+- examples: add pge animate2d, camera2d, hardware3d, and quickgui examples
+- main: add padding to the bottom of the examples-container
+- main: add responsive width to examples dialog
+- main: make examples dialog more visually sane
+- main: add "Filter:" label to the search filters and flesh out the placeholder text in the search bar
+- examples: update pgetinker-pge-classic-example.png
+- screenshot: all screenshots are 800x600 now
 - main: remove old examples templates
 - main: remove examples view
 - main: remove example code browser test
