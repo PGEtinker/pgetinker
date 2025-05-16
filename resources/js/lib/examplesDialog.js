@@ -83,8 +83,8 @@ export default function examplesDialog(state)
                                     setStorageValue(key, librariesManifest.latest[key]);
                                 });
                                 Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
-                                
-                                await state.editorPanel.setValueAndRestartLanguageClient(code)
+                                await state.editorPanel.restartLanguageClient()
+                                state.editorPanel.setValue(code);
                                 dialog.remove();
                                 resolve();
                             });
