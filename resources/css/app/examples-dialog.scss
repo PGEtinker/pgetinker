@@ -1,10 +1,6 @@
 .examples .window {
     max-width: 80vw;
     .content {
-        height: 68vh;
-        overflow: hidden;
-        overflow-y: auto;
-
         #search {
             display: block;
             width: 95%;
@@ -32,9 +28,14 @@
     gap: 1rem;
     width: 100%;
     margin-top: 1rem;
+    padding-top: 1rem;
+    height: 55vh;
+    overflow: hidden;
+    overflow-y: auto;
 
     .example {
-        width: 20rem;
+        width: 20vw;
+        min-width: 20rem;
         outline: 1px solid var(--pgetinker-dialog-border-color);
         border-radius: .6rem;
         // box-shadow: .4rem .4rem .4rem black;
@@ -52,7 +53,8 @@
 
             img:first-child {
                 width: 100%;
-                height: auto;
+                height: 20rem;
+                object-fit: contain;
                 border: 1px solid var(--pgetinker-dialog-border-color);
             }
 
