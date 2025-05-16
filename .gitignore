@@ -1,9 +1,10 @@
 /.phpunit.cache
 /node_modules
 /public/build
+/public/examples
 /public/hot
-/public/storage
 /public/screenshots
+/public/storage
 /public/wiki
 /services/wiki
 /shared/emsdk
