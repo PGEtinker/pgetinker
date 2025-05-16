@@ -31,6 +31,7 @@ Hitting "escape" now closes dialogs.
 
 ### 2025-05-16
 
+- main: scroll back up to the top when loading example
 - main: use restartLanguageClient and setValue directly to fix LSP bug
 - main: set libraries to "latest" when loading an example
 - libraries: set latest to ACTUAL latest
