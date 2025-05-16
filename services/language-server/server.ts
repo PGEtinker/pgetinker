@@ -84,7 +84,10 @@ const launchLanguageServer = (runconfig: LanguageServerRunConfig, socket: IWebSo
     {
         libraryDirectories[library] = baseLibraryDirectory + "/" + library + "/" + libraries[library];
     });
-
+    
+    libraryKeys.push("pgetinker");
+    libraryDirectories["pgetinker"] = baseLibraryDirectory + "/pgetinker/latest";
+    
     // create a sha256 of the libraryDirectories object
     const libraryHash = crypto.createHash("sha256");
     
