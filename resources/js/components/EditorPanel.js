@@ -1,4 +1,3 @@
-import examples from "../lib/exampleCodes";
 import { getUserConfiguration } from "../lib/monacoConfig";
 import { configureMonacoWorkers, runCppWrapper } from "../lib/monacoWrapper";
 import { getStorageValue, setStorageValue } from "../lib/storage";
@@ -55,27 +54,21 @@ export default class EditorPanel
         this.monacoWrapper.getEditor().setValue(value);
     }
     
-    async setToExample(codeId, codeName)
+    async setValueAndRestartLanguageClient(code)
     {
-        const codeIds = Object.keys(examples);
-        for(let i = 0; i < codeIds.length; i++)
+        await this.stopLanguageClient();
+        
+        this.state.editorPanel.setValue(code);
+        this.state.editorPanel.reveal({ column: 1, lineNumber: 1 });
+                
+        if(this.state.playerPanel.running)
         {
-            if(codeIds[i] === codeId)
-            {
-                await this.stopLanguageClient();
-                this.state.editorPanel.setValue(examples[codeId]);
-                this.state.editorPanel.reveal({ column: 1, lineNumber: 1 });
-                
-                if(this.state.playerPanel.running)
-                {
-                    document.querySelector("#start-stop").dispatchEvent(new Event("click"));                    
-                }
-                
-                createToast(`Set Code to ${codeName}`, ToastType.Info);
-                await this.startLanguageClient();
-                return;
-            }
+            document.querySelector("#start-stop").dispatchEvent(new Event("click"));                    
         }
+                
+        await this.startLanguageClient();
+        
+        return;
     }
 
     async stopLanguageClient()
@@ -89,6 +82,11 @@ export default class EditorPanel
 
     async startLanguageClient()
     {
+        const lcWrapper = this.monacoWrapper.getLanguageClientWrapper();
+        
+        if(lcWrapper.isStarted())
+            return;
+
         await axios.get('/sanctum/csrf-cookie');
         await lcWrapper.start();
     }
@@ -141,7 +139,7 @@ export default class EditorPanel
         }
         else
         {
-            code = examples.code1;
+            code = await fetch("/examples/files/pgetinker-pge-classic-example.cpp").then((response) => response.text());
         }        
         
         // at this point we have a sane default value for code.

@@ -86,23 +86,12 @@ export default class PGEtinker
             settingsDialog(this);
         });
         
-        document.querySelectorAll("#examples-menu a").forEach((item) =>
         document.querySelector("#examples-menu")?.addEventListener("click", (event) =>
         {
-            item.addEventListener("click", () =>
-            {
-                let selectedId = item.getAttribute("data-code-id");
-                let selectedName = (item as HTMLAnchorElement).innerText;
-                
-                if(selectedId)
-                {
-                    this.editorPanel.setToExample(selectedId, selectedName);
-                }
-            });
             event.preventDefault();
             examplesDialog(this);
         });
-    
+
         // Download Button
         document.querySelector("#download")?.addEventListener("click", (event) => 
         {

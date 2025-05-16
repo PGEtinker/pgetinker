@@ -2,7 +2,7 @@ import settingsDialog from "./settingsDialog";
 import newsDialog from "./newsDialog";
 import supportersDialog from "./supportersDialog";
 import version from "./version";
-import examplesMenuDialog from "./examplesMenuDialog";
+import examplesDialog from "./examplesDialog";
 
 export default function mobileMenuDialog(state)
 {
@@ -127,7 +127,7 @@ export default function mobileMenuDialog(state)
             event.preventDefault();
             dialog.remove();
             resolve();
-            examplesMenuDialog(state);
+            examplesDialog(this);
         });
     
 

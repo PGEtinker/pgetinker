@@ -1,0 +1,72 @@
+.examples .window {
+    max-width: 80vw;
+    .content {
+        height: 68vh;
+        overflow: hidden;
+        overflow-y: auto;
+
+        #search {
+            display: block;
+            width: 95%;
+            padding: .6rem;
+            margin: 1rem auto;
+            font-size: 1rem;
+            outline: 1px solid #ccc;
+            border-radius: .4rem;
+        }
+
+        .search-filters {
+            display: block;
+            margin: 0 auto 1rem auto;
+            text-align: center;
+        }
+
+    }
+}
+.examples-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+
+    .example {
+        width: 20rem;
+        outline: 1px solid var(--pgetinker-dialog-border-color);
+        border-radius: .6rem;
+        // box-shadow: .4rem .4rem .4rem black;
+        padding: 15px;
+        transition: transform 0.2s;
+        cursor: pointer;
+
+        h3 {
+            margin: 0 0 1rem;
+        }
+
+        .screenshot {
+            position: relative;
+            margin-bottom: 1rem;
+
+            img:first-child {
+                width: 100%;
+                height: auto;
+                border: 1px solid var(--pgetinker-dialog-border-color);
+            }
+
+            img:last-child {
+                position: absolute;
+                bottom: 1rem;
+                right: 1rem;
+                width: 4rem;
+                height: auto;
+            }
+        }
+    }
+    
+    .example:hover {
+        outline: 0.6rem solid var(--pgetinker-settings-dialog-hover);
+    }
+}

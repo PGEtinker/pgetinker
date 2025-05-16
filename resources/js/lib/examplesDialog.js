@@ -1,4 +1,6 @@
-export default function examplesDialog()
+import { createToast, ToastType } from './createToast';
+
+export default function examplesDialog(state)
 {
     return new Promise((resolve) =>
     {
@@ -11,19 +13,115 @@ export default function examplesDialog()
         <div class="window">
             <div class="header">Examples</div>
             <div class="content">
-                <iframe src="/examples?framed=true"></iframe>
+                <div class="search-bar">
+                    <input type="text" id="search" placeholder="Search examples..." aria-label="Search examples by keyword or name">
+                    <div class="search-filters">
+                        <input id="show-pge" type="checkbox" checked> olcPixelGameEngine
+                        <input id="show-raylib" type="checkbox" checked> raylib
+                    </div>
+                </div>
+                <div class="examples-container"></div>
             </div>
             <div class="footer">
                 <button class="ok">Close</button>
             </div>
         </div>`;
-    
+
+        const elem_examples = dialog.querySelector(".examples-container");
+        const elem_search = dialog.querySelector("#search");
+        const elem_showPGE = dialog.querySelector("#show-pge");
+        const elem_showRaylib = dialog.querySelector("#show-raylib");
+
+        function renderExamples(examples, filter = "", showPGE, showRaylib)
+        {
+            elem_examples.innerHTML = "";
+            
+            const searchTerm = filter.toLowerCase();
+            let haveMatches = false;
+            examples.forEach((example) =>
+            {
+                if(!showPGE && example.library === "pge")
+                    return;
+                
+                if(!showRaylib && example.library === "raylib")
+                    return;
+                
+                const matchKeywords = example.keywords.toLowerCase().includes(searchTerm);
+                const matchName     = example.name.toLowerCase().includes(searchTerm);
+                
+                if (matchKeywords || matchName )
+                {
+                    haveMatches = true;
+                    const card = document.createElement("div");
+                    
+                    card.className = "example";
+                    
+                    card.innerHTML = `
+                        <h3>${example.name}</h3>
+                        <div class="screenshot">
+                            <img src="${example.screenshot}" alt="${example.name} screenshot">
+                            <img src="/images/${example.library}.png" alt="${example.library} logo">
+                        </div>
+                    `;
+
+                    card.addEventListener("click", (event) =>
+                    {
+                        event.preventDefault();
+                        createToast(`Loading Example: ${example.name}`, ToastType.Success, 1000);
+                        fetch(example.codeFile)
+                            .then((response) => response.text())
+                            .then(async(code) =>
+                            {
+                                await state.editorPanel.setValueAndRestartLanguageClient(code)
+                                dialog.remove();
+                                resolve();
+                            });
+                    });
+
+                    elem_examples.appendChild(card);
+                }
+            });
+            
+            if(!haveMatches)
+            {
+                elem_examples.innerHTML = `<h3>No Results</h3>`;
+            }
+        }
+
+        fetch("/examples/examples.json")
+            .then((result) => result.json())
+            .then((data) =>
+            {
+                // Initial render
+                renderExamples(data, "", elem_showPGE.checked, elem_showRaylib.checked);
+
+                // Search event listener
+                elem_search.addEventListener("input", e => {
+                    renderExamples(data, e.target.value, elem_showPGE.checked, elem_showRaylib.checked);
+                });
+
+                elem_showPGE.addEventListener("input", (e) =>
+                {
+                    renderExamples(data, elem_search.value, elem_showPGE.checked, elem_showRaylib.checked);
+                });
+
+                elem_showRaylib.addEventListener("input", (e) =>
+                {
+                    renderExamples(data, elem_search.value, elem_showPGE.checked, elem_showRaylib.checked);
+                });
+            })
+            .catch((reason) =>
+            {
+                console.error(reason);
+            });
+        
+ 
         dialog.querySelector("button.ok").addEventListener("click", (event) =>
         {
             dialog.remove();
             resolve();
         });
-                
+
         document.body.appendChild(dialog);
     });
 
