@@ -60,7 +60,12 @@
                             <span>Settings</span>
                         </a>
                     </li>
-                    @include("shared.examples")
+                    <li class="item has-submenu" id="examples-menu">
+                        <a tabindex="0">
+                            <i data-lucide="lightbulb"></i>
+                            <span>Examples</span>
+                        </a>                    
+                    </li>
                     <li class="item">
                         <a id="start-stop">
                             <i data-lucide="circle-play"></i><i data-lucide="circle-stop" class="hidden"></i>
@@ -193,9 +198,6 @@
             </p>
         </div>
     </div>
-    <template id="examples">
-        @include("shared.examples")
-    </template>
     
     @include("shared.analytics")
 </body>
