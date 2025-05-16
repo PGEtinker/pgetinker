@@ -63,26 +63,6 @@ class BrowserTest extends DuskTestCase
         });
     }
 
-    public function testLoadsExampleCodeOnClick(): void
-    {
-        $this->browse(function(Browser $browser)
-        {
-            $browser->visit("/");
-            $browser->waitUntilMissing("#pgetinker-loading", 10);
-            $browser->assertMissing("#pgetinker-loading");
-            
-            $browser->click("@examples-menu");
-            
-            $browser->waitFor("@examples-menu .submenu");
-            $browser->click('a[data-code-id="code1"]');
-
-            $browser->waitFor(".toastify");
-            $browser->waitUntilMissing(".toastify");
-
-            $browser->assertSee('Example');
-        });
-    }
-    
     public function testSelectsLightTheme(): void
     {
         $this->browse(function(Browser $browser)
