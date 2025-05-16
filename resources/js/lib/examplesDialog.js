@@ -72,7 +72,7 @@ export default function examplesDialog(state)
                     card.addEventListener("click", (event) =>
                     {
                         event.preventDefault();
-                        createToast(`Loading Example: ${example.name}`, ToastType.Success, 1000);
+                        createToast(`Loading Example: ${example.name}`, ToastType.Success);
                         fetch(example.codeFile)
                             .then((response) => response.text())
                             .then(async(code) =>
@@ -83,11 +83,21 @@ export default function examplesDialog(state)
                                     setStorageValue(key, librariesManifest.latest[key]);
                                 });
                                 Cookies.set("pgetinker_libraries", encodeURIComponent(JSON.stringify(getCompilerLibraries())));
-                                await state.editorPanel.restartLanguageClient()
-                                state.editorPanel.setValue(code);
-                                state.editorPanel.reveal({ column: 1, lineNumber: 1 });
-                                dialog.remove();
-                                resolve();
+                                
+                                state.editorPanel.setValue("");
+                                
+                                setTimeout(() =>
+                                {
+                                    state.editorPanel.setValue(code);
+                                    state.editorPanel.reveal({ column: 1, lineNumber: 1 });
+                                    
+                                    setTimeout(async() =>
+                                    {
+                                        await state.editorPanel.restartLanguageClient()
+                                        dialog.remove();
+                                        resolve();
+                                    }, 50);
+                                }, 50);
                             });
                     });
 
