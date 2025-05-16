@@ -8,7 +8,7 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
-# <u>Release Notes - 2025-05-15</u>
+# <u>Release Notes - 2025-05-16</u>
 
 ## Notes
 
@@ -22,10 +22,31 @@ version available from OneLoneCoder!
 
 This is also something of an experimental release that includes raylib 5.5 and raygui 4.0.
 
+Also examples are now in a dialog rather than a drop down. It has filters and keyword
+search capabilities.
+
 ## Commits
+
+### 2025-05-16
+
+- main: remove old examples templates
+- main: remove examples view
+- main: remove example code browser test
+- examples: added classic example for pge and raylib
+- main: add examples dialog
+- main: remove /examples route
+- main: update ignored files
+- pgetinker: add examples symlink to initialize/update commands
+- language-server: add pgetinker library
+- libraries: add pgetinker library
+- main: add pgetinker library
 
 ### 2025-05-15
 
+- main: add skeleton for the examples dialog
+- main: add skeleton for the examples dialog
+- main: use __EMSCRIPTEN__ instead of PLATFORM_WEB
+- main: add allow-pointer-lock to support DisableCursor() in raylib
 - main: flesh out the raylib classic example
 - main: emscripten shell uses blank background color instead of black for canvas
 
