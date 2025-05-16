@@ -12,5 +12,34 @@
         "codeFile": "/examples/files/pgetinker-raylib-classic-example.cpp",
         "screenshot": "/examples/files/pgetinker-raylib-classic-example.png",
         "keywords": "raylib.h pgetinker.h algorithm iostream stdlib.h DrawText SetConfigFlags InitWindow SetTargetFPS LoadRenderTexture SetTextureFilter pgetinker_file_resolve LoadTexture GetRandomColor WindowShouldClose CalculateCanvasDestination GetMousePosition IsMouseButtonPressed BeginDrawing BeginTextureMode ClearBackground DrawRectangleLinesEx DrawTextDropShadow DrawRectangle DrawTexture DrawCircle DrawPixel EndTextureMode ClearBackground DrawTexturePro EndDrawing UnloadTexture UnloadRenderTexture CloseWindo"
-    }
+    },
+    {
+        "name": "olcUTIL_Animate2D.h Example",
+        "library": "pge",
+        "codeFile": "/examples/files/pgetinker-pge-animate2d-example.cpp",
+        "screenshot": "/examples/files/pgetinker-pge-animate2d-example.png",
+        "keywords": "olcUTIL_Animate2D.h olcPixelGameEngine.h TEST_Animate2D PixelGameEngine TEST_Animate2D sAppName DudeState Renderable AnimationState OnUserCreate pgetinker_file_resolve FrameSequence AddState OnUserUpdate ChangeState UserState DudeState UpdateState GetFrame DrawPartialDecal GetSourceImage Decal GetSourceRect DrawStringDecal Construct Start"
+    },
+    {
+        "name": "olcUTIL_Camera2D.h Example",
+        "library": "pge",
+        "codeFile": "/examples/files/pgetinker-pge-camera2d-example.cpp",
+        "screenshot": "/examples/files/pgetinker-pge-camera2d-example.png",
+        "keywords": "olcPixelGameEngine.h olcPGEX_TransformedView.h olcUTIL_Camera2D.h TEST_Camera2D PixelGameEngine sAppName TileTransformedView vi2d Camera2D vf2d Camera2D SetTarget SetMode SetWorldBoundary EnableWorldBoundary Clear OnUserUpdate fElapsedTime HandlePanAndZoom GetKey bPressed SetWorldOffset GetViewPosition SetWorldScale Simple EdgeMoveLazyFollow FixedScreens Update FillRectDecal DrawStringPropDecal"
+    },
+    {
+        "name": "olcPGEX_QuickGUI.h Example",
+        "library": "pge",
+        "codeFile": "/examples/files/pgetinker-pge-quickgui-example.cpp",
+        "screenshot": "/examples/files/pgetinker-pge-quickgui-example.png",
+        "keywords": "olcPixelGameEngine.h olcPGEX_QuickGUI.h olcDemo_QuickGUI PixelGameEngine sAppName Manager Slider QuickGUI Button Slider Label CheckBox TextBox ListBox OnUserCreate Label Alignment Right bHasBorder nAlign bHasBackground OnUserUpdate fElapsedTime Update Pixel bHeld Clear BLACK bChecked DrawDecal Draw"
+    },
+    {
+        "name": "olcUTIL_Hardware3D.h Example",
+        "library": "pge",
+        "codeFile": "/examples/files/pgetinker-pge-hardware3d-example.cpp",
+        "screenshot": "/examples/files/pgetinker-pge-hardware3d-example.png",
+        "keywords": "olcUTIL_Hardware3D.h olcPixelGameEngine.h Quad3D PixelGameEngine sAppName mf4d matWorld matView matProject Renderable hw3d mesh meshCube hw3d mesh meshLightCube olc::vf3d cubes lights OnUserCreate GetScreenSize GetScreenSize identity CreateCube Create SetDrawTarget Clear WHITE FillCircle BLACK FillCircle BLUE RED YELLOW Update VERY_DARK_BLUE HW3D_Projection HW3D_SetCullMode CullMode CCW OnUserUpdate fElapsedTime rotateY rotateX translate matView ClearBuffer CYAN fLightTime lights cross norm GREEN HW3D_DrawObject"
+    }    
 ]
+
