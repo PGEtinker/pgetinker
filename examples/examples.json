@@ -35,6 +35,13 @@
         "keywords": "BLACK BLUE CCW CYAN Clear ClearBuffer Construct Create CreateCube CullMode Decal FillCircle GREEN GetScreenSize HW3D_DrawObject HW3D_Projection HW3D_SetCullMode OnUserCreate OnUserUpdate Pixel PixelF PixelGameEngine Quad3D RED Renderable S SetDrawTarget Sprite Start Update VERY_DARK_BLUE WHITE YELLOW array bool c col cos cross cube cubes demo dot f fAspect fElapsedTime fLightTime fThetaX fThetaY hw3d i identity illum j layout lights m m1 m2 m3 m4 main matProject matView matWorld max mesh meshCube meshLightCube mf4d n norm olc override p0 p1 p2 pos rotateX rotateY sAppName sin size size_t std tan texCube translate utils uv vCross vLight vf3d x y z"
     },
     {
+        "name": "PGEtinker Classic Example",
+        "library": "raylib",
+        "codeFile": "/examples/files/pgetinker-raylib-classic-example.cpp",
+        "screenshot": "/examples/files/pgetinker-raylib-classic-example.png",
+        "keywords": "BLACK BLANK BeginDrawing BeginTextureMode CalculateCanvasDestination ClearBackground CloseWindow Color DrawCircle DrawPixel DrawRectangle DrawRectangleLinesEx DrawText DrawTextDropShadow DrawTexture DrawTexturePro EndDrawing EndTextureMode FLAG_WINDOW_RESIZABLE GetMousePosition GetRandomColor GetScreenHeight GetScreenWidth InitWindow IsMouseButtonPressed LoadRenderTexture LoadTexture RED Rectangle RenderTexture2D SetConfigFlags SetTargetFPS SetTextureFilter TEXTURE_FILTER_POINT TextFormat Texture2D UnloadRenderTexture UnloadTexture Vector2 WHITE WindowShouldClose YELLOW aspect background canvas canvasDestinationRect canvasHeight canvasSourceRect canvasWidth clamp cout fontSize foreground height imageFromURL main mousePosition pgetinker_file_resolve rand realMousePosition ret scale screenAspect screenHeight screenWidth static_cast std text texture width x y"
+    },
+    {
         "name": "Basic Window",
         "library": "raylib",
         "codeFile": "/examples/files/pgetinker-raylib-basic-window-example.cpp",
@@ -42,10 +49,10 @@
         "keywords": "BeginDrawing ClearBackground CloseWindow DrawText EndDrawing FLAG_WINDOW_RESIZABLE GetScreenHeight GetScreenWidth InitWindow LIGHTGRAY MeasureText RAYWHITE SetConfigFlags SetTargetFPS Vector2 WindowShouldClose fontSize main screenHeight screenWidth textSize x y"
     },
     {
-        "name": "PGEtinker Classic Example",
+        "name": "3D Camera First Person",
         "library": "raylib",
-        "codeFile": "/examples/files/pgetinker-raylib-classic-example.cpp",
-        "screenshot": "/examples/files/pgetinker-raylib-classic-example.png",
-        "keywords": "BLACK BLANK BeginDrawing BeginTextureMode CalculateCanvasDestination ClearBackground CloseWindow Color DrawCircle DrawPixel DrawRectangle DrawRectangleLinesEx DrawText DrawTextDropShadow DrawTexture DrawTexturePro EndDrawing EndTextureMode FLAG_WINDOW_RESIZABLE GetMousePosition GetRandomColor GetScreenHeight GetScreenWidth InitWindow IsMouseButtonPressed LoadRenderTexture LoadTexture RED Rectangle RenderTexture2D SetConfigFlags SetTargetFPS SetTextureFilter TEXTURE_FILTER_POINT TextFormat Texture2D UnloadRenderTexture UnloadTexture Vector2 WHITE WindowShouldClose YELLOW aspect background canvas canvasDestinationRect canvasHeight canvasSourceRect canvasWidth clamp cout fontSize foreground height imageFromURL main mousePosition pgetinker_file_resolve rand realMousePosition ret scale screenAspect screenHeight screenWidth static_cast std text texture width x y"
+        "codeFile": "/examples/files/pgetinker-raylib-3d-camera-first-person-example.cpp",
+        "screenshot": "/examples/files/pgetinker-raylib-3d-camera-first-person-example.png",
+        "keywords": "BLACK BLUE BeginDrawing BeginMode3D CAMERA_FIRST_PERSON CAMERA_FREE CAMERA_ORBITAL CAMERA_ORTHOGRAPHIC CAMERA_PERSPECTIVE CAMERA_THIRD_PERSON Camera CameraPitch CameraYaw ClearBackground CloseWindow Color DARKPURPLE DEG2RAD DisableCursor DrawCube DrawCubeWires DrawPlane DrawRectangle DrawRectangleLines DrawText EndDrawing EndMode3D FLAG_WINDOW_RESIZABLE Fade GOLD GetRandomValue InitWindow IsKeyPressed IsMouseButtonPressed KEY_FOUR KEY_ONE KEY_P KEY_THREE KEY_TWO LIGHTGRAY LIME MAROON MAX_COLUMNS PURPLE RAYWHITE SKYBLUE SetConfigFlags SetTargetFPS TextFormat UpdateCamera Vector2 Vector3 WindowShouldClose camera cameraMode colors fovy heights i main position positions projection screenHeight screenWidth target up x y z"
     }
 ]
