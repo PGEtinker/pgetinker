@@ -35,6 +35,13 @@
         "keywords": "BLACK BLUE CCW CYAN Clear ClearBuffer Construct Create CreateCube CullMode Decal FillCircle GREEN GetScreenSize HW3D_DrawObject HW3D_Projection HW3D_SetCullMode OnUserCreate OnUserUpdate Pixel PixelF PixelGameEngine Quad3D RED Renderable S SetDrawTarget Sprite Start Update VERY_DARK_BLUE WHITE YELLOW array bool c col cos cross cube cubes demo dot f fAspect fElapsedTime fLightTime fThetaX fThetaY hw3d i identity illum j layout lights m m1 m2 m3 m4 main matProject matView matWorld max mesh meshCube meshLightCube mf4d n norm olc override p0 p1 p2 pos rotateX rotateY sAppName sin size size_t std tan texCube translate utils uv vCross vLight vf3d x y z"
     },
     {
+        "name": "Basic Window",
+        "library": "raylib",
+        "codeFile": "/examples/files/pgetinker-raylib-basic-window-example.cpp",
+        "screenshot": "/examples/files/pgetinker-raylib-basic-window-example.png",
+        "keywords": "BeginDrawing ClearBackground CloseWindow DrawText EndDrawing FLAG_WINDOW_RESIZABLE GetScreenHeight GetScreenWidth InitWindow LIGHTGRAY MeasureText RAYWHITE SetConfigFlags SetTargetFPS Vector2 WindowShouldClose fontSize main screenHeight screenWidth textSize x y"
+    },
+    {
         "name": "PGEtinker Classic Example",
         "library": "raylib",
         "codeFile": "/examples/files/pgetinker-raylib-classic-example.cpp",
