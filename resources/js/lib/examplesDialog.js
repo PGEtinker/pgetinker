@@ -77,6 +77,13 @@ export default function examplesDialog(state)
                             .then((response) => response.text())
                             .then(async(code) =>
                             {
+                                let wasRunning = false;
+                                if(state.playerPanel.isRunning())
+                                {
+                                    wasRunning = true;
+                                    document.querySelector("#start-stop").dispatchEvent(new Event("click"));
+                                }
+                                
                                 const libKeys = Object.keys(librariesManifest.latest);
                                 libKeys.forEach((key) =>
                                 {
@@ -93,6 +100,11 @@ export default function examplesDialog(state)
                                     
                                     setTimeout(async() =>
                                     {
+                                        if(wasRunning)
+                                        {
+                                            document.querySelector("#start-stop").dispatchEvent(new Event("click"));
+                                        }
+                                            
                                         await state.editorPanel.restartLanguageClient()
                                         dialog.remove();
                                         resolve();
