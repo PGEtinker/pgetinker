@@ -8,7 +8,7 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
-# <u>Release Notes - 2025-05-16</u>
+# <u>Release Notes - 2025-05-17</u>
 
 ## Notes
 
@@ -28,6 +28,13 @@ search capabilities.
 Hitting "escape" now closes dialogs.
 
 ## Commits
+
+### 2025-05-17
+
+- examples: add olcPGEX_MiniAudio.h example
+- main: examples dialog improvements
+- libraries: add olcPGEX_MiniAudio v2.0
+- main: update 503 error view to match maintenance service
 
 ### 2025-05-16
 
