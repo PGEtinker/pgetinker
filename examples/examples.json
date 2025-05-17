@@ -61,5 +61,12 @@
         "codeFile": "/examples/files/pgetinker-raylib-classic-game-asteroids.cpp",
         "screenshot": "/examples/files/pgetinker-raylib-classic-game-asteroids.png",
         "keywords": "BLACK BeginDrawing CheckCollisionCircles ClearBackground CloseWindow Color DARKGRAY DEG2RAD DrawCircleV DrawGame DrawText DrawTriangle EndDrawing FLAG_WINDOW_RESIZABLE Fade GRAY GREEN GetRandomValue GetScreenHeight GetScreenWidth InitGame InitWindow IsKeyDown IsKeyPressed KEY_DOWN KEY_ENTER KEY_LEFT KEY_RIGHT KEY_UP LIGHTGRAY MAROON MAX_MEDIUM_METEORS MAX_SMALL_METEORS METEORS_SPEED MeasureText Meteor PLAYER_BASE_SIZE PLAYER_SPEED Player RAYWHITE SetConfigFlags SetTargetFPS TextFormat UnloadGame UpdateDrawFrame UpdateGame Vector2 Vector3 WindowShouldClose YELLOW a acceleration active bool collider color correctRange cos cosf emscripten_set_main_loop framesCounter gameOver i main mediumMeteor pause player position posx posy radius rotation screenHeight screenWidth shipHeight sin sinf smallMeteor speed static_cast tanf v1 v2 v3 velx vely x y z"
+    },
+    {
+        "name": "Bouncing Ball",
+        "library": "raylib",
+        "codeFile": "/examples/files/pgetinker-raylib-shapes-bouncing-ball.cpp",
+        "screenshot": "/examples/files/pgetinker-raylib-shapes-bouncing-ball.png",
+        "keywords": "BeginDrawing ClearBackground CloseWindow DrawCircleV DrawFPS DrawText EndDrawing FLAG_MSAA_4X_HINT FLAG_WINDOW_RESIZABLE GRAY GetScreenHeight GetScreenWidth InitWindow IsKeyPressed KEY_SPACE LIGHTGRAY MAROON RAYWHITE SetConfigFlags SetTargetFPS Vector2 WindowShouldClose ballPosition ballRadius ballSpeed bool framesCounter main pause screenHeight screenWidth x y"
     }
 ]
