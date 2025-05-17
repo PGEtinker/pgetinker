@@ -2,7 +2,7 @@
     "latest": {
         "miniaudio":          "0.11.21",
         "olcPGEX_Gamepad":    "f5958a5",
-        "olcPGEX_MiniAudio":  "v1.7",
+        "olcPGEX_MiniAudio":  "v2.0",
         "olcPixelGameEngine": "v2.29",
         "olcSoundWaveEngine": "v0.02",
         "raylib":             "5.5"
@@ -17,7 +17,8 @@
         "olcPGEX_MiniAudio": [
             "v1.5",
             "v1.6",
-            "v1.7"
+            "v1.7",
+            "v2.0"
         ],
         "olcPixelGameEngine": [
             "v2.23",
