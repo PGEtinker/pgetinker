@@ -16,9 +16,9 @@
             margin: 0 auto 1rem auto;
             text-align: center;
         }
-
     }
 }
+
 .examples-container {
     display: flex;
     flex-direction: row;
@@ -26,10 +26,11 @@
     justify-content: center;
     align-items: baseline;
     gap: 1rem;
-    width: 100%;
-    margin-top: 1rem;
-    padding: 1rem 0;
+    width: 98%;
     height: 55vh;
+    margin-top: 1rem;
+    margin: 1rem auto 0 auto;
+    padding: 1rem;
     overflow: hidden;
     overflow-y: auto;
 
@@ -38,7 +39,6 @@
         min-width: 20rem;
         outline: 1px solid var(--pgetinker-dialog-border-color);
         border-radius: .6rem;
-        // box-shadow: .4rem .4rem .4rem black;
         padding: 15px;
         transition: transform 0.2s;
         cursor: pointer;
