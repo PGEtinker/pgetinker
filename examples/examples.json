@@ -35,6 +35,13 @@
         "keywords": "BLACK BLUE CCW CYAN Clear ClearBuffer Construct Create CreateCube CullMode Decal FillCircle GREEN GetScreenSize HW3D_DrawObject HW3D_Projection HW3D_SetCullMode OnUserCreate OnUserUpdate Pixel PixelF PixelGameEngine Quad3D RED Renderable S SetDrawTarget Sprite Start Update VERY_DARK_BLUE WHITE YELLOW array bool c col cos cross cube cubes demo dot f fAspect fElapsedTime fLightTime fThetaX fThetaY hw3d i identity illum j layout lights m m1 m2 m3 m4 main matProject matView matWorld max mesh meshCube meshLightCube mf4d n norm olc override p0 p1 p2 pos rotateX rotateY sAppName sin size size_t std tan texCube translate utils uv vCross vLight vf3d x y z"
     },
     {
+        "name": "olcPGEX_MiniAudio.h Example",
+        "library": "pge",
+        "codeFile": "/examples/files/pgetinker-pge-olcPGEX_Miniaudio-example.cpp",
+        "screenshot": "/examples/files/pgetinker-pge-olcPGEX_Miniaudio-example.png",
+        "keywords": "BLACK Clear Construct DOWN Demo DrawStringDecal EQUALS ESCAPE FillRect GetCursorFloat GetCursorMilliseconds GetEngine GetKey GetOneOffCount GetScreenSize GetSound GetTextSize IsPlaying K1 Key LEFT LoadSound MINUS MiniAudio OEM_4 OEM_6 OnUserCreate OnUserUpdate PixelGameEngine Play R RIGHT S SPACE ScreenWidth SetBackgroundPlay SetPan SetPitch SetVolume Start Toggle UP VERY_DARK_BLUE WHITE YELLOW bHeld bPressed backgroundPlay bool center clamp constexpr cursor demo distance f fElapsedTime ma ma_engine_listener_set_position ma_sound_set_position ma_uint64 main name olc override pan pgetinker_file_resolve pitch sAppName scale seek song1 std thirtyFramesPerSecond to_string vf2d vi2d volume"
+    },
+    {
         "name": "PGEtinker Classic Example",
         "library": "raylib",
         "codeFile": "/examples/files/pgetinker-raylib-classic-example.cpp",
