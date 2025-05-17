@@ -31,6 +31,14 @@ Hitting "escape" now closes dialogs.
 
 ### 2025-05-16
 
+- examples: add raylib bouncing ball
+- libraries: add reasings.h to raylib 5.5
+- examples: add raylib classic game asteroids survival
+- examples: add raylib 3d camera first person example
+- examples: add raylib basic window example
+- examples: regenerated keywords with new script
+- main: never ever hand crafting example keywords again
+- main: if first load, use "latest" libraries from the libraries manifest
 - main: add some pauses to prevent LSP breakage!
 - main: scroll back up to the top when loading example
 - main: use restartLanguageClient and setValue directly to fix LSP bug
