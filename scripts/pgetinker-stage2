@@ -757,7 +757,6 @@ elif [ "$1" == "update" ]; then
         proceed=y
     else
         echo "This command will:"
-        echo "  - Run git pull."
         echo "  - Build changed docker images."
         echo "  - Install composer dependencies."
         echo "  - Install NPM dependencies."
@@ -785,15 +784,6 @@ elif [ "$1" == "update" ]; then
         [Yy]*)
             rm -rf public/build public/hot public/wiki public/examples
 
-            echo "#### Run git pull."
-            git pull
-            if [ ! $? -eq 0 ]; then
-                echo "## Failed to pull latest version."
-                exit 1
-            fi
-            echo "## Done."
-            echo
-            
             echo "#### Build changed docker images."
             scripts/pgetinker build
             if [ ! $? -eq 0 ]; then
