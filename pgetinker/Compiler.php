@@ -467,6 +467,9 @@ class Compiler
             {
                 if($implementation["macro"] == "OLC_PGE_APPLICATION")
                 {
+                    if($this->libraryVersions["olcPixelGameEngine"] == "dev")
+                        continue;
+
                     if($this->foundGeometryHeader)
                     {
                         $this->linkerInputFiles[] = "olcPixelGameEngine/olcPixelGameEngine_withGeometry.o";
