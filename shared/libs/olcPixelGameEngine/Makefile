@@ -10,6 +10,7 @@ olcPixelGameEngine:
 	$(MAKE) -C v2.27
 	$(MAKE) -C v2.28
 	$(MAKE) -C v2.29
+	$(MAKE) -C dev
 
 clean:
 	$(MAKE) -C v2.23 clean
@@ -19,3 +20,4 @@ clean:
 	$(MAKE) -C v2.27 clean
 	$(MAKE) -C v2.28 clean
 	$(MAKE) -C v2.29 clean
+	$(MAKE) -C dev clean
