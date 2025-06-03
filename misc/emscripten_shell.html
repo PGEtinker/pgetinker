@@ -146,6 +146,17 @@
                 document.querySelector("body").className = event.data.theme;
                 return;
             }
+
+            if (event.data.message === "halt-now") {
+                
+                window.onunload = function() {};
+
+                window.parent.postMessage({
+                    message: "player-halted",
+                }, "*");
+
+                window.stop();
+            }
         });
     </script>
     {{{ SCRIPT }}}
