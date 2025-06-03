@@ -27,10 +27,13 @@ search capabilities.
 
 Hitting "escape" now closes dialogs.
 
+Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEtinker/pgetinker/issues/158)
+
 ## Commits
 
 ### 2025-06-03
 
+- main: update github issue/feature request URLs to the new repo location
 - main: overhaul console panel to fix performance issues
 - main: hide interactive ui while loading
 - main: player shutsdown javascript before being removed
