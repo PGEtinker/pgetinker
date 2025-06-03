@@ -132,19 +132,19 @@
                                 </a>
                             </li>
                             <li class="subitem">
-                                <a target="_blank" href="https://github.com/Moros1138/PGEtinker">
+                                <a target="_blank" href="https://github.com/PGEtinker/pgetinker">
                                     <i data-lucide="github"></i>
                                     <span>PGEtinker on Github</span>
                                 </a>
                             </li>
                             <li class="subitem">
-                                <a target="_blank" href="https://github.com/Moros1138/PGEtinker/issues/new?assignees=Moros1138&labels=bug&projects=&template=bug_report.md&title=Bug in Version: {{ config('app.version')() }}">
+                                <a target="_blank" href="https://github.com/PGEtinker/pgetinker/issues/new?assignees=Moros1138&labels=bug&projects=&template=bug_report.md&title=Bug in Version: {{ config('app.version')() }}">
                                     <i data-lucide="bug"></i>
                                     <span>Report an issue</span>
                                 </a>
                             </li>
                             <li class="subitem">
-                                <a target="_blank" href="https://github.com/Moros1138/PGEtinker/issues/new?assignees=Moros1138&labels=enhancement&projects=&template=feature_request.md&title=">
+                                <a target="_blank" href="https://github.com/PGEtinker/pgetinker/issues/new?assignees=Moros1138&labels=enhancement&projects=&template=feature_request.md&title=">
                                     <i data-lucide="pencil-ruler"></i>
                                     <span>Request a new feature</span>
                                 </a>
