@@ -29,8 +29,25 @@ Hitting "escape" now closes dialogs.
 
 ## Commits
 
+### 2025-06-03
+
+- main: overhaul console panel to fix performance issues
+- main: hide interactive ui while loading
+- main: player shutsdown javascript before being removed
+
+### 2025-05-22
+
+- main: ignore PGE macro when "dev"
+- libraries: add v2.29 in a way that is easy to develop
+
+### 2025-05-20
+
+- libraries: add autorun to pgetinker.h that outputs the emscripten version automatically
+
 ### 2025-05-17
 
+= pgetinker: put git pull into the first stage script, so that updates to the second stage are honored.
+- main: if program running when example selected, compile and run the selected example
 - examples: add olcPGEX_MiniAudio.h example
 - main: examples dialog improvements
 - libraries: add olcPGEX_MiniAudio v2.0
