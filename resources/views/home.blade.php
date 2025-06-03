@@ -54,19 +54,19 @@
                             PGEtinker
                         </a>
                     </li>
-                    <li class="item" dusk="settings-menu" id="settings-menu">
+                    <li class="hidden item" dusk="settings-menu" id="settings-menu">
                         <a tabindex="0">
                             <i data-lucide="menu"></i>
                             <span>Settings</span>
                         </a>
                     </li>
-                    <li class="item has-submenu" id="examples-menu">
+                    <li class="hidden item has-submenu" id="examples-menu">
                         <a tabindex="0">
                             <i data-lucide="lightbulb"></i>
                             <span>Examples</span>
                         </a>                    
                     </li>
-                    <li class="item">
+                    <li class="hidden item">
                         <a id="start-stop">
                             <i data-lucide="circle-play"></i><i data-lucide="circle-stop" class="hidden"></i>
                             <span>Run</span>
@@ -75,19 +75,19 @@
                     <li class="separator"></li>
                 </ul>
                 <ul class="menu right-menu">
-                    <li class="item">
+                    <li class="hidden item">
                         <a target="_blank" href="/wiki/" title="Help Wiki">
                             <i data-lucide="circle-help"></i>
                             <span>Help</span>
                         </a>
                     </li>
-                    <li class="item">
+                    <li class="hidden item">
                         <a id="supporters">
                             <svg class="lucide" fill="currentColor" stroke="none" width="24" height="24" xmlns="http://www.w3.org/2000/svg"viewBox="0 0 1080 1080"><rect width="192.44098" height="963.00232" x="45.960854" y="58.49884" /><circle cx="694.31726" cy="424.37286" r="357.3031" /></svg>
                             <span>Supporters</span>
                         </a>
                     </li>
-                    <li class="item has-submenu">
+                    <li class="hidden item has-submenu">
                         <a dusk="sharing-menu" tabindex="0">
                             <i data-lucide="share2"></i>
                             <span>Sharing</span>
@@ -107,7 +107,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="item has-submenu">
+                    <li class="hidden item has-submenu">
                         <a tabindex="0">
                             <i data-lucide="link"></i>
                             <span>Links</span>

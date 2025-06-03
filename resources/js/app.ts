@@ -58,8 +58,8 @@ export default class PGEtinker
         this.playerPanel         = new PlayerPanel(this);
         this.problemsPanel       = new ProblemsPanel(this);
         
-        
         this.layoutConfig = getStorageValue("layout");
+        
         if(this.layoutConfig === null)
         {
             this.layoutConfig = defaultLandscapeLayout;
@@ -78,6 +78,9 @@ export default class PGEtinker
         document.querySelector("#settings-menu")?.addEventListener("click", (event) =>
         {
             event.preventDefault();
+            if(this.isLoading())
+                return;
+
             if(document.body.clientWidth <= 750)
             {
                 mobileMenuDialog(this);
@@ -89,6 +92,9 @@ export default class PGEtinker
         document.querySelector("#examples-menu")?.addEventListener("click", (event) =>
         {
             event.preventDefault();
+            if(this.isLoading())
+                return;
+
             examplesDialog(this);
         });
 
@@ -96,6 +102,9 @@ export default class PGEtinker
         document.querySelector("#download")?.addEventListener("click", (event) => 
         {
             event.preventDefault();
+            if(this.isLoading())
+                return;
+
             this.download();            
         });
         
@@ -103,6 +112,9 @@ export default class PGEtinker
         document.querySelector("#share")!.addEventListener("click", (event) => 
         {
             event.preventDefault();
+            if(this.isLoading())
+                return;
+
             this.share();
         });
 
@@ -110,6 +122,9 @@ export default class PGEtinker
         document.querySelector("#start-stop")!.addEventListener("click", (event) => 
         {
             event.preventDefault();
+            if(this.isLoading())
+                return
+
             let startStopElem = document.querySelector("#start-stop")!;
             let playIconElem = startStopElem.querySelector(".lucide-circle-play")!;
             let stopIconElem = startStopElem.querySelector(".lucide-circle-stop")!;
@@ -146,12 +161,18 @@ export default class PGEtinker
         document.querySelector("#supporters")!.addEventListener("click", (event) =>
         {
             event.preventDefault();
+            if(this.isLoading())
+                return;
+            
             supportersDialog();
         });
 
         document.querySelector("#news-and-updates")!.addEventListener("click", (event) =>
         {
             event.preventDefault();
+            if(this.isLoading())
+                return;
+
             newsDialog();
         });
 
@@ -405,8 +426,6 @@ export default class PGEtinker
 
     async SetupLayout()
     {
-        document.querySelector("#pgetinker-loading")!.classList.toggle("hidden", false);
-
         await this.editorPanel.onPreInit();
         
         // @ts-ignore
@@ -451,6 +470,15 @@ export default class PGEtinker
             {
                 this.setActiveTab("editor");
             }, 500)
+
+            document.querySelector("#pgetinker-loading")!.classList.toggle("hidden", false);
+            setTimeout(() =>
+            {
+                document.querySelectorAll("#header li.hidden")!.forEach((item) =>
+                {
+                    item.classList.toggle("hidden", false);
+                });
+            }, 100);
         });
     
         this.layout.init();
@@ -463,7 +491,6 @@ export default class PGEtinker
                     setStorageValue("version", version);
                 });
         }
-        
     }
     
     async UpdateTheme()
@@ -508,6 +535,11 @@ export default class PGEtinker
         }
 
         updateInterval = setInterval(updatehandler, 50);
+    }
+
+    isLoading()
+    {
+        return !document.querySelector("#pgetinker-loading")!.classList.contains("hidden");
     }
 }
 
