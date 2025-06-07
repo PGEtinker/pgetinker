@@ -270,7 +270,6 @@ export default class ConsolePanel
         document.querySelector("#console-auto-scroll").addEventListener("click", () =>
         {
             this.logger.resumeAutoScroll();
-            document.querySelector("#console-buttons").classList.toggle("hidden", this.consoleAutoScrollEnabled);
         });
 
         this.logger = setupLogger(this);
