@@ -77,7 +77,7 @@ Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEti
 
 ### 2025-05-17
 
-= pgetinker: put git pull into the first stage script, so that updates to the second stage are honored.
+- pgetinker: put git pull into the first stage script, so that updates to the second stage are honored.
 - main: if program running when example selected, compile and run the selected example
 - examples: add olcPGEX_MiniAudio.h example
 - main: examples dialog improvements
