@@ -27,6 +27,7 @@ services:
             - './shared/libs:/opt/libs'
             - './shared/emsdk:/opt/emsdk'
             - '/dev/shm:/dev/shm'
+            - '/etc/localtime:/etc/localtime:ro'
         tty: true        # Allocates a TTY
         stdin_open: true # Keeps stdin open for input
         healthcheck:
@@ -80,6 +81,7 @@ services:
             - './services/language-server:/var/www/html'
             - './shared/libs:/opt/libs'
             - './shared/emsdk:/opt/emsdk'
+            - '/etc/localtime:/etc/localtime:ro'
         networks:
             - sail
     screenshot:
