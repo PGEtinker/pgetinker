@@ -32,7 +32,9 @@ The following emscripten built-in libraries are suppported:
     - ``#include <SDL2/SDL_ttf.h>``
 - SDL 3 ``#include <SDL3/SDL.h>``
 
-Also examples are now in a dialog rather than a drop down. It has keyword
+Raylib version 5.5, with web platform patches, has been added. ``#include <raylib.h>``
+
+Examples are now in a dialog rather than a drop down. It has keyword
 search capabilities.
 
 Hitting "escape" now closes dialogs.
