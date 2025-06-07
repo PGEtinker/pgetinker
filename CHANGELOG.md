@@ -8,21 +8,31 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
-# <u>Release Notes - 2025-06-03</u>
+# <u>Release Notes - 2025-06-07</u>
 
 ## Notes
 
-This release overhauls the way libraries are handled. The PGE version is no longer
-tied to the versions of the other libraries. This simplifies library selection and
-backend sanity checks. It also lightens the load when building the libraries as
-fewer wasm objects are required for the same version combinations.
+Upgrade Emscripten to version 4.0.8.
 
-This release now includes newer versions of PGE up to v2.29, currently the latest
-version available from OneLoneCoder!
+Add versions of PGE up to v2.29, currently the latest version available from OneLoneCoder!
 
-This is also something of an experimental release that includes raylib 5.5 and raygui 4.0.
+Overhaul the way libraries are handled. Library selection has been simplified.
+Emscripten built-in libraries are now exposed for use. PGEtinker will now
+detect the included headers and set compiler and linker flags accordingly.
 
-Also examples are now in a dialog rather than a drop down. It has filters and keyword
+The following emscripten built-in libraries are suppported:
+
+- SDL 1 ``#include <SDL/SDL.h>``
+- SDL2
+    - ``#include <SDL2/SDL.h>``
+    - ``#include <SDL2/SDL_gfx.h>``
+    - ``#include <SDL2/SDL_image.h>``
+    - ``#include <SDL2/SDL_mixer.h>``
+    - ``#include <SDL2/SDL_net.h>``
+    - ``#include <SDL2/SDL_ttf.h>``
+- SDL 3 ``#include <SDL3/SDL.h>``
+
+Also examples are now in a dialog rather than a drop down. It has keyword
 search capabilities.
 
 Hitting "escape" now closes dialogs.
@@ -30,6 +40,21 @@ Hitting "escape" now closes dialogs.
 Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEtinker/pgetinker/issues/158)
 
 ## Commits
+
+### 2025-06-07
+
+- main: add support for built-in emscripten SDL2 extended libraries
+- libraries: revamp resize handling in PGE dev
+- libraries: apply keyboard and resize fixes to raylib
+- main: filter dev libraries in production
+- main: revamp library detection, add cflags, add ldflags
+- pgetinker: containers share time with host
+- libraries: compile PGE with -O1
+- main: remove unnecessary hidden class toggle from console panel
+- libraries: build all emscripten official libraries
+- main: add develop branch warning dialog
+- main: add a resize handler to the emscripten shell to accomodate raylib
+- pgetinker: bump EMSCRIPTEN_VERSION from 3.1.56 to 4.0.8
 
 ### 2025-06-03
 
