@@ -194,6 +194,8 @@ class Compiler
     
     private function processCodeDetectLibraries($index)
     {
+
+
         $headerFlagMap = [
             'olcPixelGameEngine.h' => [
                 "cflags"  => [
@@ -254,6 +256,37 @@ class Compiler
                 "cflags"  => [],
                 "ldflags" => [
                     "-sUSE_SDL=2"
+                ],
+            ],
+            
+            'SDL2\/SDL_gfx.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL_GFX=2"
+                ],
+            ],
+            'SDL2\/SDL_image.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL_IMAGE=2"
+                ],
+            ],
+            'SDL2\/SDL_mixer.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL_MIXER=2"
+                ],
+            ],
+            'SDL2\/SDL_net.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL_NET=2"
+                ],
+            ],
+            'SDL2\/SDL_ttf.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL_TTF=2"
                 ],
             ],
             'SDL3\/SDL.h' => [
