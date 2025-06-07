@@ -43,6 +43,7 @@ Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEti
 
 ### 2025-06-07
 
+- main: fix no-top-level await in app-preload
 - main: add support for built-in emscripten SDL2 extended libraries
 - libraries: revamp resize handling in PGE dev
 - libraries: apply keyboard and resize fixes to raylib
