@@ -70,24 +70,29 @@ const tryToAgree = async() =>
     }
 }
 
-if(version.includes('develop@') && !getStorageValue("acknowleged-develop"))
+const developBranchCheck = async() =>
 {
-    try
+    if(version.includes('develop@') && !getStorageValue("acknowleged-develop"))
     {
-        const dontWarnAgain = await developDialog();
-        setStorageValue("acknowleged-develop", dontWarnAgain);
+        try
+        {
+            const dontWarnAgain = await developDialog();
+            setStorageValue("acknowleged-develop", dontWarnAgain);
+            tryToAgree();
+        }
+        catch(e)
+        {
+            const link = document.createElement('a');
+            link.setAttribute('href', 'https://pgetinker.com');
+            link.click();
+        }
+        
+    }
+    else
+    {
         tryToAgree();
     }
-    catch(e)
-    {
-        const link = document.createElement('a');
-        link.setAttribute('href', 'https://pgetinker.com');
-        link.click();
-    }
-    
 }
-else
-{
-    tryToAgree();
-}
+
+developBranchCheck();
 
