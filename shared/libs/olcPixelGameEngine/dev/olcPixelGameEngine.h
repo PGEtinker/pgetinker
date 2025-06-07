@@ -7550,129 +7550,63 @@ namespace olc
 			// Canvas Focus Callbacks
 			emscripten_set_blur_callback("#canvas", 0, 1, focus_callback);
 			emscripten_set_focus_callback("#canvas", 0, 1, focus_callback);
+			
+			// Canvas Resize Callbacks
+			emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, resize_callback);
+			emscripten_set_fullscreenchange_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, fullscreen_change_callback);
+			
+			// trigger resize after a short pause
+			EM_ASM({ setTimeout(function() { window.dispatchEvent(new Event("resize")); }, 200); });
 
-#pragma warning disable format
-			EM_ASM(window.onunload = Module._olc_OnPageUnload; );
+			return olc::rcode::OK;
+		}
 
-			// IMPORTANT! - Sorry About This...
-			//
-			//	In order to handle certain browser based events, such as resizing and
-			//	going to full screen, we have to effectively inject code into the container
-			//	running the PGE. Yes, I vomited about 11 times too when the others were
-			//	convincing me this is the future. Well, this isnt the future, and if it
-			//	were to be, I want no part of what must be a miserable distopian free
-			//	for all of anarchic code injection to get rudimentary events like "Resize()".
-			//
-			//	Wake up people! Of course theres a spoon. There has to be to keep feeding
-			//	the giant web baby.
-
-
-			EM_ASM({
-
-				// olc_ApsectRatio
-				// 
-				// Used by olc_ResizeHandler to calculate the viewport from the
-				// dimensions of the canvas container's element.
-				Module.olc_AspectRatio = $0 / $1;
-
+		//TY Moros
+		static EM_BOOL fullscreen_change_callback(int eventType, const EmscriptenFullscreenChangeEvent *event, void *userData)
+		{
+			// trigger resize after a short pause
+			EM_ASM({ setTimeout(function() { window.dispatchEvent(new Event("resize")); }, 50); });
+			return 0;
+		}
+		
+		//TY Moros
+		static EM_BOOL resize_callback(int eventType, const EmscriptenUiEvent *event, void *userData)
+		{
 			// HACK ALERT!
 			// 
 			// Here we assume any html shell that uses 3 or more instance of the class "emscripten"
 			// is using one of the default or minimal emscripten page layouts
-			Module.olc_AssumeDefaultShells = (document.querySelectorAll('.emscripten').length >= 3) ? true : false;
+			static bool assumeDefaultShell = EM_ASM_INT( return (document.querySelectorAll('.emscripten').length >= 3) ? 1 : 0; );
+			static bool firstTry = false;
 
-			// olc_ResizeHandler
-			// 
-			// Used by olc_Init, and is called when a resize observer and fullscreenchange event is triggered.
-			var olc_ResizeHandler = function()
+			// we to apply this style once
+			if(!firstTry && assumeDefaultShell)
 			{
-				// are we in fullscreen mode?
-				let isFullscreen = (document.fullscreenElement != null);
+				EM_ASM({ Module.canvas.parentNode.setAttribute('style', 'width: 100%; height: 70vh; margin-left: auto; margin-right: auto;'); });
+				firstTry = true;
+			}
 
-				// get the width of the containing element
-				let width = (isFullscreen) ? window.innerWidth : Module.canvas.parentNode.clientWidth;
-				let height = (isFullscreen) ? window.innerHeight : Module.canvas.parentNode.clientHeight;
+			// get and keep the aspect ratio of the canvas
+			static double aspect = EM_ASM_DOUBLE( return Module.canvas.clientWidth; ) / EM_ASM_DOUBLE( return Module.canvas.clientHeight; );
 
-				// calculate the expected viewport size
-				let viewWidth = width;
-				let viewHeight = width / Module.olc_AspectRatio;
+			double parentWidth = EM_ASM_DOUBLE( return (!!document.fullscreenElement) ? window.innerWidth : Module.canvas.parentElement.clientWidth; );
+			double parentHeight = EM_ASM_DOUBLE( return (!!document.fullscreenElement) ? window.innerHeight : Module.canvas.parentElement.clientHeight; );
 
-				// if we're taller than the containing element, recalculate based on height
-				if (viewHeight > height)
-				{
-					viewWidth = height * Module.olc_AspectRatio;
-					viewHeight = height;
-				}
+			double width = parentWidth;
+			double height = parentWidth / aspect;
 
-				// ensure resulting viewport is in integer space
-				viewWidth = parseInt(viewWidth);
-				viewHeight = parseInt(viewHeight);
-
-				setTimeout(function()
-				{
-					// if default shells, apply default styles
-					if (Module.olc_AssumeDefaultShells)
-						Module.canvas.parentNode.setAttribute('style', 'width: 100%; height: 70vh; margin-left: auto; margin-right: auto;');
-
-					// apply viewport dimensions to the canvas
-					Module.canvas.setAttribute('width', viewWidth);
-					Module.canvas.setAttribute('height', viewHeight);
-					Module.canvas.setAttribute('style', `width: ${viewWidth}px; height: ${viewHeight}px; `);
-
-					// update the PGE window size
-					Module._olc_PGE_UpdateWindowSize(viewWidth, viewHeight);
-
-					// force focus on our PGE canvas
-					// Module.canvas.focus();
-				}, 200);
-			};
-
-
-			// olc_Init
-			// 
-			// set up resize observer and fullscreenchange event handler
-			var olc_Init = function()
+			if (height > parentHeight)
 			{
-				if (Module.olc_AspectRatio === undefined)
-				{
-					setTimeout(function() { Module.olc_Init(); }, 50);
-					return;
-				}
-
-				let resizeObserver = new ResizeObserver(function(entries)
-				{
-					Module.olc_ResizeHandler();
-				}).observe(Module.canvas.parentNode);
-
-				let mutationObserver = new MutationObserver(function(mutationsList, observer)
-				{
-					setTimeout(function() { Module.olc_ResizeHandler(); },  200);
-				}).observe(Module.canvas.parentNode, { attributes: false, childList : true, subtree : false });
-
-				window.addEventListener('fullscreenchange', function(e)
-				{
-					setTimeout(function() { Module.olc_ResizeHandler(); },  200);
-				});
-			};
-
-			// set up hooks
-			Module.olc_ResizeHandler = (Module.olc_ResizeHandler != undefined) ? Module.olc_ResizeHandler : olc_ResizeHandler;
-			Module.olc_Init = (Module.olc_Init != undefined) ? Module.olc_Init : olc_Init;
-
-			// run everything!
-			Module.olc_Init();
-
-					}, vWindowSize.x, vWindowSize.y); // Fullscreen and Resize Observers
-#pragma warning restore format
-			return olc::rcode::OK;
+				height = parentHeight;
+				width = height * aspect;
+			}
+			
+			// resize the canvas
+			emscripten_set_canvas_element_size("#canvas", static_cast<int>(width), static_cast<int>(height));
+			ptrPGE->olc_UpdateWindowSize(static_cast<int>(width), static_cast<int>(height));
+			return 0;
 		}
-
-		// Interface PGE's UpdateWindowSize, for use in Javascript
-		void UpdateWindowSize(int width, int height)
-		{
-			ptrPGE->olc_UpdateWindowSize(width, height);
-		}
-
+		
 		//TY Gorbit
 		static EM_BOOL focus_callback(int eventType, const EmscriptenFocusEvent* focusEvent, void* userData)
 		{
@@ -7848,16 +7782,6 @@ namespace olc
 		// Wait for thread to be exited
 		if (platform->ApplicationCleanUp() != olc::OK) return olc::FAIL;
 		return olc::OK;
-	}
-}
-
-extern "C"
-{
-	EMSCRIPTEN_KEEPALIVE inline void olc_PGE_UpdateWindowSize(int width, int height)
-	{
-		emscripten_set_canvas_element_size("#canvas", width, height);
-		// Thanks slavka
-		((olc::Platform_Emscripten*)olc::platform.get())->UpdateWindowSize(width, height);
 	}
 }
 
