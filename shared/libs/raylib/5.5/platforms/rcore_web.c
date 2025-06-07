@@ -135,6 +135,7 @@ static EM_BOOL EmscriptenFullscreenChangeCallback(int eventType, const Emscripte
 static EM_BOOL EmscriptenResizeCallback(int eventType, const EmscriptenUiEvent *event, void *userData);
 
 // Emscripten input callback events
+static EM_BOOL EmscriptenKeyboardCallback(int eventType, const EmscriptenKeyboardEvent *keyboardEvent, void *userData);
 static EM_BOOL EmscriptenMouseMoveCallback(int eventType, const EmscriptenMouseEvent *mouseEvent, void *userData);
 static EM_BOOL EmscriptenMouseCallback(int eventType, const EmscriptenMouseEvent *mouseEvent, void *userData);
 static EM_BOOL EmscriptenPointerlockCallback(int eventType, const EmscriptenPointerlockChangeEvent *pointerlockChangeEvent, void *userData);
@@ -1105,7 +1106,11 @@ int InitPlatform(void)
     if ((CORE.Window.flags & FLAG_WINDOW_UNDECORATED) > 0) glfwWindowHint(GLFW_DECORATED, GLFW_FALSE); // Border and buttons on Window
     else glfwWindowHint(GLFW_DECORATED, GLFW_TRUE); // Decorated window
 
-    if ((CORE.Window.flags & FLAG_WINDOW_RESIZABLE) > 0) glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // Resizable window
+    if ((CORE.Window.flags & FLAG_WINDOW_RESIZABLE) > 0)
+    {
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // Resizable window
+        glfwSetWindowAttrib(platform.handle, GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+    }
     else glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // Avoid window being resizable
 
     // Disable FLAG_WINDOW_MINIMIZED, not supported on initialization
@@ -1337,8 +1342,8 @@ int InitPlatform(void)
     EmscriptenResizeCallback(EMSCRIPTEN_EVENT_RESIZE, NULL, NULL);
 
     // Support keyboard events -> Not used, GLFW.JS takes care of that
-    // emscripten_set_keypress_callback("#canvas", NULL, 1, EmscriptenKeyboardCallback);
-    // emscripten_set_keydown_callback("#canvas", NULL, 1, EmscriptenKeyboardCallback);
+    emscripten_set_keypress_callback("#canvas", NULL, 1, EmscriptenKeyboardCallback);
+    emscripten_set_keydown_callback("#canvas", NULL, 1, EmscriptenKeyboardCallback);
 
     // Support mouse events
     emscripten_set_click_callback("#canvas", NULL, 1, EmscriptenMouseCallback);
@@ -1590,6 +1595,14 @@ static void MouseCursorPosCallback(GLFWwindow *window, double x, double y)
 #endif
 }
 
+static EM_BOOL EmscriptenKeyboardCallback(int eventType, const EmscriptenKeyboardEvent *keyboardEvent, void *userData)
+{
+    // NOTE: handled by GLFW, this is only to consume the keyboard events so we
+    //       make use of F-keys and other shortcuts without triggering browser
+    //       functions.
+    return 1; // The event was consumed by the callback handler
+}
+
 static EM_BOOL EmscriptenMouseMoveCallback(int eventType, const EmscriptenMouseEvent *mouseEvent, void *userData)
 {
     // To emulate the GLFW_RAW_MOUSE_MOTION property.
@@ -1661,7 +1674,7 @@ static EM_BOOL EmscriptenResizeCallback(int eventType, const EmscriptenUiEvent *
     else if (height > (int)CORE.Window.screenMax.height && CORE.Window.screenMax.height > 0) height = CORE.Window.screenMax.height;
 
     emscripten_set_canvas_element_size("#canvas", width, height);
-
+    glfwSetWindowSize(platform.handle, width, height);
     SetupViewport(width, height); // Reset viewport and projection matrix for new size
 
     CORE.Window.currentFbo.width = width;
