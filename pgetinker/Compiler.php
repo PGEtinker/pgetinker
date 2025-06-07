@@ -18,6 +18,7 @@ class Compiler
     private $code = [];
     
     private $compilerCommand = [];
+    private $compilerFlags   = [];
 
     private $compilerExitCode;
 
@@ -26,14 +27,13 @@ class Compiler
     private $errors = [];
 
     private $foundGeometryHeader = false;
-    
-    private $foundRaylibHeader = false;
 
     private $html = "";
 
     private $implementationMacros = [];
 
     private $linkerCommand = [];
+    private $linkerFlags   = [];
 
     private $libraryDirectories = [];
     
@@ -192,22 +192,95 @@ class Compiler
         return false;
     }
     
-    private function processCodeDetectRaylib($index)
+    private function processCodeDetectLibraries($index)
     {
-        preg_match(
-            '/^\s*#\s*i(nclude|mport)(_next)?\s+["<](.*)raylib.h[">]/',
-            $this->code[$index],
-            $match,
-            PREG_OFFSET_CAPTURE,
-            0
-        );
+        $headerFlagMap = [
+            'olcPixelGameEngine.h' => [
+                "cflags"  => [
+                    "-I./olcPixelGameEngine",
+                    "-I./olcPixelGameEngine/extensions",
+                    "-I./olcPixelGameEngine/utilities",
+                ],
+                "ldflags" => [
+                    "-sUSE_LIBPNG=1",
+                ],
+            ],
+            'olcSoundWaveEngine.h' => [
+                "cflags"  => [
+                    "-I./olcSoundWaveEngine",
+                ],
+                "ldflags" => [
+                    "-sUSE_SDL_MIXER=2",
+                ],
+            ],
+            'miniaudio.h' => [
+                "cflags"  => [
+                    "-I./miniaudio",
+                ],
+                "ldflags" => [],
+            ],
+            'olcPGEX_MiniAudio.h' => [
+                "cflags"  => [
+                    "-I./miniaudio",
+                    "-I./olcPGEX_MiniAudio",
+                ],
+                "ldflags" => [],
+            ],
+            'olcPGEX_Gamepad.h' => [
+                "cflags"  => [
+                    "-I./olcPGEX_Gamepad",
+                ],
+                "ldflags" => [],
+            ],
+            'raylib.h' => [
+                "cflags"  => [
+                    "-DPLATFORM_WEB",
+                    "-I./raylib",
+                ],
+                "ldflags" => [
+                    "-DPLATFORM_WEB",
+                    "-sUSE_GLFW=3",
+                    "-Lraylib",
+                    "-lraylib"
+                ],
+            ],
+            'SDL\/SDL.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL=1"
+                ],
+            ],
+            'SDL2\/SDL.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL=2"
+                ],
+            ],
+            'SDL3\/SDL.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL=3"
+                ],
+            ],
+        ];
 
-        if(count($match) > 0)
+        foreach($headerFlagMap as $regex => $flags)
         {
-            $this->foundRaylibHeader = true;
-            return true;
-        }
+            preg_match(
+                '/^\s*#\s*i(nclude|mport)(_next)?\s+["<](.*)'.$regex.'[">]/',
+                $this->code[$index],
+                $match,
+                PREG_OFFSET_CAPTURE,
+                0
+            );
 
+            if(count($match) > 0)
+            {
+                $this->compilerFlags = array_unique(array_merge($this->compilerFlags, $flags["cflags"]), SORT_REGULAR);
+                $this->linkerFlags = array_unique(array_merge($this->linkerFlags, $flags["ldflags"]), SORT_REGULAR);
+                return true;
+            }
+        }
     }
 
     private function processCodeDetectGeometryUtility($index)
@@ -447,7 +520,7 @@ class Compiler
             if($this->processCodeDetectGeometryUtility($i))
                 continue;
             
-            if($this->processCodeDetectRaylib($i))
+            if($this->processCodeDetectLibraries($i))
                 continue;
 
             if($this->processCodeAbsoluteOrRelativePaths($i))
@@ -482,12 +555,6 @@ class Compiler
                 $this->code[$implementation["lineIndex"]] = "";
                 continue;
             }
-        }
-        
-        if($this->foundRaylibHeader)
-        {
-            $this->logger->info("found raylib header");
-            $this->linkerInputFiles[] = "raylib/libraylib.a";
         }
 
         $this->logger->info("finished processing code");
@@ -569,29 +636,14 @@ class Compiler
         $this->compilerCommand = array_merge($this->compilerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
             "-c",
-            "-O1",
-            "-I./pgetinker",
-            "-I./raylib",
-            "-I./miniaudio",
-            "-I./olcPGEX_Gamepad",
-            "-I./olcPGEX_MiniAudio",
-            "-I./olcPixelGameEngine",
-            "-I./olcPixelGameEngine/extensions",
-            "-I./olcPixelGameEngine/utilities",
-            "-I./olcSoundWaveEngine",
+            "-Os",
             "pgetinker.cpp",
             "-o",
             "pgetinker.o",
+            "-I./pgetinker",
+            ...$this->compilerFlags,
             "-std=c++20",
         ]);
-
-        if($this->foundRaylibHeader)
-        {
-            $this->compilerCommand = array_merge($this->compilerCommand, [
-                "-DPLATFORM_WEB",
-            ]);
-        }
-
 
         $this->logger->info("Compiler command:\n\n" . implode("\n", $this->compilerCommand) . "\n");
 
@@ -606,27 +658,16 @@ class Compiler
             "./emscripten_shell.html",
             "-sASYNCIFY",
             "-sALLOW_MEMORY_GROWTH=1",
+            ...$this->linkerFlags,
             "-sSTACK_SIZE=131072",
             "-sMAX_WEBGL_VERSION=2",
             "-sMIN_WEBGL_VERSION=2",
-            "-sUSE_LIBPNG=1",
-            "-sUSE_SDL_MIXER=2",
             "-sLLD_REPORT_UNDEFINED",
             "-sSINGLE_FILE",
             "-std=c++20",
         ]);
         
-        if($this->foundRaylibHeader)
-        {
-            $this->linkerCommand = array_merge($this->linkerCommand, [
-                "-sUSE_GLFW=3",
-                "-DPLATFORM_WEB",
-            ]);
-        }
-
         $this->logger->info("Linker command:\n\n" . implode("\n", $this->linkerCommand) . "\n");
-
-        
         return true;
     }
 
