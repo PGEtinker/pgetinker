@@ -117,12 +117,6 @@
             }
         };
         
-        document.addEventListener('keydown', (event) =>
-        {
-            if (event.key === 'F1' || event.keyCode === 112)
-                event.preventDefault();
-        });
-        
         window.onerror = (event) =>
         {
             window.parent.postMessage({
@@ -134,6 +128,23 @@
             message: "player-ready",
         }, "*");
         
+        function resizeHandler()
+        {
+            if(!!(window.GLFW && window.GLFW.hints && window.GLFW.hints[0x00020003]))
+                return;
+            
+            const aspect = parseInt(Module.canvas.getAttribute("width")) / parseInt(Module.canvas.getAttribute("height"));
+            const windowAspect = window.innerWidth / window.innerHeight;
+
+            Module.canvas.style.width = "100%";
+            Module.canvas.style.height = "100%";
+            if(windowAspect > aspect) Module.canvas.style.width = "";
+            if(windowAspect < aspect) Module.canvas.style.height = "";
+        }
+
+        window.addEventListener("resize", resizeHandler);
+        setTimeout(resizeHandler, 200);
+
         window.addEventListener("message", (event) =>
         {
             if (typeof event.data !== "object")
