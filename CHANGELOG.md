@@ -45,6 +45,8 @@ Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEti
 
 ### 2025-06-07
 
+- examples: remove all but classic examples
+- main: move PGE specific linker flags to the ldflags for olcPixelGameEngine.h
 - main: fix no-top-level await in app-preload
 - main: add support for built-in emscripten SDL2 extended libraries
 - libraries: revamp resize handling in PGE dev
