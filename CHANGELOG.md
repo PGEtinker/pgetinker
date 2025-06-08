@@ -45,6 +45,7 @@ Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEti
 
 ### 2025-06-07
 
+- libraries: add pgetinker-screenshot-ready event dispatcher to pgetinker.h
 - examples: remove all but classic examples
 - main: move PGE specific linker flags to the ldflags for olcPixelGameEngine.h
 - main: fix no-top-level await in app-preload
