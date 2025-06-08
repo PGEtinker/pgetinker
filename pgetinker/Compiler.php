@@ -204,6 +204,8 @@ class Compiler
                     "-I./olcPixelGameEngine/utilities",
                 ],
                 "ldflags" => [
+                    "-sMAX_WEBGL_VERSION=2",
+                    "-sMIN_WEBGL_VERSION=2",
                     "-sUSE_LIBPNG=1",
                 ],
             ],
@@ -693,8 +695,6 @@ class Compiler
             "-sALLOW_MEMORY_GROWTH=1",
             ...$this->linkerFlags,
             "-sSTACK_SIZE=131072",
-            "-sMAX_WEBGL_VERSION=2",
-            "-sMIN_WEBGL_VERSION=2",
             "-sLLD_REPORT_UNDEFINED",
             "-sSINGLE_FILE",
             "-std=c++20",
