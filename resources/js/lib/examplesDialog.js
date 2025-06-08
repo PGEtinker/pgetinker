@@ -19,11 +19,13 @@ export default function examplesDialog(state)
             <div class="content">
                 <div class="search-bar">
                     <input type="text" id="search" placeholder="Search examples by name, function, or keyword..." aria-label="Search examples by keyword or name">
+<!--
                     <div class="search-filters">
                         Filters:
                         <input id="show-pge" type="checkbox" checked> olcPixelGameEngine
                         <input id="show-raylib" type="checkbox" checked> raylib
                     </div>
+-->
                 </div>
                 <div class="examples-container"></div>
             </div>
@@ -128,22 +130,24 @@ export default function examplesDialog(state)
             .then((data) =>
             {
                 // Initial render
-                renderExamples(data, "", elem_showPGE.checked, elem_showRaylib.checked);
+                // renderExamples(data, "", elem_showPGE.checked, elem_showRaylib.checked);
+                renderExamples(data, "", true, true);
 
                 // Search event listener
                 elem_search.addEventListener("input", e => {
-                    renderExamples(data, e.target.value, elem_showPGE.checked, elem_showRaylib.checked);
+                    // renderExamples(data, e.target.value, elem_showPGE.checked, elem_showRaylib.checked);
+                    renderExamples(data, e.target.value, true, true);
                 });
 
-                elem_showPGE.addEventListener("input", (e) =>
-                {
-                    renderExamples(data, elem_search.value, elem_showPGE.checked, elem_showRaylib.checked);
-                });
+                // elem_showPGE.addEventListener("input", (e) =>
+                // {
+                //     renderExamples(data, elem_search.value, elem_showPGE.checked, elem_showRaylib.checked);
+                // });
 
-                elem_showRaylib.addEventListener("input", (e) =>
-                {
-                    renderExamples(data, elem_search.value, elem_showPGE.checked, elem_showRaylib.checked);
-                });
+                // elem_showRaylib.addEventListener("input", (e) =>
+                // {
+                //     renderExamples(data, elem_search.value, elem_showPGE.checked, elem_showRaylib.checked);
+                // });
             })
             .catch((reason) =>
             {
