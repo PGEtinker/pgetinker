@@ -8,7 +8,7 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
-# <u>Release Notes - 2025-06-07</u>
+# <u>Release Notes - 2025-06-08</u>
 
 ## Notes
 
@@ -42,6 +42,16 @@ Hitting "escape" now closes dialogs.
 Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEtinker/pgetinker/issues/158)
 
 ## Commits
+
+### 2025-06-08
+
+- main: fix support for SDL2_image png, jpg, and gif support
+- main: fix detection of SDL_gfx headers
+- main: send stderr to console panel
+- main: increase initial resize delay from 200ms to 500ms
+- main: add sdl2/v logos for examples dialog
+- main: remove library based filters in the example dialog
+- examples: add sdl2 classic example
 
 ### 2025-06-07
 
