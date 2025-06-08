@@ -260,8 +260,7 @@ class Compiler
                     "-sUSE_SDL=2"
                 ],
             ],
-            
-            'SDL2\/SDL_gfx.h' => [
+            'SDL2\/SDL2_(framerate|gfxPrimitives_font|gfxPrimitives|imageFilter|rotozoom).h' => [
                 "cflags"  => [],
                 "ldflags" => [
                     "-sUSE_SDL_GFX=2"
