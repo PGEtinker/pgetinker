@@ -7,73 +7,10 @@
         "keywords": "BLACK Clear Construct Draw DrawRect DrawSprite DrawString DrawStringDropShadow FillCircle GetMouse GetMousePos Load OnUserCreate OnUserUpdate PGEtinkerClassicExample Pixel PixelGameEngine RED RandomColor Renderable ScreenHeight ScreenWidth Sprite Start WHITE YELLOW bPressed backgroundColor bool color cout example fElapsedTime foregroundColor image main olc override pgetinker_file_resolve rand sAppName std str string text x y"
     },
     {
-        "name": "olcUTIL_Animate2D.h Example",
-        "library": "pge",
-        "codeFile": "/examples/files/pgetinker-pge-animate2d-example.cpp",
-        "screenshot": "/examples/files/pgetinker-pge-animate2d-example.png",
-        "keywords": "AddFrame AddState Animate2D Animation AnimationState BLACK CHEER ChangeState Construct Decal DrawPartialDecal DrawStringDecal DudeState FrameSequence GetFrame GetSourceImage GetSourceRect IDLE_STAND LAUGH Load NO OnUserCreate OnUserUpdate PixelGameEngine RAND_MAX Renderable ScreenHeight ScreenWidth Start TEST_Animate2D UpdateState UserState WALK_E WALK_N WALK_S WALK_W WHITE YES animDude anim_fs_cheer anim_fs_idle anim_fs_laugh anim_fs_no anim_fs_walk_e anim_fs_walk_n anim_fs_walk_s anim_fs_walk_w anim_fs_yes animstate bool demo dude fElapsedTime fSpeed fTick frame gfxAll id int32_t main n nAction nDudes olc override pgetinker_file_resolve pos push_back rand sAppName sWalkingDude size size_t std uint8_t utils vDudes vOffset vector vf2d vi2d x y"
-    },
-    {
-        "name": "olcUTIL_Camera2D.h Example",
-        "library": "pge",
-        "codeFile": "/examples/files/pgetinker-pge-camera2d-example.cpp",
-        "screenshot": "/examples/files/pgetinker-pge-camera2d-example.png",
-        "keywords": "A BLUE CYAN Camera2D Clear Construct D DrawStringPropDecal EdgeMove EnableWorldBoundary FillRectDecal FixedScreens GetBottomRightTile GetKey GetScreenSize GetTopLeftTile GetViewPosition GetViewSize HandlePanAndZoom K1 K2 K3 K4 Key LazyFollow Mode OnUserCreate OnUserUpdate Pixel PixelF PixelGameEngine S SetMode SetTarget SetWorldBoundary SetWorldOffset SetWorldScale Simple Start TAB TEST_Camera2D TileTransformedView Update W YELLOW bFreeRoam bHeld bOnScreen bPressed bool camera demo fElapsedTime i idx m_vTileSize m_vWorldSize main max min olc override rand resize sAppName size std str tv uint8_t utils vTile vTileBR vTileTL vTrackedPoint vVel vWorldMap vector vf2d vi2d x y"
-    },
-    {
-        "name": "olcPGEX_QuickGUI.h Example",
-        "library": "pge",
-        "codeFile": "/examples/files/pgetinker-pge-quickgui-example.cpp",
-        "screenshot": "/examples/files/pgetinker-pge-quickgui-example.png",
-        "keywords": "Alignment BLACK Button CheckBox Clear Construct Draw DrawDecal Label ListBox Manager OnUserCreate OnUserUpdate Pixel PixelGameEngine QuickGUI Right Slider Start TextBox Update bChecked bHasBackground bHasBorder bHeld bPressed bool colNormal demo fElapsedTime fValue guiButton1 guiButton2 guiButton3 guiCheckBox1 guiLabelB guiLabelG guiLabelR guiListBox guiManager guiSlider1 guiSlider2 guiSlider3 guiTextBox1 guiTextBox2 guiThemeColourB guiThemeColourG guiThemeColourR int32_t listExample main nAlign olc olcDemo_QuickGUI override push_back sAppName sText std string this to_string uint8_t vector"
-    },
-    {
-        "name": "olcUTIL_Hardware3D.h Example",
-        "library": "pge",
-        "codeFile": "/examples/files/pgetinker-pge-hardware3d-example.cpp",
-        "screenshot": "/examples/files/pgetinker-pge-hardware3d-example.png",
-        "keywords": "BLACK BLUE CCW CYAN Clear ClearBuffer Construct Create CreateCube CullMode Decal FillCircle GREEN GetScreenSize HW3D_DrawObject HW3D_Projection HW3D_SetCullMode OnUserCreate OnUserUpdate Pixel PixelF PixelGameEngine Quad3D RED Renderable S SetDrawTarget Sprite Start Update VERY_DARK_BLUE WHITE YELLOW array bool c col cos cross cube cubes demo dot f fAspect fElapsedTime fLightTime fThetaX fThetaY hw3d i identity illum j layout lights m m1 m2 m3 m4 main matProject matView matWorld max mesh meshCube meshLightCube mf4d n norm olc override p0 p1 p2 pos rotateX rotateY sAppName sin size size_t std tan texCube translate utils uv vCross vLight vf3d x y z"
-    },
-    {
-        "name": "olcPGEX_MiniAudio.h Example",
-        "library": "pge",
-        "codeFile": "/examples/files/pgetinker-pge-olcPGEX_Miniaudio-example.cpp",
-        "screenshot": "/examples/files/pgetinker-pge-olcPGEX_Miniaudio-example.png",
-        "keywords": "BLACK Clear Construct DOWN Demo DrawStringDecal EQUALS ESCAPE FillRect GetCursorFloat GetCursorMilliseconds GetEngine GetKey GetOneOffCount GetScreenSize GetSound GetTextSize IsPlaying K1 Key LEFT LoadSound MINUS MiniAudio OEM_4 OEM_6 OnUserCreate OnUserUpdate PixelGameEngine Play R RIGHT S SPACE ScreenWidth SetBackgroundPlay SetPan SetPitch SetVolume Start Toggle UP VERY_DARK_BLUE WHITE YELLOW bHeld bPressed backgroundPlay bool center clamp constexpr cursor demo distance f fElapsedTime ma ma_engine_listener_set_position ma_sound_set_position ma_uint64 main name olc override pan pgetinker_file_resolve pitch sAppName scale seek song1 std thirtyFramesPerSecond to_string vf2d vi2d volume"
-    },
-    {
         "name": "PGEtinker Classic Example",
         "library": "raylib",
         "codeFile": "/examples/files/pgetinker-raylib-classic-example.cpp",
         "screenshot": "/examples/files/pgetinker-raylib-classic-example.png",
         "keywords": "BLACK BLANK BeginDrawing BeginTextureMode CalculateCanvasDestination ClearBackground CloseWindow Color DrawCircle DrawPixel DrawRectangle DrawRectangleLinesEx DrawText DrawTextDropShadow DrawTexture DrawTexturePro EndDrawing EndTextureMode FLAG_WINDOW_RESIZABLE GetMousePosition GetRandomColor GetScreenHeight GetScreenWidth InitWindow IsMouseButtonPressed LoadRenderTexture LoadTexture RED Rectangle RenderTexture2D SetConfigFlags SetTargetFPS SetTextureFilter TEXTURE_FILTER_POINT TextFormat Texture2D UnloadRenderTexture UnloadTexture Vector2 WHITE WindowShouldClose YELLOW aspect background canvas canvasDestinationRect canvasHeight canvasSourceRect canvasWidth clamp cout fontSize foreground height imageFromURL main mousePosition pgetinker_file_resolve rand realMousePosition ret scale screenAspect screenHeight screenWidth static_cast std text texture width x y"
-    },
-    {
-        "name": "Basic Window",
-        "library": "raylib",
-        "codeFile": "/examples/files/pgetinker-raylib-basic-window-example.cpp",
-        "screenshot": "/examples/files/pgetinker-raylib-basic-window-example.png",
-        "keywords": "BeginDrawing ClearBackground CloseWindow DrawText EndDrawing FLAG_WINDOW_RESIZABLE GetScreenHeight GetScreenWidth InitWindow LIGHTGRAY MeasureText RAYWHITE SetConfigFlags SetTargetFPS Vector2 WindowShouldClose fontSize main screenHeight screenWidth textSize x y"
-    },
-    {
-        "name": "3D Camera First Person",
-        "library": "raylib",
-        "codeFile": "/examples/files/pgetinker-raylib-3d-camera-first-person-example.cpp",
-        "screenshot": "/examples/files/pgetinker-raylib-3d-camera-first-person-example.png",
-        "keywords": "BLACK BLUE BeginDrawing BeginMode3D CAMERA_FIRST_PERSON CAMERA_FREE CAMERA_ORBITAL CAMERA_ORTHOGRAPHIC CAMERA_PERSPECTIVE CAMERA_THIRD_PERSON Camera CameraPitch CameraYaw ClearBackground CloseWindow Color DARKPURPLE DEG2RAD DisableCursor DrawCube DrawCubeWires DrawPlane DrawRectangle DrawRectangleLines DrawText EndDrawing EndMode3D FLAG_WINDOW_RESIZABLE Fade GOLD GetRandomValue InitWindow IsKeyPressed IsMouseButtonPressed KEY_FOUR KEY_ONE KEY_P KEY_THREE KEY_TWO LIGHTGRAY LIME MAROON MAX_COLUMNS PURPLE RAYWHITE SKYBLUE SetConfigFlags SetTargetFPS TextFormat UpdateCamera Vector2 Vector3 WindowShouldClose camera cameraMode colors fovy heights i main position positions projection screenHeight screenWidth target up x y z"
-    },
-    {
-        "name": "Classic Game Asteroids Survival",
-        "library": "raylib",
-        "codeFile": "/examples/files/pgetinker-raylib-classic-game-asteroids.cpp",
-        "screenshot": "/examples/files/pgetinker-raylib-classic-game-asteroids.png",
-        "keywords": "BLACK BeginDrawing CheckCollisionCircles ClearBackground CloseWindow Color DARKGRAY DEG2RAD DrawCircleV DrawGame DrawText DrawTriangle EndDrawing FLAG_WINDOW_RESIZABLE Fade GRAY GREEN GetRandomValue GetScreenHeight GetScreenWidth InitGame InitWindow IsKeyDown IsKeyPressed KEY_DOWN KEY_ENTER KEY_LEFT KEY_RIGHT KEY_UP LIGHTGRAY MAROON MAX_MEDIUM_METEORS MAX_SMALL_METEORS METEORS_SPEED MeasureText Meteor PLAYER_BASE_SIZE PLAYER_SPEED Player RAYWHITE SetConfigFlags SetTargetFPS TextFormat UnloadGame UpdateDrawFrame UpdateGame Vector2 Vector3 WindowShouldClose YELLOW a acceleration active bool collider color correctRange cos cosf emscripten_set_main_loop framesCounter gameOver i main mediumMeteor pause player position posx posy radius rotation screenHeight screenWidth shipHeight sin sinf smallMeteor speed static_cast tanf v1 v2 v3 velx vely x y z"
-    },
-    {
-        "name": "Bouncing Ball",
-        "library": "raylib",
-        "codeFile": "/examples/files/pgetinker-raylib-shapes-bouncing-ball.cpp",
-        "screenshot": "/examples/files/pgetinker-raylib-shapes-bouncing-ball.png",
-        "keywords": "BeginDrawing ClearBackground CloseWindow DrawCircleV DrawFPS DrawText EndDrawing FLAG_MSAA_4X_HINT FLAG_WINDOW_RESIZABLE GRAY GetScreenHeight GetScreenWidth InitWindow IsKeyPressed KEY_SPACE LIGHTGRAY MAROON RAYWHITE SetConfigFlags SetTargetFPS Vector2 WindowShouldClose ballPosition ballRadius ballSpeed bool framesCounter main pause screenHeight screenWidth x y"
     }
 ]
