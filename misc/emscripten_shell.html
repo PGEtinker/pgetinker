@@ -100,6 +100,21 @@
                     }, "*");
                 };
             })(),
+            printErr: (function () {
+                return (...args) => {
+                    var text = args.join(' ');
+
+                    if(text.indexOf("main_loop") === -1)
+                    {
+                        window.parent.postMessage({
+                            message: "console-output",
+                            data: text + "\n",
+                        }, "*");
+                    }
+                    
+                    console.error(text);
+                };
+            })(),
             canvas: (() => {
                 var canvas = document.getElementById('canvas');
 
