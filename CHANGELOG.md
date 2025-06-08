@@ -25,7 +25,12 @@ The following emscripten built-in libraries are suppported:
 - SDL 1 ``#include <SDL/SDL.h>``
 - SDL2
     - ``#include <SDL2/SDL.h>``
-    - ``#include <SDL2/SDL_gfx.h>``
+    - SDL2 GFX
+        - ``#include <SDL2/SDL2_framerate.h>``
+        - ``#include <SDL2/SDL2_gfxPrimitives_font.h>``
+        - ``#include <SDL2/SDL2_gfxPrimitives.h>``
+        - ``#include <SDL2/SDL2_imageFilter.h>``
+        - ``#include <SDL2/SDL2_rotozoom.h>``
     - ``#include <SDL2/SDL_image.h>``
     - ``#include <SDL2/SDL_mixer.h>``
     - ``#include <SDL2/SDL_net.h>``
