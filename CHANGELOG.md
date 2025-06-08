@@ -50,6 +50,7 @@ Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEti
 
 ### 2025-06-08
 
+- examples: add license to sdl2 example
 - main: fix support for SDL2_image png, jpg, and gif support
 - main: fix detection of SDL_gfx headers
 - main: send stderr to console panel
