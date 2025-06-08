@@ -269,7 +269,11 @@ class Compiler
             'SDL2\/SDL_image.h' => [
                 "cflags"  => [],
                 "ldflags" => [
-                    "-sUSE_SDL_IMAGE=2"
+                    "-sUSE_SDL_IMAGE=2",
+                    "-sSDL2_IMAGE_FORMATS=[png,jpg,gif]",
+                    "-sUSE_LIBPNG=1",
+                    "-sUSE_LIBJPEG=1",
+                    "-sUSE_GIFLIB=1",
                 ],
             ],
             'SDL2\/SDL_mixer.h' => [
