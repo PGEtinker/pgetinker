@@ -20,6 +20,9 @@ namespace {
     struct AutoRun {
         AutoRun() {
             std::cout << "INFO: Using Escripten " << __EMSCRIPTEN_major__ << "." << __EMSCRIPTEN_minor__ << "." << __EMSCRIPTEN_tiny__ << "\n";
+            EM_ASM({
+                Module.canvas.dispatchEvent(new Event("pgetinker-screenshot-ready"));
+            });
         }
     };
 
