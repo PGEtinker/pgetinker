@@ -1,6 +1,15 @@
-#define OLC_PGE_APPLICATION
-#include "olcPixelGameEngine.h"
+/*******************************************************************************************
+*   raylib - Classic PGEtinker Example
+********************************************************************************************/
+#include "raylib.h"
 
+#include <algorithm>
+#include <iostream>
+#include <stdlib.h>
+
+//------------------------------------------------------------------------------------
+// Allow loading of URL assets on PLATFORM_WEB
+//------------------------------------------------------------------------------------
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
 #endif
@@ -12,70 +21,159 @@ void FILE_RESOLVE(const char* url, const char* file)
     emscripten_sleep(0);
     #endif
 }
+//------------------------------------------------------------------------------------
 
-// Override base class with your custom functionality
-class Example : public olc::PixelGameEngine
+
+//------------------------------------------------------------------------------------
+// Calculates the rectangles used to scale the canvas
+//------------------------------------------------------------------------------------
+Rectangle CalculateCanvasDestination(float width, float height)
 {
-public:
-    Example()
-    {
-        // Name your application
-        sAppName = "Example 4";
-    }
-    
-public:
-    bool OnUserCreate() override
-    {
-        // Called once at the start, so create things here
-        
-        // built with emscripten, maps the url to the virtual filesystem and makes it
-        // available to the standard C/C++ file i/o functions without change!
-        //
-        // built with any other native toolchain, the macro does nothing and all file
-        // access is done just as it would in any other normal scenario.
-        FILE_RESOLVE("https://i.imgur.com/KdWjkwC.png", "assets/gfx/broken.png");
-        
-        renBroken.Load("assets/gfx/broken.png");
+    float screenWidth = (float)GetScreenWidth();
+    float screenHeight = (float)GetScreenHeight();
 
-        color = RandomColor();
-        return true;
-    }
+    float aspect = width / height;
+    float screenAspect = screenWidth / screenHeight;
+    float scale;
     
-    bool OnUserUpdate(float fElapsedTime) override
-    {
-        // Called once per frame, draws random coloured pixels
-        if(GetMouse(0).bPressed)
-            color = RandomColor();
-        
-        Clear(color);
-        DrawRect(0,0,ScreenWidth()-1, ScreenHeight()-1, olc::YELLOW);
-        DrawString(6,  6, "Hello, PGE", olc::BLACK);
-        DrawString(5,  5, "Hello, PGE", olc::WHITE);
-        DrawString(6, 26, "Mouse position SHOULD match\nclosely to the circle.\n\nYellow borders should ALWAYS\nbe visible\n\nLEFT MOUSE to change color.", olc::BLACK);
-        DrawString(5, 25, "Mouse position SHOULD match\nclosely to the circle.\n\nYellow borders should ALWAYS\nbe visible\n\nLEFT MOUSE to change color.", olc::WHITE);
-        
-        DrawSprite(5, 100, renBroken.Sprite());
+    Rectangle ret = {0,0,0,0};
 
-        DrawString(6, 221, GetMousePos().str(), olc::BLACK);
-        DrawString(5, 220, GetMousePos().str(), olc::WHITE);
-        FillCircle(GetMousePos(), 3, olc::RED);
-        Draw(GetMousePos(), olc::WHITE);
-        return true;
-    }
-    
-    olc::Pixel RandomColor()
+    if(aspect > screenAspect)
     {
-        return olc::Pixel(rand() % 128, rand() % 128, rand() % 128);
+        scale = screenWidth / width;
+        ret.width = screenWidth;
+        ret.height = height * scale;
+        ret.x = 0;
+        ret.y = (screenHeight - ret.height) / 2;
+    }
+    else
+    {
+        scale = screenHeight / height;
+        ret.width = width * scale;
+        ret.height = screenHeight;
+        ret.x = (screenWidth - ret.width) / 2;
+        ret.y = 0;
     }
     
-    olc::Pixel color;
-    olc::Renderable renBroken;
-};
+    return ret;
+}
+//------------------------------------------------------------------------------------
 
-int main()
+
+//------------------------------------------------------------------------------------
+// Get a randomized color of full alpha.
+//------------------------------------------------------------------------------------
+Color GetRandomColor()
 {
-    Example demo;
-    if (demo.Construct(256, 240, 2, 2))
-        demo.Start();
+    return Color(rand() % 128, rand() % 128, rand() % 128, 255);
+}
+//------------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------------
+// Draw Text with a drop shadow of the provided foreground/background colors.
+//------------------------------------------------------------------------------------
+void DrawTextDropShadow(const char* text, int x,  int y, int fontSize, Color foreground, Color background)
+{
+    DrawText(text, x + 1, y + 1, fontSize, background);
+    DrawText(text, x, y, fontSize, foreground);
+}
+//------------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
+int main(void)
+{
+    const int canvasWidth = 256;
+    const int canvasHeight = 240;
+
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(canvasWidth, canvasHeight, "raylib - PGEtinker Classic Example");
+    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    
+    RenderTexture2D canvas = LoadRenderTexture(canvasWidth, canvasHeight);
+    SetTextureFilter(canvas.texture, TEXTURE_FILTER_POINT);
+
+    FILE_RESOLVE("https://raw.githubusercontent.com/PGEtinker/assets/main/broken.png", "assets/gfx/broken.png");
+    Texture2D imageFromURL = LoadTexture("assets/gfx/broken.png");
+    
+    Color background = GetRandomColor();
+    Vector2 realMousePosition = {0, 0};
+    Vector2 mousePosition     = {0, 0};
+
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
+    {
+        // Core Update
+        //----------------------------------------------------------------------------------
+
+        // Calculate Canvas Position
+        Rectangle canvasSourceRect = { 0, 0, canvasWidth, -canvasHeight };
+        Rectangle canvasDestinationRect = CalculateCanvasDestination(canvasWidth, canvasHeight);
+        
+        // Calculate mouse position 
+        realMousePosition = GetMousePosition();
+        
+        mousePosition.x = realMousePosition.x - canvasDestinationRect.x;
+        mousePosition.y = realMousePosition.y - canvasDestinationRect.y;
+        
+        mousePosition.x = (int)(mousePosition.x / (float)(GetScreenWidth() - (canvasDestinationRect.x * 2)) * canvasWidth);
+        mousePosition.y = (int)(mousePosition.y / (float)(GetScreenHeight() - (canvasDestinationRect.y * 2)) * canvasHeight);
+        
+        mousePosition.x = std::clamp(mousePosition.x, 0.0f, (float)canvasWidth - 1);
+        mousePosition.y = std::clamp(mousePosition.y, 0.0f, (float)canvasHeight - 1);
+        //----------------------------------------------------------------------------------
+
+        // Update
+        //----------------------------------------------------------------------------------
+
+        if(IsMouseButtonPressed(0))
+        {
+            background = GetRandomColor();
+            std::cout << TextFormat("(%d,%d)", static_cast<int>(mousePosition.x), static_cast<int>(mousePosition.y)) << "\n";
+        }
+        //----------------------------------------------------------------------------------
+
+        // Draw
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
+            BeginTextureMode(canvas);
+                // clear canvas to color
+                ClearBackground(background);
+                
+                // draw yellow border
+                DrawRectangleLinesEx({0.5f, 0.5f, canvasWidth, canvasHeight - 0.5f}, 1.0f, YELLOW);
+                
+                // draw some text
+                DrawTextDropShadow("Hello, raylib", 5, 5, 8, WHITE, BLACK);
+                DrawTextDropShadow("Mouse position SHOULD match\nclosely to the circle.\n\nYellow borders should ALWAYS\nbe visible\n\nLEFT MOUSE to change color.", 5, 25, 8, WHITE, BLACK);
+                DrawTextDropShadow(TextFormat("(%d,%d)", static_cast<int>(mousePosition.x), static_cast<int>(mousePosition.y)), 5, 220, 8, WHITE, BLACK);
+                
+                // draw image
+                DrawRectangle(5, 115, 16, 16, BLACK);
+                DrawTexture(imageFromURL, 5, 115, WHITE);
+
+                // draw the mouse circles
+                DrawCircle(mousePosition.x+.5f, mousePosition.y, 3.0f, RED);
+                DrawPixel(mousePosition.x+.5f, mousePosition.y+.5f, WHITE);
+            EndTextureMode();
+
+            ClearBackground(BLANK);
+            DrawTexturePro(canvas.texture, canvasSourceRect, canvasDestinationRect, (Vector2){0, 0}, 0.0f, WHITE);
+        EndDrawing();
+        //----------------------------------------------------------------------------------
+    }
+
+    // De-Initialization
+    //--------------------------------------------------------------------------------------
+    UnloadTexture(imageFromURL);
+    UnloadRenderTexture(canvas);
+    CloseWindow();        // Close window and OpenGL context
+    //--------------------------------------------------------------------------------------
+
     return 0;
 }

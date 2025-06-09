@@ -44,7 +44,23 @@ export default function shareDialog(shareUrl, shareThumbUrl)
             dialog.remove();
             resolve();
         });
-        
+
+        function escapeKeyHandler(event)
+        {
+            if(event.key === 'Escape')
+            {
+                if(!copied)
+                {
+                    createToast("Copied URL to clipboard.", ToastType.Info);
+                    navigator.clipboard.writeText(shareUrl).catch((reason) => console.log(reason));
+                }
+
+                document.removeEventListener("keydown", escapeKeyHandler);
+                dialog.remove();
+                resolve();
+            }
+        }
+        document.addEventListener('keydown', escapeKeyHandler);        
         document.body.appendChild(dialog);
     });
 }

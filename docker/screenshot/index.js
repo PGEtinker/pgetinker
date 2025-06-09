@@ -93,42 +93,33 @@ app.post("/", async(request, response) =>
         // setup core update handler
         await page.evaluate(() =>
         {
-            const pgeUpdateHandler = () =>
+            const pgetinkerScreenshotReadyHandler = () =>
             {
-                console.log("PGE: core update called.");
-                Module.canvas.removeEventListener("pge-core-update", pgeUpdateHandler)
-                Module.pgeReadyForScreenshot = true;
+                console.log("PGETINKER: screenshot ready");
+                Module.canvas.removeEventListener("pgetinker-screenshot-ready", pgetinkerScreenshotReadyHandler)
+                Module.pgetinkerReadyForScreenshot = true;
             }
             
-            Module.pgeReadyForScreenshot = false;
-            Module.canvas.addEventListener("pge-core-update", pgeUpdateHandler);
+            Module.pgetinkerReadyForScreenshot = false;
+            Module.canvas.addEventListener("pgetinker-screenshot-ready", pgetinkerScreenshotReadyHandler);
         });
         console.log("Screenshot:", "setup core update handler")
         
         // wait for pge to be ready
         await page.waitForFunction(() =>
         {
-            return Module.pgeReadyForScreenshot;
+            return Module.pgetinkerReadyForScreenshot;
         });
-        console.log("Screenshot:", "pge is ready for screenshot");
+        console.log("Screenshot:", "pgetinker is ready for screenshot");
         
         // wait for 5 second after ready
         await sleep(5);
         
-        // get the PGE canvas
-        const canvas = await page.$('canvas');
-        console.log("Screenshot:", "get the canvas");
-
-        // get the size of the PGE canvas
-        const boundingBox = await canvas.boundingBox();
-        console.log("Screenshot:", "get bounding box", boundingBox);
-        
         // change the size of the viewport to match the PGE canvas size
         await page.setViewport({
-            width: boundingBox.width,
-            height: boundingBox.height
+            width: 800,
+            height: 600
         });
-        console.log("Screenshot:", "resize window to size of bounding box");
 
         // shutter --- click 
         const screenshot = await page.screenshot({

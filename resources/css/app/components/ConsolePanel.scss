@@ -2,32 +2,46 @@
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
     bottom: 0;
-    overflow: auto;
-    padding: 1rem 1rem 2rem 1rem;
+    right: 0;
+    padding: 1rem;
+    overflow: hidden;
+    scrollbar-gutter: stable;
+    font-family: "Droid Sans Mono", "monospace", monospace;
+    white-space: pre;    
+    
+    &:hover,
+    &:focus {
+        outline: none;
+        overflow-y: auto;
+    }
 
     & div {
+        scroll-margin-top: 1rem;
         white-space: pre;
         font-family: "Droid Sans Mono", "monospace", monospace;
     }
 }
 
-#console-auto-scroll {
+#console-buttons {
     position: absolute;
     top: 1rem;
-    right: 1rem;
-    border: none;
-    border-radius: 0.4rem;
-    padding: 0.6rem;
-    font-size: 1.2rem;
-
-    background-color: var(--pgetinker-link-color);
-    color: var(--pgetinker-text-color);
-    text-shadow: .2rem .2rem .5rem var(--pgetinker-text-shadow-color);
+    right: 1.4rem;
+    
+    & button {
+        border: none;
+        border-radius: 0.4rem;
+        padding: 0.6rem;
+        margin-bottom: 0.6rem;
+        font-size: 1.2rem;
+        background-color: var(--pgetinker-link-color);
+        color: var(--pgetinker-text-color);
+        text-shadow: .2rem .2rem .5rem var(--pgetinker-text-shadow-color);
+        
+        &:active {
+            background-color: var(--pgetinker-link-hover-color);
+        }
+    }
 }
 
-#console-auto-scroll:active {    
-    background-color: var(--pgetinker-link-hover-color);
-}
 

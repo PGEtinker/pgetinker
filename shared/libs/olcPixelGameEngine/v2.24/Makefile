@@ -1,10 +1,10 @@
 SRCDIR = .
-INC    = -IolcPixelGameEngine -IolcPixelGameEngine/extensions -IolcPixelGameEngine/utilities -Iminiaudio/0.11.21
+INC    = -I. -I./extensions -I./utilities
 
 CC     = emcc
 CXX    = em++
 
-CXXFLAGS = -std=c++20 -c $(INC)
+CXXFLAGS = -O1 -std=c++20 $(INC)
 
 # Find all cpp files and corresponding object files
 SRCS = $(shell find $(SRCDIR) -name '*.cpp')
@@ -15,7 +15,7 @@ all: $(OBJS)
 
 # Recipe to build .o files from .cpp
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) -c $< -o $@ $(CXXFLAGS) 
 
 # Clean up all generated object files
 clean:

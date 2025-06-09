@@ -52,16 +52,4 @@ class ProcessCodeTest extends TestCase
         $compiler->processCode();
         $this->assertTrue($code != $compiler->getCode());
     }
-    
-    // public function test_process_code_fails_on_bad_macro(): void
-    // {
-    //     $compiler = new Compiler();
-        
-    //     $code = "I can write anything wheeeee!#define OLC_PGE_APPLICATIONYEAAAAAAA\n";
-    //     $compiler->setCode($code);
-    //     $compiler->processCode();
-
-    //     $this->assertTrue($code == $compiler->getCode());
-    // }
-
 }

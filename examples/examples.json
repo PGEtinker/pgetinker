@@ -1,0 +1,23 @@
+[
+    {
+        "name": "PGEtinker Classic Example",
+        "library": "pge",
+        "codeFile": "/examples/files/pgetinker-pge-classic-example.cpp",
+        "screenshot": "/examples/files/pgetinker-pge-classic-example.png",
+        "keywords": "BLACK Clear Construct Draw DrawRect DrawSprite DrawString DrawStringDropShadow FillCircle GetMouse GetMousePos Load OnUserCreate OnUserUpdate PGEtinkerClassicExample Pixel PixelGameEngine RED RandomColor Renderable ScreenHeight ScreenWidth Sprite Start WHITE YELLOW bPressed backgroundColor bool color cout example fElapsedTime foregroundColor image main olc override pgetinker_file_resolve rand sAppName std str string text x y"
+    },
+    {
+        "name": "PGEtinker Classic Example",
+        "library": "raylib",
+        "codeFile": "/examples/files/pgetinker-raylib-classic-example.cpp",
+        "screenshot": "/examples/files/pgetinker-raylib-classic-example.png",
+        "keywords": "BLACK BeginDrawing ClearBackground CloseWindow Color DrawCircle DrawPixel DrawRectangle DrawRectangleLinesEx DrawText DrawTextDropShadow DrawTexture EndDrawing GetMousePosition GetRandomColor InitWindow IsMouseButtonPressed LoadTexture RED SetTargetFPS TextFormat Texture2D UnloadTexture Vector2 WHITE WindowShouldClose YELLOW background cout emscripten_set_main_loop fontSize foreground imageFromURL main mousePosition pgetinker_file_resolve rand screenHeight screenWidth static_cast std text update x y"
+    },
+    {
+        "name": "PGEtinker Classic Example",
+        "library": "sdl2",
+        "codeFile": "/examples/files/pgetinker-sdl2-classic-example.cpp",
+        "screenshot": "/examples/files/pgetinker-sdl2-classic-example.png",
+        "keywords": "ApplicationState Color DrawStringDropShadow FillCircle GetRandomColor IMG_GetError IMG_INIT_PNG IMG_Init IMG_Load IMG_Quit LoadFromFile NOT_READY READY SDL_BUTTON SDL_BUTTON_LEFT SDL_Color SDL_CreateRenderer SDL_CreateTextureFromSurface SDL_CreateWindow SDL_DestroyRenderer SDL_DestroyTexture SDL_DestroyWindow SDL_Event SDL_FreeSurface SDL_GetError SDL_GetMouseState SDL_INIT_VIDEO SDL_Init SDL_PollEvent SDL_QUIT SDL_Quit SDL_RENDERER_ACCELERATED SDL_Rect SDL_RenderClear SDL_RenderCopy SDL_RenderDrawPoint SDL_RenderDrawRect SDL_RenderFillRect SDL_RenderPresent SDL_Renderer SDL_SetRenderDrawColor SDL_Surface SDL_Texture SDL_WINDOWPOS_CENTERED SDL_Window SURFACE_FAIL Sprite Status TEXTURE_FAIL TTF_CloseFont TTF_Font TTF_GetError TTF_Init TTF_OpenFont TTF_Quit TTF_RenderText_Blended_Wrapped TTF_RenderText_Solid_Wrapped Uint32 Uint8 a a_ app b b_ backgroundColor bg bg_rect bg_surface bg_texture bool border c_str cerr color cout currentLeftMouse cx cy emscripten_set_main_loop endl event fg fg_rect fg_surface fg_texture font g g_ getError h height image_rect main mouse_state mouse_x mouse_y operator path pgetinker_file_resolve prevLeftMouse r r_ radius rand renderer retval running screenHeight screenScale screenWidth sdl_bg sdl_fg sprite status std string surface text texture to_string type update w width window x y"
+    }
+]

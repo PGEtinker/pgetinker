@@ -177,6 +177,7 @@ export SAIL_SHARE_SERVER_PORT=${SAIL_SHARE_SERVER_PORT:-8080}
 export SAIL_SHARE_SUBDOMAIN=${SAIL_SHARE_SUBDOMAIN:-""}
 export SAIL_SHARE_DOMAIN=${SAIL_SHARE_DOMAIN:-"$SAIL_SHARE_SERVER_HOST"}
 export SAIL_SHARE_SERVER=${SAIL_SHARE_SERVER:-""}
+export EMSCRIPTEN_VERSION=${EMSCRIPTEN_VERSION:-"4.0.8"}
 
 # Function that outputs Sail is not running...
 function sail_is_not_running {
@@ -756,12 +757,14 @@ elif [ "$1" == "update" ]; then
         proceed=y
     else
         echo "This command will:"
-        echo "  - Run git pull."
         echo "  - Build changed docker images."
         echo "  - Install composer dependencies."
         echo "  - Install NPM dependencies."
         echo "  - Generate a pre-built frontend."
         echo "  - Pull wiki repo."
+        echo "  - Create wiki symlinks."
+        echo "  - Create examples symlinks."
+        echo "  - Update esmcripten."
         echo "  - Build shared emscripten libraries."
         echo "  - Run laravel migration scripts."
         echo "  - Restart PGEtinker services."
@@ -779,17 +782,8 @@ elif [ "$1" == "update" ]; then
     
     case $proceed in
         [Yy]*)
-            rm -rf public/build public/hot
+            rm -rf public/build public/hot public/wiki public/examples
 
-            echo "#### Run git pull."
-            git pull
-            if [ ! $? -eq 0 ]; then
-                echo "## Failed to pull latest version."
-                exit 1
-            fi
-            echo "## Done."
-            echo
-            
             echo "#### Build changed docker images."
             scripts/pgetinker build
             if [ ! $? -eq 0 ]; then
@@ -834,7 +828,32 @@ elif [ "$1" == "update" ]; then
             fi
             echo "## Done."
             echo
+
+            echo "#### Create wiki symlinks."
+            ln -s /var/www/html/services/wiki/public public/wiki
+            echo "## Done."
+            echo
             
+            echo "#### Create examples symlinks."
+            ln -s /var/www/html/examples public/examples
+            echo "## Done."
+            echo
+
+            echo "#### Clone and install emscripten."
+            if [ -f "shared/emsdk/emsdk_env.sh" ]; then
+                echo "## emsdk has already been cloned. pulling"
+                (cd shared/emsdk; git pull)
+            else
+                echo "## emsdk not found, cloning."
+                (mkdir -p shared; cd shared; git clone https://github.com/emscripten-core/emsdk.git)
+            fi
+
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk install "$EMSCRIPTEN_VERSION"
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk activate "$EMSCRIPTEN_VERSION"
+            
+            echo "## Done."
+            echo
+
             echo "#### Build shared emscripten libraries."
             docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/opt/emsdk' -v './shared/libs:/var/www/html' pgetinker/app bash build-libs.sh
             if [ ! $? -eq 0 ]; then
@@ -924,7 +943,8 @@ elif [ "$1" == "initialize" ]; then
         echo "  - Generate a pre-built frontend."
         echo "  - Clone wiki repo."
         echo "  - Create wiki symlinks."
-        echo "  - Pull and install emscripten."
+        echo "  - Create examples symlinks."
+        echo "  - Clone and install emscripten."
         echo "  - Build shared emscripten libraries."
         echo "  - Run laravel migration scripts."
         echo ""
@@ -941,7 +961,7 @@ elif [ "$1" == "initialize" ]; then
     
     case $proceed in
         [Yy]*)
-            rm -rf docker-compose.yml vendor node_modules public/build public/hot .env services/wiki public/wiki
+            rm -rf docker-compose.yml vendor node_modules public/build public/hot .env services/wiki public/wiki public/examples
             
             echo "#### Creating default environment configuration."
             cp .env.sail .env > /dev/null 2>&1
@@ -1004,17 +1024,22 @@ elif [ "$1" == "initialize" ]; then
             echo "## Done."
             echo
             
-            echo "#### Pull and install emscripten."
+            echo "#### Create examples symlinks."
+            ln -s /var/www/html/examples public/examples
+            echo "## Done."
+            echo
+
+            echo "#### Clone and install emscripten."
             if [ -f "shared/emsdk/emsdk_env.sh" ]; then
-                echo "## emsdk has already been pulled."
+                echo "## emsdk has already been cloned. pulling"
+                (cd shared/emsdk; git pull)
             else
-                echo "## emsdk not found, pulling."
+                echo "## emsdk not found, cloning."
                 (mkdir -p shared; cd shared; git clone https://github.com/emscripten-core/emsdk.git)
             fi
 
-            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk install 3.1.56
-            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk activate 3.1.56
-            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/opt/emsdk' pgetinker/app bash -c "EMSDK_QUIET=1 source /opt/emsdk/emsdk_env.sh; embuilder build libpng sdl2_mixer"
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk install "$EMSCRIPTEN_VERSION"
+            docker run --rm -e WWWUSER="${WWWUSER}" -v './shared/emsdk:/var/www/html' pgetinker/app bash emsdk activate "$EMSCRIPTEN_VERSION"
             
             echo "## Done."
             echo

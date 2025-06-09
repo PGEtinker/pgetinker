@@ -155,21 +155,20 @@ class CodeController extends Controller
                 "message" => "inavlid libraries set",
             ];
         }
-
-        $hashedCode = hashCode($code);
-        $hashedLibraries = hash("sha256", json_encode($libraries));
-        $cacheKey = "compiler_{$hashedCode}_{$hashedLibraries}";
+        
+        ksort($libraries);
+        $hashedCode = hash("sha256", hashCode($code) . json_encode($libraries));
 
         if(env("COMPILER_CACHING", false))
         {
             try
             {
-                $cachedCode = Redis::get($cacheKey);
+                $cachedCode = Redis::get($hashedCode);
             
                 if(isset($cachedCode))
                 {
-                    Redis::expire($cacheKey, env("REDIS_TTL", 60));
-                    Log::debug("Compile: cache hit", ["hashedCode" => $hashedCode, "hashedLibraries" => $hashedLibraries]);
+                    Redis::expire($hashedCode, env("REDIS_TTL", 60));
+                    Log::debug("Compile: cache hit", ["hashedCode" => $hashedCode]);
                     
                     $compiler = new Compiler();
                     $compiler->deserialize($cachedCode);
@@ -189,7 +188,7 @@ class CodeController extends Controller
                 Log::emergency("Compiler Caching enabled and Redis failed.");
             }
             
-            Log::debug("Compile: cache miss", ["hashedCode" => $hashedCode, "hashedLibraries" => $hashedLibraries]);
+            Log::debug("Compile: cache miss", ["hashedCode" => $hashedCode]);
         }
         
         if(Storage::directoryMissing("workspaces"))
@@ -219,7 +218,7 @@ class CodeController extends Controller
             {
                 try
                 {
-                    Redis::setex($cacheKey, env("REDIS_TTL", 60), $compiler->serialize());
+                    Redis::setex($hashedCode, env("REDIS_TTL", 60), $compiler->serialize());
                 }
                 catch(Exception $e)
                 {
@@ -241,7 +240,7 @@ class CodeController extends Controller
         {
             try
             {
-                Redis::setex($cacheKey, env("REDIS_TTL", 60), $compiler->serialize());
+                Redis::setex($hashedCode, env("REDIS_TTL", 60), $compiler->serialize());
             }
             catch(Exception $e)
             {
@@ -261,13 +260,7 @@ class CodeController extends Controller
     
     function validateLibraries($libraries)
     {
-        if(!isset($libraries["olcPixelGameEngine"]))
-        {
-            Log::error("Library `olcPixelGameEngine` isn't in the set of libraries.");
-            return false;
-        }
-            
-        $libraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs") . "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
+        $libraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
         
         if(!file_exists($libraryDirectory))
         {
@@ -275,8 +268,6 @@ class CodeController extends Controller
             return false;
         }
             
-        unset($libraries["olcPixelGameEngine"]);
-
         if(count($libraries) == 0)
         {
             Log::error("No libraries are set.");

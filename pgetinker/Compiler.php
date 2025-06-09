@@ -18,6 +18,7 @@ class Compiler
     private $code = [];
     
     private $compilerCommand = [];
+    private $compilerFlags   = [];
 
     private $compilerExitCode;
 
@@ -32,6 +33,7 @@ class Compiler
     private $implementationMacros = [];
 
     private $linkerCommand = [];
+    private $linkerFlags   = [];
 
     private $libraryDirectories = [];
     
@@ -190,6 +192,135 @@ class Compiler
         return false;
     }
     
+    private function processCodeDetectLibraries($index)
+    {
+
+
+        $headerFlagMap = [
+            'olcPixelGameEngine.h' => [
+                "cflags"  => [
+                    "-I./olcPixelGameEngine",
+                    "-I./olcPixelGameEngine/extensions",
+                    "-I./olcPixelGameEngine/utilities",
+                ],
+                "ldflags" => [
+                    "-sMAX_WEBGL_VERSION=2",
+                    "-sMIN_WEBGL_VERSION=2",
+                    "-sUSE_LIBPNG=1",
+                ],
+            ],
+            'olcSoundWaveEngine.h' => [
+                "cflags"  => [
+                    "-I./olcSoundWaveEngine",
+                ],
+                "ldflags" => [
+                    "-sUSE_SDL_MIXER=2",
+                ],
+            ],
+            'miniaudio.h' => [
+                "cflags"  => [
+                    "-I./miniaudio",
+                ],
+                "ldflags" => [],
+            ],
+            'olcPGEX_MiniAudio.h' => [
+                "cflags"  => [
+                    "-I./miniaudio",
+                    "-I./olcPGEX_MiniAudio",
+                ],
+                "ldflags" => [],
+            ],
+            'olcPGEX_Gamepad.h' => [
+                "cflags"  => [
+                    "-I./olcPGEX_Gamepad",
+                ],
+                "ldflags" => [],
+            ],
+            'raylib.h' => [
+                "cflags"  => [
+                    "-DPLATFORM_WEB",
+                    "-I./raylib",
+                ],
+                "ldflags" => [
+                    "-DPLATFORM_WEB",
+                    "-sUSE_GLFW=3",
+                    "-Lraylib",
+                    "-lraylib"
+                ],
+            ],
+            'SDL\/SDL.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL=1"
+                ],
+            ],
+            'SDL2\/SDL.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL=2"
+                ],
+            ],
+            'SDL2\/SDL2_(framerate|gfxPrimitives_font|gfxPrimitives|imageFilter|rotozoom).h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL_GFX=2"
+                ],
+            ],
+            'SDL2\/SDL_image.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL_IMAGE=2",
+                    "-sSDL2_IMAGE_FORMATS=[png,jpg,gif]",
+                    "-sUSE_LIBPNG=1",
+                    "-sUSE_LIBJPEG=1",
+                    "-sUSE_GIFLIB=1",
+                ],
+            ],
+            'SDL2\/SDL_mixer.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL_MIXER=2"
+                ],
+            ],
+            'SDL2\/SDL_net.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL_NET=2"
+                ],
+            ],
+            'SDL2\/SDL_ttf.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL_TTF=2"
+                ],
+            ],
+            'SDL3\/SDL.h' => [
+                "cflags"  => [],
+                "ldflags" => [
+                    "-sUSE_SDL=3"
+                ],
+            ],
+        ];
+
+        foreach($headerFlagMap as $regex => $flags)
+        {
+            preg_match(
+                '/^\s*#\s*i(nclude|mport)(_next)?\s+["<](.*)'.$regex.'[">]/',
+                $this->code[$index],
+                $match,
+                PREG_OFFSET_CAPTURE,
+                0
+            );
+
+            if(count($match) > 0)
+            {
+                $this->compilerFlags = array_unique(array_merge($this->compilerFlags, $flags["cflags"]), SORT_REGULAR);
+                $this->linkerFlags = array_unique(array_merge($this->linkerFlags, $flags["ldflags"]), SORT_REGULAR);
+                return true;
+            }
+        }
+    }
+
     private function processCodeDetectGeometryUtility($index)
     {
         preg_match(
@@ -246,154 +377,6 @@ class Compiler
         
         return false;
     }
-
-    private function processCodeRemoteInclude($index)
-    {
-        preg_match(
-            '/^\s*#\s*i(nclude|mport)(_next)?\s+["<](https?:\/\/(.*)[^">]*)[">]/',
-            $this->code[$index],
-            $match,
-            PREG_OFFSET_CAPTURE,
-            0
-        );
-
-        if(count($match) > 0)
-        {
-            $this->logger->info("found a potential url for remote include");
-            
-            $potentialUrl = $match[3][0];
-            $potentialFilename = basename($match[3][0]);
-            $hashedUrl = hash("sha256", $potentialUrl);
-
-            if(env("COMPILER_REMOTE_INCLUDE_CACHING", false))
-            {
-                try
-                {
-                    $remoteIncludeCache = Redis::get("remote_include_{$hashedUrl}");
-                    
-                    // if we have a cached version of the url's contents, don't pull it
-                    if(isset($remoteIncludeCache))
-                    {
-                        $this->logger->info("remote include cache hit");
-                        $remoteIncludeCache = json_decode($remoteIncludeCache, false);
-                        
-                        Redis::expire("remote_include_{$hashedUrl}", env("REDIS_TTL", 60));
-                        
-                        // just because it's cached, doesn't mean you get to compile faster!
-                        usleep(floatval($remoteIncludeCache->time) * 1000000);
-                        
-                        file_put_contents(
-                            "{$this->workingDirectory}/{$potentialFilename}",
-                            $remoteIncludeCache->content
-                        );
-                        
-                        $this->code[$index] = '#include "' . $potentialFilename .'"';
-                        return true;
-                    }
-                }
-                catch(Exception $e)
-                {
-                    Log::emergency("Remote Include Cache Enabled, But Redis Failed");
-                }
-            }
-            
-            $this->logger->info("remote include cache miss");
-            
-            try
-            {
-                $request = new PendingRequest();
-                $request->timeout(3);
-                $response = $request->head($potentialUrl);
-            }
-            catch(Exception $e)
-            {
-                $this->errors[] = "/pgetinker.cpp:" . $index + 1 . ":1: error: failed to retrieve {$potentialUrl}";
-                $this->logger->info("failed to include remote file: {$potentialUrl} at line: " . $index + 1, [ "message" => $e->getMessage()]);
-                return true;
-            }
-            
-            if(
-                !($response->status() >= 200 && $response->status() < 400) ||
-                !str_contains($response->header("Content-Type"), "text/plain")
-            )
-            {
-                $this->errors[] = "/pgetinker.cpp:" . $index + 1 . ":1: error: failed to retrieve {$potentialUrl}";
-                $this->logger->info("failed to include remote file: {$potentialUrl} at line: " . $index + 1);
-                return true;                    
-            }
-
-            if(intval($response->header("Content-Length")) > 1048576)
-            {
-                $this->errors[] = "/pgetinker.cpp:" . $index + 1 . ":1: error: exceeds 1MB maximum file size";
-                $this->logger->info("remote file: {$potentialUrl} exceeds 1MB file size limitation");
-                return true;
-            }
-
-            $this->logger->info("retrieving the body content");
-
-            try
-            {
-                $requestStartTime = microtime(true);
-                
-                $request = new PendingRequest();
-                $request->timeout(5);
-                
-                $response = $request->get($potentialUrl);
-                
-                $requestDuration = microtime(true) - $requestStartTime;
-            }
-            catch(Exception $e)
-            {
-                $this->errors[] = "/pgetinker.cpp:" . $index + 1 . ":1: error: failed to retrieve {$potentialUrl}";
-                $this->logger->info("failed to include remote file: {$potentialUrl} at line: " . $index + 1);
-                return true;
-            }                
-            
-            // check included source for bad things
-            preg_match_all(
-                '/\s*#\s*i(nclude|mport)(_next)?\s+["<]((\.{1,2}|\/)[^">]*)[">]/m',
-                $response->body(),
-                $match,
-                PREG_SET_ORDER,
-                0
-            );
-            
-            if(count($match) > 0)
-            {
-                $this->errors[] = "/pgetinker.cpp:" . $index + 1 . ":1: error: found absolute or relative paths in remote file: {$potentialUrl}";
-                $this->logger->info("found absolute or relative paths in remote file: {$potentialUrl}");
-                return true;
-            }
-            
-            $this->logger->info("writing remote file to: {$this->workingDirectory}/{$potentialFilename}");
-            file_put_contents(
-                "{$this->workingDirectory}/{$potentialFilename}",
-                $response->body()
-            );
-            
-            if(env("COMPILER_REMOTE_INCLUDE_CACHING", false))
-            {
-                $this->logger->info("caching remotely included source file: $potentialFilename");
-
-                $remoteIncludeCache = new stdClass();
-                
-                $remoteIncludeCache->time = $requestDuration;
-                $remoteIncludeCache->content = $response->body();
-                
-                try
-                {
-                    Redis::setex("remote_include_{$hashedUrl}", env("REDI_TTL", 60), json_encode($remoteIncludeCache, JSON_PRETTY_PRINT));
-                }
-                catch(Exception $e)
-                {
-                    Log::emergency("Remote Inlucde Cache Enabled, But Redis Failed");
-                }
-            }
-
-            $this->code[$index] = '#include "' . $potentialFilename .'"';
-            return true;
-        }
-    }
     
     public function processCode()
     {
@@ -409,6 +392,10 @@ class Compiler
 
         $temp = json_decode(file_get_contents($baseLibraryDirectory . "/manifest.json"), true);
         $this->libraryMap = $temp["macroToObject"];
+        if(count($this->libraryVersions) == 0)
+        {
+            $this->libraryVersions = $temp["latest"];
+        }
         unset($temp);
 
         $startTime = microtime(true);
@@ -427,13 +414,13 @@ class Compiler
             if($this->processCodeDetectGeometryUtility($i))
                 continue;
             
+            if($this->processCodeDetectLibraries($i))
+                continue;
+
             if($this->processCodeAbsoluteOrRelativePaths($i))
                 continue;
 
             if($this->processCodeDetectImplementationMacros($i))
-                continue;
-
-            if($this->processCodeRemoteInclude($i))
                 continue;
         }
 
@@ -444,6 +431,9 @@ class Compiler
             {
                 if($implementation["macro"] == "OLC_PGE_APPLICATION")
                 {
+                    if($this->libraryVersions["olcPixelGameEngine"] == "dev")
+                        continue;
+
                     if($this->foundGeometryHeader)
                     {
                         $this->linkerInputFiles[] = "olcPixelGameEngine/olcPixelGameEngine_withGeometry.o";
@@ -457,7 +447,7 @@ class Compiler
                 continue;
             }
         }
-        
+
         $this->logger->info("finished processing code");
         
         return (count($this->errors) == 0);
@@ -470,14 +460,12 @@ class Compiler
         $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
         
         $libraries = $this->libraryVersions;
-        $baseLibraryDirectory .= "/olcPixelGameEngine/" . $libraries["olcPixelGameEngine"];
-        unset($libraries["olcPixelGameEngine"]);
-        $this->libraryDirectories["olcPixelGameEngine"] = $baseLibraryDirectory . "/olcPixelGameEngine";
-
+        
         foreach($libraries as $library => $version)
         {
             $this->libraryDirectories["{$library}"] = "{$baseLibraryDirectory}/{$library}/{$version}";
         }
+        $this->libraryDirectories["pgetinker"] = "{$baseLibraryDirectory}/pgetinker/latest";
 
         $this->logger->info("writing linesOfCode to {$this->workingDirectory}/pgetinker.cpp");
         file_put_contents(
@@ -539,19 +527,15 @@ class Compiler
         $this->compilerCommand = array_merge($this->compilerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
             "-c",
-            "-O1",
-            "-I./miniaudio",
-            "-I./olcPGEX_Gamepad",
-            "-I./olcPGEX_MiniAudio",
-            "-I./olcPixelGameEngine",
-            "-I./olcPixelGameEngine/extensions",
-            "-I./olcPixelGameEngine/utilities",
-            "-I./olcSoundWaveEngine",
+            "-Os",
             "pgetinker.cpp",
             "-o",
             "pgetinker.o",
+            "-I./pgetinker",
+            ...$this->compilerFlags,
             "-std=c++20",
         ]);
+
         $this->logger->info("Compiler command:\n\n" . implode("\n", $this->compilerCommand) . "\n");
 
         $this->logger->info("preparing linker command");
@@ -565,18 +549,14 @@ class Compiler
             "./emscripten_shell.html",
             "-sASYNCIFY",
             "-sALLOW_MEMORY_GROWTH=1",
+            ...$this->linkerFlags,
             "-sSTACK_SIZE=131072",
-            "-sMAX_WEBGL_VERSION=2",
-            "-sMIN_WEBGL_VERSION=2",
-            "-sUSE_LIBPNG=1",
-            "-sUSE_SDL_MIXER=2",
             "-sLLD_REPORT_UNDEFINED",
             "-sSINGLE_FILE",
             "-std=c++20",
         ]);
-        $this->logger->info("Linker command:\n\n" . implode("\n", $this->linkerCommand) . "\n");
-
         
+        $this->logger->info("Linker command:\n\n" . implode("\n", $this->linkerCommand) . "\n");
         return true;
     }
 

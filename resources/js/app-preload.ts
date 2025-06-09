@@ -1,8 +1,12 @@
 import { conformStorage, getStorageValue, setStorageValue, removeStorageKey } from './lib/storage';
 import './lib/lucide';
+// @ts-ignore
+import version from './lib/version';
 
 // @ts-ignore
 import agreeDialog from './lib/agreeDialog';
+// @ts-ignore
+import developDialog from './lib/developDialog';
 
 conformStorage();
 
@@ -66,4 +70,29 @@ const tryToAgree = async() =>
     }
 }
 
-tryToAgree();
+const developBranchCheck = async() =>
+{
+    if(version.includes('develop@') && !getStorageValue("acknowleged-develop"))
+    {
+        try
+        {
+            const dontWarnAgain = await developDialog();
+            setStorageValue("acknowleged-develop", dontWarnAgain);
+            tryToAgree();
+        }
+        catch(e)
+        {
+            const link = document.createElement('a');
+            link.setAttribute('href', 'https://pgetinker.com');
+            link.click();
+        }
+        
+    }
+    else
+    {
+        tryToAgree();
+    }
+}
+
+developBranchCheck();
+

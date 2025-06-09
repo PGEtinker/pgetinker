@@ -8,6 +8,194 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - 2025-06-09</u>
+
+## Notes
+
+Upgrade Emscripten to version 4.0.8.
+
+Add versions of PGE up to v2.29, currently the latest version available from OneLoneCoder!
+
+Overhaul the way libraries are handled. Library selection has been simplified.
+Emscripten built-in libraries are now exposed for use. PGEtinker will now
+detect the included headers and set compiler and linker flags accordingly.
+
+<span style="font-weight: bold; color:#a14b4b;">Feature removed:</span> Remote ``#include``s.
+The feature was only used in 1 share and it was before the addition of the LSP.
+Remote ``#include``s have never worked well with the LSP, between that and it's lack of common
+use means it gets to go away!
+
+The following emscripten built-in libraries are suppported:
+
+- SDL 1 ``#include <SDL/SDL.h>``
+- SDL2
+    - ``#include <SDL2/SDL.h>``
+    - SDL2 GFX
+        - ``#include <SDL2/SDL2_framerate.h>``
+        - ``#include <SDL2/SDL2_gfxPrimitives_font.h>``
+        - ``#include <SDL2/SDL2_gfxPrimitives.h>``
+        - ``#include <SDL2/SDL2_imageFilter.h>``
+        - ``#include <SDL2/SDL2_rotozoom.h>``
+    - ``#include <SDL2/SDL_image.h>``
+    - ``#include <SDL2/SDL_mixer.h>``
+    - ``#include <SDL2/SDL_net.h>``
+    - ``#include <SDL2/SDL_ttf.h>``
+- SDL 3 ``#include <SDL3/SDL.h>``
+
+Raylib version 5.5, with web platform patches, has been added. ``#include <raylib.h>``
+
+Examples are now in a dialog rather than a drop down. It has keyword
+search capabilities.
+
+Hitting "escape" now closes dialogs.
+
+Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEtinker/pgetinker/issues/158)
+
+## Commits
+
+### 2025-06-09
+
+- main: fix develop branch only browser tests so they don't break main branch CI tests
+- main: add browser tests for the develop branch warning dialog
+- main: in processCode(). set library versions to latest if unset at this point.
+- main: remove commented-out test
+- main: remove remote includes feature
+
+### 2025-06-08
+
+- examples: add license to sdl2 example
+- main: fix support for SDL2_image png, jpg, and gif support
+- main: fix detection of SDL_gfx headers
+- main: send stderr to console panel
+- main: increase initial resize delay from 200ms to 500ms
+- main: add sdl2/v logos for examples dialog
+- main: remove library based filters in the example dialog
+- examples: add sdl2 classic example
+
+### 2025-06-07
+
+- libraries: add pgetinker-screenshot-ready event dispatcher to pgetinker.h
+- examples: remove all but classic examples
+- main: move PGE specific linker flags to the ldflags for olcPixelGameEngine.h
+- main: fix no-top-level await in app-preload
+- main: add support for built-in emscripten SDL2 extended libraries
+- libraries: revamp resize handling in PGE dev
+- libraries: apply keyboard and resize fixes to raylib
+- main: filter dev libraries in production
+- main: revamp library detection, add cflags, add ldflags
+- pgetinker: containers share time with host
+- libraries: compile PGE with -O1
+- main: remove unnecessary hidden class toggle from console panel
+- libraries: build all emscripten official libraries
+- main: add develop branch warning dialog
+- main: add a resize handler to the emscripten shell to accomodate raylib
+- pgetinker: bump EMSCRIPTEN_VERSION from 3.1.56 to 4.0.8
+
+### 2025-06-03
+
+- main: update github issue/feature request URLs to the new repo location
+- main: overhaul console panel to fix performance issues
+- main: hide interactive ui while loading
+- main: player shutsdown javascript before being removed
+
+### 2025-05-22
+
+- main: ignore PGE macro when "dev"
+- libraries: add v2.29 in a way that is easy to develop
+
+### 2025-05-20
+
+- libraries: add autorun to pgetinker.h that outputs the emscripten version automatically
+
+### 2025-05-17
+
+- pgetinker: put git pull into the first stage script, so that updates to the second stage are honored.
+- main: if program running when example selected, compile and run the selected example
+- examples: add olcPGEX_MiniAudio.h example
+- main: examples dialog improvements
+- libraries: add olcPGEX_MiniAudio v2.0
+- main: update 503 error view to match maintenance service
+
+### 2025-05-16
+
+- examples: add raylib bouncing ball
+- libraries: add reasings.h to raylib 5.5
+- examples: add raylib classic game asteroids survival
+- examples: add raylib 3d camera first person example
+- examples: add raylib basic window example
+- examples: regenerated keywords with new script
+- main: never ever hand crafting example keywords again
+- main: if first load, use "latest" libraries from the libraries manifest
+- main: add some pauses to prevent LSP breakage!
+- main: scroll back up to the top when loading example
+- main: use restartLanguageClient and setValue directly to fix LSP bug
+- main: set libraries to "latest" when loading an example
+- libraries: set latest to ACTUAL latest
+- main: hitting escape closes dialogs
+- examples: add pge animate2d, camera2d, hardware3d, and quickgui examples
+- main: add padding to the bottom of the examples-container
+- main: add responsive width to examples dialog
+- main: make examples dialog more visually sane
+- main: add "Filter:" label to the search filters and flesh out the placeholder text in the search bar
+- examples: update pgetinker-pge-classic-example.png
+- screenshot: all screenshots are 800x600 now
+- main: remove old examples templates
+- main: remove examples view
+- main: remove example code browser test
+- examples: added classic example for pge and raylib
+- main: add examples dialog
+- main: remove /examples route
+- main: update ignored files
+- pgetinker: add examples symlink to initialize/update commands
+- language-server: add pgetinker library
+- libraries: add pgetinker library
+- main: add pgetinker library
+
+### 2025-05-15
+
+- main: add skeleton for the examples dialog
+- main: add skeleton for the examples dialog
+- main: use __EMSCRIPTEN__ instead of PLATFORM_WEB
+- main: add allow-pointer-lock to support DisableCursor() in raylib
+- main: flesh out the raylib classic example
+- main: emscripten shell uses blank background color instead of black for canvas
+
+### 2025-05-14
+
+- main: add raylib classic demo
+- main: denote PGE examples
+- main: update broken.png url in examples
+- main: change GetShareThumbnails to get all with no clause
+- libraries: add rlights.h
+- pgetinker: embuilder here is not needed, same command is run in build-libs.sh
+- pgetinker: add emscripten update to the update command
+- pgetinker: use EMSCRIPTEN_VERSION variable to configure version by environment vars
+- libraries: clean artifacts before building
+- main: capture F1 presses and ignore them
+- main: add raylib to libraries while recalculating hashes
+- libraries: add raygui 4.0 to raylib 5.5
+
+### 2025-05-13
+
+- main: ensure player html is empty if the player isn't running when layout reset
+- main: set libraries cookie correctly on shares
+- main: add update-code-hashes command to recalculate share hashes
+- main: consolidate hashing of code and libraries, easier cache handling
+- screenshot: use pgetinker-screenshot-ready event
+- libraries: add pgetinker-screenshot-ready event to libraries
+- main: add raylib to getCompilerLibraries
+- main: add default raylib version
+- main: add raylib code detector and handler to the compiler
+- main: pge no longer requires special handling in librariesDialog
+- libraries: remove PGE v2.30 entry from manifest
+- main: pge no longer requires special handling
+- language-server: pge no longer requires special handling
+- libraries: more PGE compatibility changes
+- libraries: tweak makefiles and make PGE compatibility changes
+- libraries: recover PGE compile units
+- libraries: recover PGE
+- libraries: overhaul library handling
+
 # <u>Release Notes - 2025-05-03</u>
 
 ## Notes

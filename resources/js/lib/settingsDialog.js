@@ -130,6 +130,17 @@ export default function settingsDialog(state)
             dialog.remove();
             resolve();
         });
+        
+        function escapeKeyHandler(event)
+        {
+            if(event.key === 'Escape')
+            {
+                document.removeEventListener("keydown", escapeKeyHandler);
+                dialog.remove();
+                resolve();
+            }
+        }
+        document.addEventListener('keydown', escapeKeyHandler);        
                 
         document.body.appendChild(dialog);
     });

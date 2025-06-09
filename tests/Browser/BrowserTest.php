@@ -8,6 +8,38 @@ use Tests\DuskTestCase;
 class BrowserTest extends DuskTestCase
 {
     
+    public function testShowsDevelopBranchWarning(): void
+    {
+        $version = config('app.version')();
+        if(!str_contains($version, "develop"))
+            return;
+
+        $this->browse(function(Browser $browser)
+        {
+            $browser->visit("/")
+                ->assertSee("Develop Branch Deployment!");
+        });
+    }
+    
+    public function testHidesDevelopBranchWarningOnClickProceed(): void
+    {
+        $version = config('app.version')();
+        if(!str_contains($version, "develop"))
+            return;
+
+        $this->browse(function(Browser $browser)
+        {
+            $browser->visit("/")
+                ->assertSee("Develop Branch Deployment!");
+                
+            $browser->click("#disable-develop-branch-warning");
+            $browser->click(".back");
+            
+            $browser->visit("/")
+                ->assertDontSee("Develop Branch Deployment!");
+        });
+    }
+    
     public function testFirstLoadShowsTermsOfUseDisclosure(): void
     {
         $this->browse(function(Browser $browser)
@@ -63,26 +95,6 @@ class BrowserTest extends DuskTestCase
         });
     }
 
-    public function testLoadsExampleCodeOnClick(): void
-    {
-        $this->browse(function(Browser $browser)
-        {
-            $browser->visit("/");
-            $browser->waitUntilMissing("#pgetinker-loading", 10);
-            $browser->assertMissing("#pgetinker-loading");
-            
-            $browser->click("@examples-menu");
-            
-            $browser->waitFor("@examples-menu .submenu");
-            $browser->click('a[data-code-id="code1"]');
-
-            $browser->waitFor(".toastify");
-            $browser->waitUntilMissing(".toastify");
-
-            $browser->assertSee('Example');
-        });
-    }
-    
     public function testSelectsLightTheme(): void
     {
         $this->browse(function(Browser $browser)

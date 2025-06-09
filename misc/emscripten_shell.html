@@ -67,7 +67,7 @@
         #canvas {
             display: block;
             border: 0px none;
-            background-color: black;
+            background-color: rgba(0,0,0,0);
             margin: 0 auto;
         }
 
@@ -100,6 +100,21 @@
                     }, "*");
                 };
             })(),
+            printErr: (function () {
+                return (...args) => {
+                    var text = args.join(' ');
+
+                    if(text.indexOf("main_loop") === -1)
+                    {
+                        window.parent.postMessage({
+                            message: "console-output",
+                            data: text + "\n",
+                        }, "*");
+                    }
+                    
+                    console.error(text);
+                };
+            })(),
             canvas: (() => {
                 var canvas = document.getElementById('canvas');
 
@@ -127,6 +142,23 @@
         window.parent.postMessage({
             message: "player-ready",
         }, "*");
+        
+        function resizeHandler()
+        {
+            if(!!(window.GLFW && window.GLFW.hints && window.GLFW.hints[0x00020003]))
+                return;
+            
+            const aspect = parseInt(Module.canvas.getAttribute("width")) / parseInt(Module.canvas.getAttribute("height"));
+            const windowAspect = window.innerWidth / window.innerHeight;
+
+            Module.canvas.style.width = "100%";
+            Module.canvas.style.height = "100%";
+            if(windowAspect > aspect) Module.canvas.style.width = "";
+            if(windowAspect < aspect) Module.canvas.style.height = "";
+        }
+
+        window.addEventListener("resize", resizeHandler);
+        setTimeout(resizeHandler, 500);
 
         window.addEventListener("message", (event) =>
         {
@@ -139,6 +171,17 @@
             if (event.data.message === "set-theme") {
                 document.querySelector("body").className = event.data.theme;
                 return;
+            }
+
+            if (event.data.message === "halt-now") {
+                
+                window.onunload = function() {};
+
+                window.parent.postMessage({
+                    message: "player-halted",
+                }, "*");
+
+                window.stop();
             }
         });
     </script>

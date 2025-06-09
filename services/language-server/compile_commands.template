@@ -26,6 +26,8 @@
         "-Xclang",
         "-iwithsysroot/include/compat",
         "-c",
+        "-I", "./pgetinker",
+        "-I", "./raylib",
         "-I", "./miniaudio",
         "-I", "./olcPGEX_Gamepad",
         "-I", "./olcPGEX_MiniAudio",

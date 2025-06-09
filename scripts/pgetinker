@@ -34,4 +34,15 @@ if [ -n "$bashSource" ]; then
     fi
 fi
 
+if [ "$1" = "update" ]; then
+    echo "#### Run git pull."
+    git pull
+    if [ $? != 0 ]; then
+        echo "## Failed to pull latest version."
+        exit 1
+    fi
+    echo "## Done."
+    echo
+fi
+
 exec "${dir}/pgetinker-stage2" "$@"

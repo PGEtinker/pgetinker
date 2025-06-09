@@ -9,6 +9,8 @@ export default class PlayerPanel
     {
         this.state = state;
         console.log("Player panel", "constructor");
+        
+        
         window.addEventListener("message", (event) =>
         {
             if(typeof event.data !== "object")
@@ -25,12 +27,21 @@ export default class PlayerPanel
                     theme: this.state.theme
                 }, "*");
             }
+            
+            if(event.data.message === "player-halted")
+            {
+                let playerFrame = document.querySelector("#player-panel iframe");
+                if(playerFrame != null)
+                {
+                    playerFrame.remove();
+                }
+            }
 
             if(event.data.message === "player-runtime-error")
             {
                 alert("A runtime error has occured, check the web developer console for more details.");
             }
-    
+            
         });
     }
     
@@ -49,8 +60,8 @@ export default class PlayerPanel
         if(this.lastPlayerHtml != "")
         {
             let playerFrame = document.createElement('iframe');
+            playerFrame.setAttribute("sandbox", "allow-pointer-lock allow-scripts");
             playerFrame.setAttribute("srcdoc", this.lastPlayerHtml);
-            playerFrame.setAttribute("sandbox", "allow-scripts");
             document.querySelector("#player-panel .iframe-container").append(playerFrame);
             
             playerFrame.classList.toggle("display-block", true);
@@ -126,7 +137,7 @@ export default class PlayerPanel
     {
         let playerFrame = document.createElement('iframe');
         playerFrame.setAttribute("srcdoc", this.lastPlayerHtml);
-        playerFrame.setAttribute("sandbox", "allow-scripts");
+        playerFrame.setAttribute("sandbox", "allow-pointer-lock allow-scripts");
         document.querySelector("#player-panel .iframe-container").append(playerFrame);
         
         playerFrame.classList.toggle("display-block", true);
@@ -138,11 +149,14 @@ export default class PlayerPanel
 
     stop()
     {
+        this.running = false;
         let playerFrame = document.querySelector("#player-panel iframe");
         
         if(playerFrame != null)
-            playerFrame.remove();
-
-        this.running = false;
+        {
+            playerFrame.contentWindow.postMessage({
+                message: "halt-now",
+            }, "*");
+        }
     }
 }
