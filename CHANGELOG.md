@@ -8,7 +8,7 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
-# <u>Release Notes - 2025-06-08</u>
+# <u>Release Notes - 2025-06-09</u>
 
 ## Notes
 
@@ -19,6 +19,11 @@ Add versions of PGE up to v2.29, currently the latest version available from One
 Overhaul the way libraries are handled. Library selection has been simplified.
 Emscripten built-in libraries are now exposed for use. PGEtinker will now
 detect the included headers and set compiler and linker flags accordingly.
+
+<span style="font-weight: bold; color:#a14b4b;">Feature removed:</span> Remote ``#include``s.
+The feature was only used in 1 share and it was before the addition of the LSP.
+Remote ``#include``s have never worked well with the LSP, between that and it's lack of common
+use means it gets to go away!
 
 The following emscripten built-in libraries are suppported:
 
@@ -47,6 +52,13 @@ Hitting "escape" now closes dialogs.
 Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEtinker/pgetinker/issues/158)
 
 ## Commits
+
+### 2025-06-09
+
+- main: add browser tests for the develop branch warning dialog
+- main: in processCode(). set library versions to latest if unset at this point.
+- main: remove commented-out test
+- main: remove remote includes feature
 
 ### 2025-06-08
 
