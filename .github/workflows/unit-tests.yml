@@ -39,5 +39,5 @@ jobs:
         run: ./scripts/pgetinker down
       
       - name: Save Emscripten Cache
-        run: (cd shared; tar -cvpf /mnt/docker/emsdk.tar emsdk/)
+        run: (cd shared; sudo tar -cvpf /mnt/docker/emsdk.tar emsdk/)
 
