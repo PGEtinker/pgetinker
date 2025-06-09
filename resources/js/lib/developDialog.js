@@ -12,7 +12,7 @@ export default function developDialog()
             <div class="header">Develop Branch Deployment!</div>
             <div class="content">
                 <p>
-                    <img src="images/stop.png" alt="picture of a stop sign">
+                    <img src="/images/stop.png" alt="picture of a stop sign">
                 </p>
                 <p>
                     This version of PGEtinker is a development deployment
