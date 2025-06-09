@@ -8,6 +8,16 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - UNRELEASED</u>
+
+## Notes
+
+## Commits
+
+### 2025-06-09
+
+- main: add emscripten caching to unit test workflow
+
 # <u>Release Notes - 2025-06-09</u>
 
 ## Notes
