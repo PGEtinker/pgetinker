@@ -392,6 +392,10 @@ class Compiler
 
         $temp = json_decode(file_get_contents($baseLibraryDirectory . "/manifest.json"), true);
         $this->libraryMap = $temp["macroToObject"];
+        if(count($this->libraryVersions) == 0)
+        {
+            $this->libraryVersions = $temp["latest"];
+        }
         unset($temp);
 
         $startTime = microtime(true);
