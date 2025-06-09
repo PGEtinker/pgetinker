@@ -10,6 +10,10 @@ class BrowserTest extends DuskTestCase
     
     public function testShowsDevelopBranchWarning(): void
     {
+        $version = config('app.version')();
+        if(!str_contains($version, "develop"))
+            return;
+
         $this->browse(function(Browser $browser)
         {
             $browser->visit("/")
@@ -19,6 +23,10 @@ class BrowserTest extends DuskTestCase
     
     public function testHidesDevelopBranchWarningOnClickProceed(): void
     {
+        $version = config('app.version')();
+        if(!str_contains($version, "develop"))
+            return;
+
         $this->browse(function(Browser $browser)
         {
             $browser->visit("/")
