@@ -8,6 +8,30 @@ use Tests\DuskTestCase;
 class BrowserTest extends DuskTestCase
 {
     
+    public function testShowsDevelopBranchWarning(): void
+    {
+        $this->browse(function(Browser $browser)
+        {
+            $browser->visit("/")
+                ->assertSee("Develop Branch Deployment!");
+        });
+    }
+    
+    public function testHidesDevelopBranchWarningOnClickProceed(): void
+    {
+        $this->browse(function(Browser $browser)
+        {
+            $browser->visit("/")
+                ->assertSee("Develop Branch Deployment!");
+                
+            $browser->click("#disable-develop-branch-warning");
+            $browser->click(".back");
+            
+            $browser->visit("/")
+                ->assertDontSee("Develop Branch Deployment!");
+        });
+    }
+    
     public function testFirstLoadShowsTermsOfUseDisclosure(): void
     {
         $this->browse(function(Browser $browser)
