@@ -55,6 +55,7 @@ Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEti
 
 ### 2025-06-09
 
+- main: fix develop branch only browser tests so they don't break main branch CI tests
 - main: add browser tests for the develop branch warning dialog
 - main: in processCode(). set library versions to latest if unset at this point.
 - main: remove commented-out test
