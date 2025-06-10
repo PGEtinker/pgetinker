@@ -197,6 +197,12 @@ class Compiler
 
 
         $headerFlagMap = [
+            'entt.hpp' => [
+                "cflags" => [
+                    "-I./entt",
+                ],
+                "ldflags" => [],
+            ],
             'olcPixelGameEngine.h' => [
                 "cflags"  => [
                     "-I./olcPixelGameEngine",

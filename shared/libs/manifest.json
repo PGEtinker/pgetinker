@@ -1,5 +1,6 @@
 {
     "latest": {
+        "entt":               "3.15.0",
         "miniaudio":          "0.11.21",
         "olcPGEX_Gamepad":    "f5958a5",
         "olcPGEX_MiniAudio":  "v2.0",
@@ -8,6 +9,9 @@
         "raylib":             "5.5"
     },
     "libraries": {
+        "entt": [
+            "3.15.0"
+        ],
         "miniaudio": [
             "0.11.21"
         ],

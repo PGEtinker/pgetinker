@@ -26,6 +26,7 @@
         "-Xclang",
         "-iwithsysroot/include/compat",
         "-c",
+        "-I", "./entt",
         "-I", "./pgetinker",
         "-I", "./raylib",
         "-I", "./miniaudio",
