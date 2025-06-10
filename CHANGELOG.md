@@ -20,6 +20,9 @@ Add [olcPGEDearImGui v4.0](https://github.com/dandistine/olcPGEDearImGui)
 
 ### 2025-06-10
 
+- libraries: dear imgui demo appears at 10,10
+- libraries: update ignored files
+- libraries: remove imgui_impl_pge.a
 - libraries: fix makefile for olcPGEX_Gamepad, had wrong phony name.
 - main,libraries,language-server: add olcPGEX_DearImGui v4.0
 - main,libraries,language-server: add entt 3.15.0
