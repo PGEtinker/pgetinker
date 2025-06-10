@@ -1,8 +1,8 @@
-.PHONY: all clean olcPGEX_MiniAudio
+.PHONY: all clean olcPGEX_Gamepad
 
-all: olcPGEX_MiniAudio
+all: olcPGEX_Gamepad
 
-olcPGEX_MiniAudio:
+olcPGEX_Gamepad:
 	$(MAKE) -C f5958a5
 
 clean:
