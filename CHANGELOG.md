@@ -12,10 +12,23 @@ please refer to the repository's commit history.
 
 ## Notes
 
+Add [entt v3.15.0](https://github.com/skypjack/entt).
+
+Add [olcPGEDearImGui v4.0](https://github.com/dandistine/olcPGEDearImGui)
+
 ## Commits
+
+### 2025-06-10
+
+- libraries: fix makefile for olcPGEX_Gamepad, had wrong phony name.
+- main,libraries,language-server: add olcPGEX_DearImGui v4.0
+- main,libraries,language-server: add entt 3.15.0
 
 ### 2025-06-09
 
+- main: fix broken stop sign image on shares
+- libraries: add entt.hpp
+- main: add sudo to tar command that saves the emsdk cache
 - main: add emscripten caching to unit test workflow
 
 # <u>Release Notes - 2025-06-09</u>
