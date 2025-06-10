@@ -20,6 +20,7 @@ Add [olcPGEDearImGui v4.0](https://github.com/dandistine/olcPGEDearImGui)
 
 ### 2025-06-10
 
+- examples: add dear imgui example
 - libraries: dear imgui demo appears at 10,10
 - libraries: update ignored files
 - libraries: remove imgui_impl_pge.a
