@@ -7,6 +7,13 @@
         "keywords": "BLACK Clear Construct Draw DrawRect DrawSprite DrawString DrawStringDropShadow FillCircle GetMouse GetMousePos Load OnUserCreate OnUserUpdate PGEtinkerClassicExample Pixel PixelGameEngine RED RandomColor Renderable ScreenHeight ScreenWidth Sprite Start WHITE YELLOW bPressed backgroundColor bool color cout example fElapsedTime foregroundColor image main olc override pgetinker_file_resolve rand sAppName std str string text x y"
     },
     {
+        "name": "Dear Imgui Example",
+        "library": "pge",
+        "codeFile": "/examples/files/pgetinker-pge-dear-imgui-example.cpp",
+        "screenshot": "/examples/files/pgetinker-pge-dear-imgui-example.png",
+        "keywords": "Clear Construct CreateLayer DrawRect EnableLayer ImGui OnUserCreate OnUserUpdate PGE_ImGUI PGEtinkerDearImguiExample Pixel PixelGameEngine ScreenHeight ScreenWidth SetDrawTarget ShowDemoWindow Start YELLOW bool demo fElapsedTime gameLayer imgui main olc override pge_imgui sAppName"
+    },
+    {
         "name": "PGEtinker Classic Example",
         "library": "raylib",
         "codeFile": "/examples/files/pgetinker-raylib-classic-example.cpp",
