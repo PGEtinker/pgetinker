@@ -45,6 +45,7 @@ export function getCompilerLibraries(): any
     return {
         entt: getStorageValue("entt"),
         miniaudio: getStorageValue("miniaudio"),
+        olcPGEX_DearImGui: getStorageValue("olcPGEX_DearImGui"),
         olcPGEX_Gamepad: getStorageValue("olcPGEX_Gamepad"),
         olcPGEX_MiniAudio: getStorageValue("olcPGEX_MiniAudio"),
         olcPixelGameEngine: getStorageValue("olcPixelGameEngine"),

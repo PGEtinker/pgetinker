@@ -203,6 +203,12 @@ class Compiler
                 ],
                 "ldflags" => [],
             ],
+            'imgui_impl_pge.h' => [
+                "cflags" => [
+                    "-I./olcPGEX_DearImGui"
+                ],
+                "ldflags" => []
+            ],
             'olcPixelGameEngine.h' => [
                 "cflags"  => [
                     "-I./olcPixelGameEngine",

@@ -30,6 +30,7 @@
         "-I", "./pgetinker",
         "-I", "./raylib",
         "-I", "./miniaudio",
+        "-I", "./olcPGEX_DearImGui",
         "-I", "./olcPGEX_Gamepad",
         "-I", "./olcPGEX_MiniAudio",
         "-I", "./olcPixelGameEngine",
