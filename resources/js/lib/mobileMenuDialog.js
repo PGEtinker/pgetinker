@@ -127,7 +127,7 @@ export default function mobileMenuDialog(state)
             event.preventDefault();
             dialog.remove();
             resolve();
-            examplesDialog(this);
+            examplesDialog(state);
         });
     
 
