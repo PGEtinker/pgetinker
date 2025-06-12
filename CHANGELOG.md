@@ -80,6 +80,10 @@ Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEti
 
 ## Commits
 
+### 2025-06-12
+
+- main: use state instead of this to fix mobile examples dialog
+
 ### 2025-06-09
 
 - main: fix develop branch only browser tests so they don't break main branch CI tests
