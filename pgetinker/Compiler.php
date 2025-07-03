@@ -545,6 +545,7 @@ class Compiler
             "pgetinker.o",
             "-I./pgetinker",
             ...$this->compilerFlags,
+            "-D__PGETINKER__",
             "-std=c++20",
         ]);
 
@@ -555,6 +556,7 @@ class Compiler
             "/opt/emsdk/upstream/emscripten/em++",
             "pgetinker.o",
             ...$this->linkerInputFiles,
+            "-D__PGETINKER__",
             "-o",
             "pgetinker.html",
             "--shell-file",
