@@ -1,0 +1,17 @@
+name: Checkout and Display Branch
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Display Checked Out Branch
+        run: |
+          echo "Repository Full Name: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Current Branch in Checkout: $(git rev-parse --abbrev-ref HEAD)"
