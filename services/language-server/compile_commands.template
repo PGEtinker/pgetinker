@@ -21,6 +21,8 @@
         "--sysroot=/opt/emsdk/upstream/emscripten/cache/sysroot",
         "-D",
         "EMSCRIPTEN",
+        "-D",
+        "__PGETINKER__",
         "-Xclang",
         "-iwithsysroot/include/fakesdl",
         "-Xclang",
