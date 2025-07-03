@@ -20,8 +20,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Load Emscripten Cache
-        run: (cd shared; tar -xvpf /mnt/docker/emsdk.tar)
+      # - name: Load Emscripten Cache
+      #   run: (cd shared; tar -xvpf /mnt/docker/emsdk.tar)
 
       - name: Initialize PGEtinker
         run: ./scripts/pgetinker initialize ci
@@ -38,6 +38,6 @@ jobs:
       - name: Stop PGEtinker
         run: ./scripts/pgetinker down
       
-      - name: Save Emscripten Cache
-        run: (cd shared; sudo tar -cvpf /mnt/docker/emsdk.tar emsdk/)
+      # - name: Save Emscripten Cache
+      #   run: (cd shared; sudo tar -cvpf /mnt/docker/emsdk.tar emsdk/)
 
