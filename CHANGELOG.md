@@ -16,7 +16,31 @@ Add [entt v3.15.0](https://github.com/skypjack/entt).
 
 Add [olcPGEDearImGui v4.0](https://github.com/dandistine/olcPGEDearImGui)
 
+Add __PGETINKER__ macro. A simple mechanism for determining if the code
+is being compiled with PGEtinker. Useful for local developers seeking
+to port their code to PGEtinker.
+
+Change the maximum code size from 50k to 128k
+
 ## Commits
+
+### 2025-07-02
+
+- language server: add __PGETINKER__ macro definition to compile_commands
+- main: add __PGETINKER__ macro definition to buid command
+- main: add code max size with a new max size of 128k
+
+### 2025-06-17
+
+- main: fix vulnerabilities with npm audit fix
+
+### 2025-06-16
+
+- main: fix bug where javid mode errors still appear in the editor
+
+### 2025-06-13
+
+- libraries: make raylib ShowCursor/HideCursor work way way it does on windows
 
 ### 2025-06-10
 
