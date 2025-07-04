@@ -20,8 +20,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      # - name: Load Emscripten Cache
-      #   run: (cd shared; tar -xvpf /mnt/docker/emsdk.tar)
+      - name: Load Docker Cache
+        run: |
+          sudo systemctl stop docker.socket
+          sudo systemctl stop docker
+          sudo cache-load docker-cache /var/lib
+          sudo systemctl start docker
+
+      - name: Load Emscripten Cache
+        run: cache-load emsdk-cache ./shared
 
       - name: Initialize PGEtinker
         run: ./scripts/pgetinker initialize ci
@@ -38,6 +45,12 @@ jobs:
       - name: Stop PGEtinker
         run: ./scripts/pgetinker down
       
-      # - name: Save Emscripten Cache
-      #   run: (cd shared; sudo tar -cvpf /mnt/docker/emsdk.tar emsdk/)
+      - name: Save Emscripten Cache
+        run: cache-save ./shared/emsdk emsdk-cache
 
+      - name: Load Docker Cache
+        run: |
+          sudo systemctl stop docker.socket
+          sudo systemctl stop docker
+          sudo cache-save /var/lib/docker docker-cache
+          sudo systemctl start docker
