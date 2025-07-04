@@ -48,7 +48,7 @@ jobs:
       - name: Save Emscripten Cache
         run: cache-save ./shared/emsdk emsdk-cache
 
-      - name: Load Docker Cache
+      - name: Save Docker Cache
         run: |
           sudo systemctl stop docker.socket
           sudo systemctl stop docker
