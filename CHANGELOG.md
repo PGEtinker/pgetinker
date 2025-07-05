@@ -24,6 +24,20 @@ Change the maximum code size from 50k to 128k
 
 ## Commits
 
+### 2025-07-05
+
+- github: remove vendor caching of vender/node_modules, doesn't work as expected.
+- github: add caching of vender/node_modules to tests
+
+### 2025-07-04
+
+- github: fix typo, Load should be Save
+- github: make use of new caching scripts
+
+### 2025-07-03
+
+- github: remove emsdk cache
+
 ### 2025-07-02
 
 - language server: add __PGETINKER__ macro definition to compile_commands
