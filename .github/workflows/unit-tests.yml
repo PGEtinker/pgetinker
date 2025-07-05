@@ -30,6 +30,11 @@ jobs:
       - name: Load Emscripten Cache
         run: cache-load emsdk-cache ./shared
 
+      - name: Load Vendor/NPM Cache
+        run: |
+          cache-load vendor-cache ./
+          cache-load npm-cache ./
+
       - name: Initialize PGEtinker
         run: ./scripts/pgetinker initialize ci
       
@@ -45,6 +50,11 @@ jobs:
       - name: Stop PGEtinker
         run: ./scripts/pgetinker down
       
+      - name: Load Vendor/NPM Cache
+        run: |
+          cache-save ./vendor vendor-cache
+          cache-save ./node_modules npm-cache
+
       - name: Save Emscripten Cache
         run: cache-save ./shared/emsdk emsdk-cache
 
