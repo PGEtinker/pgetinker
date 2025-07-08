@@ -16,7 +16,7 @@ Add [entt v3.15.0](https://github.com/skypjack/entt).
 
 Add [olcPGEDearImGui v4.0](https://github.com/dandistine/olcPGEDearImGui)
 
-Add __PGETINKER__ macro. A simple mechanism for determining if the code
+Add ``__PGETINKER__`` macro. A simple mechanism for determining if the code
 is being compiled with PGEtinker. Useful for local developers seeking
 to port their code to PGEtinker.
 
@@ -26,9 +26,9 @@ Change the maximum code size from 50k to 128k
 
 ### 2025-07-08
 
-- examples: use __PGETINKER__ in PGE classic example
-- examples: use __PGETINKER__ in raylib classic example
-- examples: use __PGETINKER__ in SDL2 classic example
+- examples: use ``__PGETINKER__`` in PGE classic example
+- examples: use ``__PGETINKER__`` in raylib classic example
+- examples: use ``__PGETINKER__`` in SDL2 classic example
 
 ### 2025-07-05
 
@@ -46,8 +46,8 @@ Change the maximum code size from 50k to 128k
 
 ### 2025-07-02
 
-- language server: add __PGETINKER__ macro definition to compile_commands
-- main: add __PGETINKER__ macro definition to buid command
+- language server: add ``__PGETINKER__`` macro definition to compile_commands
+- main: add ``__PGETINKER__`` macro definition to buid command
 - main: add code max size with a new max size of 128k
 
 ### 2025-06-17
@@ -230,7 +230,7 @@ Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEti
 
 - main: add skeleton for the examples dialog
 - main: add skeleton for the examples dialog
-- main: use __EMSCRIPTEN__ instead of PLATFORM_WEB
+- main: use ``__EMSCRIPTEN__`` instead of PLATFORM_WEB
 - main: add allow-pointer-lock to support DisableCursor() in raylib
 - main: flesh out the raylib classic example
 - main: emscripten shell uses blank background color instead of black for canvas
