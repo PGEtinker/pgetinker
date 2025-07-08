@@ -31,7 +31,12 @@
 *
 ********************************************************************************************/
 #include "raylib.h"
+
+#if defined(__PGETINKER__)
 #include "pgetinker.h"
+#else
+static inline void pgetinker_file_resolve(const char* url, const char* mountPath) {}
+#endif
 
 #include <iostream>
 #include <stdlib.h>
