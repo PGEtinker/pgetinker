@@ -32,7 +32,12 @@
 ********************************************************************************************/
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
+
+#if defined(__PGETINKER__)
 #include "pgetinker.h"
+#else
+static inline void pgetinker_file_resolve(const char* url, const char* mountPath) {}
+#endif
 
 class PGEtinkerClassicExample : public olc::PixelGameEngine
 {
