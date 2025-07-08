@@ -24,6 +24,12 @@ Change the maximum code size from 50k to 128k
 
 ## Commits
 
+### 2025-07-08
+
+- examples: use __PGETINKER__ in PGE classic example
+- examples: use __PGETINKER__ in raylib classic example
+- examples: use __PGETINKER__ in SDL2 classic example
+
 ### 2025-07-05
 
 - github: remove vendor caching of vender/node_modules, doesn't work as expected.
