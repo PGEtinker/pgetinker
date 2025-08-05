@@ -26,6 +26,7 @@ Change the maximum code size from 50k to 128k
 
 ### 2025-08-05
 
+- pgetinker: clear language server workspaces on update
 - examples: add raylib bare example, add raylib entt example
 - examples: add pge bare example
 - examples: add pge entt bouncing balls example
