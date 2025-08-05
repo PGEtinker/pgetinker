@@ -28,11 +28,25 @@
         "keywords": "BLACK Ball BouncingBalls Clear Color Construct FillCircle InitializeBalls OnUserCreate OnUserUpdate Pixel PixelGameEngine Position RenderBalls ScreenHeight ScreenWidth Start UpdatePhysics Velocity b1 b2 ball bool clamp collisions color constexpr create dist distance dot dvx dvy dx dy e1 e2 each emplace emplace_back entity entt fElapsedTime game get i impulse int32_t main mass maxRadius maxSpeed minRadius mt19937 numBalls nx ny olc overlap override p1 p2 pair pos posX posY r radius random_device registry rng sAppName sqrt std uniform_int_distribution uniform_real_distribution v1 v2 vector vel view x y"
     },
     {
+        "name": "EnTT Bouncing Balls Example",
+        "library": "raylib",
+        "codeFile": "/examples/files/pgetinker-raylib-entt-bouncing-balls-example.cpp",
+        "screenshot": "/examples/files/pgetinker-raylib-entt-bouncing-balls-example.png",
+        "keywords": "BLACK Ball BeginDrawing ClearBackground CloseWindow Color DrawCircle EndDrawing EntityColor GetFrameTime InitWindow InitializeBalls Position RenderBalls SetTargetFPS UpdatePhysics Velocity WindowShouldClose a b b1 b2 ball clamp collisions color colorChannel constexpr create dist distance dot dvx dvy dx dy e1 e2 each emplace emplace_back emscripten_set_main_loop entity entt fElapsedTime g get i impulse int32_t main mass maxRadius maxSpeed minRadius mountPath mt19937 numBalls nx ny overlap p1 p2 pair pgetinker_file_resolve pos posX posY r radius random_device registry rng screenHeight screenWidth sqrt std uniform_int_distribution uniform_real_distribution update url v1 v2 vector vel view x y"
+    },
+    {
         "name": "PGEtinker Classic Example",
         "library": "raylib",
         "codeFile": "/examples/files/pgetinker-raylib-classic-example.cpp",
         "screenshot": "/examples/files/pgetinker-raylib-classic-example.png",
         "keywords": "BLACK BeginDrawing ClearBackground CloseWindow Color DrawCircle DrawPixel DrawRectangle DrawRectangleLinesEx DrawText DrawTextDropShadow DrawTexture EndDrawing GetMousePosition GetRandomColor InitWindow IsMouseButtonPressed LoadTexture RED SetTargetFPS TextFormat Texture2D UnloadTexture Vector2 WHITE WindowShouldClose YELLOW background cout emscripten_set_main_loop fontSize foreground imageFromURL main mountPath mousePosition pgetinker_file_resolve rand screenHeight screenWidth static_cast std text update url x y"
+    },
+    {
+        "name": "PGEtinker Bare Example",
+        "library": "raylib",
+        "codeFile": "/examples/files/pgetinker-raylib-bare-example.cpp",
+        "screenshot": "/examples/files/pgetinker-raylib-bare-example.png",
+        "keywords": "BLACK BeginDrawing ClearBackground CloseWindow DrawText EndDrawing InitWindow MeasureText SetTargetFPS WHITE WindowShouldClose emscripten_set_main_loop fontSize main mountPath pgetinker_file_resolve screenHeight screenWidth update url"
     },
     {
         "name": "PGEtinker Classic Example",
