@@ -7,6 +7,13 @@
         "keywords": "BLACK Clear Construct Draw DrawRect DrawSprite DrawString DrawStringDropShadow FillCircle GetMouse GetMousePos Load OnUserCreate OnUserUpdate PGEtinkerClassicExample Pixel PixelGameEngine RED RandomColor Renderable ScreenHeight ScreenWidth Sprite Start WHITE YELLOW bPressed backgroundColor bool color cout example fElapsedTime foregroundColor image main mountPath olc override pgetinker_file_resolve rand sAppName std str string text url x y"
     },
     {
+        "name": "PGEtinker Bare Example",
+        "library": "pge",
+        "codeFile": "/examples/files/pgetinker-pge-bare-example.cpp",
+        "screenshot": "/examples/files/pgetinker-pge-bare-example.png",
+        "keywords": "BLACK Clear Construct DrawString GetScreenSize GetTextSize OnUserCreate OnUserUpdate PGEtinkerBareExample PixelGameEngine Start WHITE bool demo fElapsedTime main mountPath olc override pgetinker_file_resolve sAppName url vi2d"
+    },
+    {
         "name": "Dear Imgui Example",
         "library": "pge",
         "codeFile": "/examples/files/pgetinker-pge-dear-imgui-example.cpp",
