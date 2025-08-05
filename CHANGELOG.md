@@ -8,6 +8,84 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - 2025-08-05</u>
+
+## Notes
+
+Add [entt v3.15.0](https://github.com/skypjack/entt).
+
+Add [olcPGEDearImGui v4.0](https://github.com/dandistine/olcPGEDearImGui)
+
+Add ``__PGETINKER__`` macro. A simple mechanism for determining if the code
+is being compiled with PGEtinker. Useful for local developers seeking
+to port their code to PGEtinker.
+
+Change the maximum code size from 50k to 128k
+
+## Commits
+
+### 2025-08-05
+
+- pgetinker: clear language server workspaces on update
+- examples: add raylib bare example, add raylib entt example
+- examples: add pge bare example
+- examples: add pge entt bouncing balls example
+
+### 2025-07-08
+
+- examples: use ``__PGETINKER__`` in PGE classic example
+- examples: use ``__PGETINKER__`` in raylib classic example
+- examples: use ``__PGETINKER__`` in SDL2 classic example
+
+### 2025-07-05
+
+- github: remove vendor caching of vender/node_modules, doesn't work as expected.
+- github: add caching of vender/node_modules to tests
+
+### 2025-07-04
+
+- github: fix typo, Load should be Save
+- github: make use of new caching scripts
+
+### 2025-07-03
+
+- github: remove emsdk cache
+
+### 2025-07-02
+
+- language server: add ``__PGETINKER__`` macro definition to compile_commands
+- main: add ``__PGETINKER__`` macro definition to buid command
+- main: add code max size with a new max size of 128k
+
+### 2025-06-17
+
+- main: fix vulnerabilities with npm audit fix
+
+### 2025-06-16
+
+- main: fix bug where javid mode errors still appear in the editor
+
+### 2025-06-13
+
+- libraries: make raylib ShowCursor/HideCursor work way way it does on windows
+
+### 2025-06-10
+
+- examples: add dear imgui example
+- libraries: dear imgui demo appears at 10,10
+- libraries: update ignored files
+- libraries: remove imgui_impl_pge.a
+- libraries: fix makefile for olcPGEX_Gamepad, had wrong phony name.
+- main,libraries,language-server: add olcPGEX_DearImGui v4.0
+- main,libraries,language-server: add entt 3.15.0
+
+### 2025-06-09
+
+- main: fix broken stop sign image on shares
+- libraries: add entt.hpp
+- main: add sudo to tar command that saves the emsdk cache
+- main: add emscripten caching to unit test workflow
+
 # <u>Release Notes - 2025-06-09</u>
 
 ## Notes
@@ -159,7 +237,7 @@ Hide interactive UI while loading to fixed [issue #158](https://github.com/PGEti
 
 - main: add skeleton for the examples dialog
 - main: add skeleton for the examples dialog
-- main: use __EMSCRIPTEN__ instead of PLATFORM_WEB
+- main: use ``__EMSCRIPTEN__`` instead of PLATFORM_WEB
 - main: add allow-pointer-lock to support DisableCursor() in raylib
 - main: flesh out the raylib classic example
 - main: emscripten shell uses blank background color instead of black for canvas

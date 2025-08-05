@@ -782,7 +782,7 @@ elif [ "$1" == "update" ]; then
     
     case $proceed in
         [Yy]*)
-            rm -rf public/build public/hot public/wiki public/examples
+            rm -rf public/build public/hot public/wiki public/examples services/language-server/workspaces
 
             echo "#### Build changed docker images."
             scripts/pgetinker build

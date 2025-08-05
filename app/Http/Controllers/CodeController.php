@@ -138,8 +138,8 @@ class CodeController extends Controller
                 "message" => "missing required parameters",
             ];
         }
-    
-        if(strlen($code) > 50000)
+        
+        if(strlen($code) > config('app.code_max_size'))
         {
             Log::debug("Compile: code exceeds maximum limit");
             return [

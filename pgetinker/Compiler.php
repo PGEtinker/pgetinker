@@ -197,6 +197,18 @@ class Compiler
 
 
         $headerFlagMap = [
+            'entt.hpp' => [
+                "cflags" => [
+                    "-I./entt",
+                ],
+                "ldflags" => [],
+            ],
+            'imgui_impl_pge.h' => [
+                "cflags" => [
+                    "-I./olcPGEX_DearImGui"
+                ],
+                "ldflags" => []
+            ],
             'olcPixelGameEngine.h' => [
                 "cflags"  => [
                     "-I./olcPixelGameEngine",
@@ -533,6 +545,7 @@ class Compiler
             "pgetinker.o",
             "-I./pgetinker",
             ...$this->compilerFlags,
+            "-D__PGETINKER__",
             "-std=c++20",
         ]);
 
@@ -543,6 +556,7 @@ class Compiler
             "/opt/emsdk/upstream/emscripten/em++",
             "pgetinker.o",
             ...$this->linkerInputFiles,
+            "-D__PGETINKER__",
             "-o",
             "pgetinker.html",
             "--shell-file",

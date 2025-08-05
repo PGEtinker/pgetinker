@@ -24,7 +24,7 @@ export default class EditorPanel
     state;
     autoConnect = true;
     monacoWrapper = null;
-    maxFileSize = 50000;
+    maxFileSize = window.codeMaxSize;
     reconnectInterval = null;
     sharedSlug = null;
 

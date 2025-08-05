@@ -56,10 +56,6 @@ export const createUserConfig = (workspaceRoot, code, codeUri) =>
                 middleware: {
                     handleDiagnostics: (uri, diagnostics, next) =>
                     {
-                        // we only care about the main source file, let the rest of the middleware handle this one
-                        if(uri.path != "/workspace/pgetinker.cpp")
-                            return next(uri, diagnostics);
-                        
                         let filteredDiagnostics = [];
 
                         diagnostics.forEach((diagnostic) =>
@@ -75,7 +71,6 @@ export const createUserConfig = (workspaceRoot, code, codeUri) =>
 
                             filteredDiagnostics.push(diagnostic);
                         });
-
 
                         window.dispatchEvent(new CustomEvent("update-problems-panel", { detail: filteredDiagnostics }));
                         return next(uri, filteredDiagnostics);

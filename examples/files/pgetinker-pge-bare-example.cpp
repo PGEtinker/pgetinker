@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   olcPixelGameEngine example - PGEtinker Classic Example
+*   olcPixelGameEngine example - PGEtinker Bare Example
 *   
 ********************************************************************************************
 *   
@@ -39,74 +39,41 @@
 static inline void pgetinker_file_resolve(const char* url, const char* mountPath) {}
 #endif
 
-class PGEtinkerClassicExample : public olc::PixelGameEngine
+// Override base class with your custom functionality
+class PGEtinkerBareExample : public olc::PixelGameEngine
 {
 public:
-    PGEtinkerClassicExample()
+    PGEtinkerBareExample()
     {
-        sAppName = "PGEtinker Classic Example";
+        // Name your application
+        sAppName = "PGEtinker Bare PGE Example";
     }
     
+public:
     bool OnUserCreate() override
     {
-        pgetinker_file_resolve("https://raw.githubusercontent.com/PGEtinker/assets/main/broken.png", "assets/gfx/broken.png");
-        image.Load("assets/gfx/broken.png");
-
-        color = RandomColor();
+        // Called once at the start, so create things here
         return true;
     }
     
     bool OnUserUpdate(float fElapsedTime) override
     {
-        // if left mouse is pressed, get a new color and print the mouse coords
-        if(GetMouse(0).bPressed)
-        {
-            color = RandomColor();
-            std::cout << GetMousePos() << "\n";
-        }
-            
-        Clear(color);
-        DrawRect(0,0,ScreenWidth()-1, ScreenHeight()-1, olc::YELLOW);
-        
-        // draw some text
-        DrawStringDropShadow(5,  5, "Hello, olcPixelGameEngine", olc::WHITE, olc::BLACK);
-        DrawStringDropShadow(5, 25, "Mouse position SHOULD match\nclosely to the circle.\n\nYellow borders should ALWAYS\nbe visible\n\nLEFT MOUSE to change color.", olc::WHITE, olc::BLACK);
-        DrawStringDropShadow(5, 220, GetMousePos().str(), olc::WHITE, olc::BLACK);
-        
-        // draw the image
-        DrawSprite(5, 100, image.Sprite());
-        
-        // draw the mouse
-        FillCircle(GetMousePos(), 3, olc::RED);
-        Draw(GetMousePos(), olc::WHITE);
+        // Called once per frame, handle input and draw things here
+        Clear(olc::BLACK);
+        DrawString(
+            olc::vi2d{GetScreenSize() / 2} - olc::vi2d{GetTextSize("Bare Example") / 2},
+            "Bare Example",
+            olc::WHITE
+        );
         
         return true;
     }
-    
-    // draw a string with a dropshadow of the provided foreground/background colors
-    void DrawStringDropShadow(const int x, const int y, const std::string& text, const olc::Pixel& foregroundColor, const olc::Pixel& backgroundColor)
-    {
-        DrawString(x + 1, y + 1, text, backgroundColor);
-        DrawString(    x,     y, text, foregroundColor);
-    }
-    
-    // get a random color
-    olc::Pixel RandomColor()
-    {
-        return olc::Pixel(rand() % 128, rand() % 128, rand() % 128);
-    }
-    
-private:
-    olc::Pixel color;
-    olc::Renderable image;
 };
 
 int main()
 {
-    PGEtinkerClassicExample example;
-    
-    if (example.Construct(256, 240, 2, 2))
-        example.Start();
-    
+    PGEtinkerBareExample demo;
+    if (demo.Construct(256, 240, 2, 2))
+        demo.Start();
     return 0;
 }

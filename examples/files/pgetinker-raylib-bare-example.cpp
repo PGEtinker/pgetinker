@@ -1,6 +1,6 @@
 /*******************************************************************************************
 *
-*   raylib example - PGEtinker Classic Example
+*   raylib example - PGEtinker Bare Example
 *   
 ********************************************************************************************
 *   
@@ -38,79 +38,32 @@
 static inline void pgetinker_file_resolve(const char* url, const char* mountPath) {}
 #endif
 
-#include <iostream>
-#include <stdlib.h>
-
-//------------------------------------------------------------------------------------
-// Get a randomized color of full alpha.
-//------------------------------------------------------------------------------------
-Color GetRandomColor()
-{
-    return Color(rand() % 128, rand() % 128, rand() % 128, 255);
-}
-//------------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------------
-// Draw Text with a drop shadow of the provided foreground/background colors.
-//------------------------------------------------------------------------------------
-void DrawTextDropShadow(const char* text, int x,  int y, int fontSize, Color foreground, Color background)
-{
-    DrawText(text, x + 1, y + 1, fontSize, background);
-    DrawText(text, x, y, fontSize, foreground);
-}
-//------------------------------------------------------------------------------------
-
 //------------------------------------------------------------------------------------
 // Global Varialbes
 //------------------------------------------------------------------------------------
-const int screenWidth = 256;
+const int screenWidth  = 256;
 const int screenHeight = 240;
-
-Texture2D imageFromURL;
-Color background;
-Vector2 mousePosition;
-
-//------------------------------------------------------------------------------------
+const int fontSize     = 8;
 
 //------------------------------------------------------------------------------------
 // Update
 //------------------------------------------------------------------------------------
 void update()
 {
-    // Update
-    //----------------------------------------------------------------------------------
-    mousePosition = GetMousePosition();
-
-    if(IsMouseButtonPressed(0))
-    {
-        background = GetRandomColor();
-        std::cout << TextFormat("(%d,%d)", static_cast<int>(mousePosition.x), static_cast<int>(mousePosition.y)) << "\n";
-    }
-    //----------------------------------------------------------------------------------
-
     // Draw
     //----------------------------------------------------------------------------------
     BeginDrawing();
-        // clear canvas to color
-        ClearBackground(background);
-        
-        // draw yellow border
-        DrawRectangleLinesEx({0.5f, -0.5f, screenWidth, screenHeight + 0.5f}, 1.0f, YELLOW);
-        
-        // draw some text
-        DrawTextDropShadow("Hello, raylib", 5, 5, 8, WHITE, BLACK);
-        DrawTextDropShadow("Mouse position SHOULD match\nclosely to the circle.\n\nYellow borders should ALWAYS\nbe visible\n\nLEFT MOUSE to change color.", 5, 25, 8, WHITE, BLACK);
-        DrawTextDropShadow(TextFormat("(%d,%d)", static_cast<int>(mousePosition.x), static_cast<int>(mousePosition.y)), 5, 220, 8, WHITE, BLACK);
-        
-        // draw image
-        DrawRectangle(5, 115, 16, 16, BLACK);
-        DrawTexture(imageFromURL, 5, 115, WHITE);
-
-        // draw the mouse circles
-        DrawCircle(mousePosition.x+.5f, mousePosition.y, 3.0f, RED);
-        DrawPixel(mousePosition.x+.5f, mousePosition.y+.5f, WHITE);
-    EndDrawing();
     
+        ClearBackground(BLACK);
+        DrawText(
+            "Bare Example",
+            screenWidth / 2 - (MeasureText("Bare Example", fontSize) / 2),
+            screenHeight / 2 - fontSize / 2,
+            fontSize,
+            WHITE
+        );
+    
+    EndDrawing();
     //----------------------------------------------------------------------------------
 }
 
@@ -124,12 +77,6 @@ int main(void)
     // Initialization
     //--------------------------------------------------------------------------------------
     InitWindow(screenWidth, screenHeight, "raylib - PGEtinker Classic Example");
-    
-    pgetinker_file_resolve("https://raw.githubusercontent.com/PGEtinker/assets/main/broken.png", "assets/gfx/broken.png");
-    imageFromURL = LoadTexture("assets/gfx/broken.png");
-    
-    background = GetRandomColor();
-    mousePosition     = {0, 0};
 
 #if(__EMSCRIPTEN__)
     // Set our game to run at 60 frames-per-second
@@ -146,7 +93,6 @@ int main(void)
     
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadTexture(imageFromURL);
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 

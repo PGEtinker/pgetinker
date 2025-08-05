@@ -40,6 +40,7 @@
 
     <script>
         window.AppVersion = "{{ config('app.version')() }}";
+        window.codeMaxSize = parseInt("{{ config('app.code_max_size'); }}");
     </script>
     @vite('resources/js/app-preload.ts')
 </head>

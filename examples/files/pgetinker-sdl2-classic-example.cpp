@@ -37,7 +37,12 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
-#include <pgetinker.h>
+
+#if defined(__PGETINKER__)
+#include "pgetinker.h"
+#else
+static inline void pgetinker_file_resolve(const char* url, const char* mountPath) {}
+#endif
 
 //------------------------------------------------------------------------------------
 // wrap up SDL_texture loading 
