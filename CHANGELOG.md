@@ -8,7 +8,7 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
-# <u>Release Notes - UNRELEASED</u>
+# <u>Release Notes - 2025-08-05</u>
 
 ## Notes
 
@@ -23,6 +23,12 @@ to port their code to PGEtinker.
 Change the maximum code size from 50k to 128k
 
 ## Commits
+
+### 2025-08-05
+
+- examples: add raylib bare example, add raylib entt example
+- examples: add pge bare example
+- examples: add pge entt bouncing balls example
 
 ### 2025-07-08
 
