@@ -566,6 +566,7 @@ class Compiler
             ...$this->linkerFlags,
             "-sSTACK_SIZE=131072",
             "-sLLD_REPORT_UNDEFINED",
+            "-sEXPORTED_RUNTIME_METHODS=HEAPF32",
             "-sSINGLE_FILE",
             "-std=c++20",
         ]);
