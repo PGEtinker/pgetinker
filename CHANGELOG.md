@@ -8,11 +8,18 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
-# <u>Release Notes - UNRELEASED</u>
+# <u>Release Notes - 2025-08-23</u>
 
 ## Notes
 
+A quick hotfix because the olcPGEX_MiniAudio was broken by a recent upgrade
+to version 4.0.8 of emscripten.
+
 ## Commits
+
+### 2025-08-23
+
+- main: add HEAPF32 to exported runtime functions, fix olcPGEX_MiniAudio
 
 # <u>Release Notes - 2025-08-05</u>
 
