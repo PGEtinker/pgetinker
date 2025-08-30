@@ -8,13 +8,21 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
-# <u>Release Notes - 2025-08-29</u>
+# <u>Release Notes - 2025-08-30</u>
 
 ## Notes
 
 A quick patch to better support assertions, debugging, and exception catching.
 
 ## Commits
+
+### 2025-08-30
+
+- main: fix submenu disappearing when mouse moving is too slow to bridge the 1px gap
+- main: add mouseOver/mouseOut event handling to the console to allow for text selection.
+- main: add runtime error message to the console
+- main: remove superfluous logging in ConsolePanel
+- libraries: fix olc_OnPageUnload bug in all versions of PGE
 
 ### 2025-08-29
 
