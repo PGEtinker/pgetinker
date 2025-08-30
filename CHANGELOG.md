@@ -8,13 +8,17 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
-# <u>Release Notes - UNRELEASED</u>
+# <u>Release Notes - 2025-08-29</u>
 
 ## Notes
 
+A quick patch to better support assertions, debugging, and exception catching.
 
 ## Commits
 
+### 2025-08-29
+
+- main: compile with debug symbols, assertions, and exception catching
 
 # <u>Release Notes - 2025-08-23</u>
 
