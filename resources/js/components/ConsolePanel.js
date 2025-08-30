@@ -148,7 +148,6 @@ function setupLogger(consolePanel)
     
     function clear()
     {
-        console.log("LOGGER:", "clear()");
         reset();
     }
     
@@ -159,7 +158,6 @@ function setupLogger(consolePanel)
 
     function start()
     {
-        console.log("LOGGER:", "start()");
         if(interval)
             return;
 
@@ -168,7 +166,6 @@ function setupLogger(consolePanel)
 
     function stop()
     {
-        console.log("LOGGER:", "stop()");
         if(!interval)
             return;
         
@@ -178,7 +175,6 @@ function setupLogger(consolePanel)
     
     function toString()
     {
-        console.log("LOGGER:", "toString()");
         stop();
         const output = chunks.map(chunk => chunk.join("")).join("") + working.join("") + queue.join("");
         start();
