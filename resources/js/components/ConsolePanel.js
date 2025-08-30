@@ -184,6 +184,16 @@ function setupLogger(consolePanel)
     //-----------------------------------------------------------------
     // Event Handlers
     //-----------------------------------------------------------------
+    element.addEventListener("mouseover", (event) =>
+    {
+        stop();
+    });
+    
+    element.addEventListener("mouseout", (event) =>
+    {
+        start();
+    });
+
     element.addEventListener("mousewheel", handleManualScrolling);
     element.addEventListener("keydown", handleManualScrolling);
     element.addEventListener("scroll", (event) =>
