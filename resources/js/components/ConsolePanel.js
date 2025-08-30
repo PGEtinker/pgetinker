@@ -242,6 +242,12 @@ export default class ConsolePanel
                 this.logger.addEntry(event.data.data);
                 return;
             }
+
+            if(event.data.message === "player-runtime-error")
+            {
+                this.logger.addEntry("A runtime error has occured, check the web developer console for more details.");
+                return;
+            }            
         });
     }
     
