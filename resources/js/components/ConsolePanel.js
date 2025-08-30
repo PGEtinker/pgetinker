@@ -148,7 +148,6 @@ function setupLogger(consolePanel)
     
     function clear()
     {
-        console.log("LOGGER:", "clear()");
         reset();
     }
     
@@ -159,7 +158,6 @@ function setupLogger(consolePanel)
 
     function start()
     {
-        console.log("LOGGER:", "start()");
         if(interval)
             return;
 
@@ -168,7 +166,6 @@ function setupLogger(consolePanel)
 
     function stop()
     {
-        console.log("LOGGER:", "stop()");
         if(!interval)
             return;
         
@@ -178,7 +175,6 @@ function setupLogger(consolePanel)
     
     function toString()
     {
-        console.log("LOGGER:", "toString()");
         stop();
         const output = chunks.map(chunk => chunk.join("")).join("") + working.join("") + queue.join("");
         start();
@@ -188,6 +184,16 @@ function setupLogger(consolePanel)
     //-----------------------------------------------------------------
     // Event Handlers
     //-----------------------------------------------------------------
+    element.addEventListener("mouseover", (event) =>
+    {
+        stop();
+    });
+    
+    element.addEventListener("mouseout", (event) =>
+    {
+        start();
+    });
+
     element.addEventListener("mousewheel", handleManualScrolling);
     element.addEventListener("keydown", handleManualScrolling);
     element.addEventListener("scroll", (event) =>
@@ -246,6 +252,12 @@ export default class ConsolePanel
                 this.logger.addEntry(event.data.data);
                 return;
             }
+
+            if(event.data.message === "player-runtime-error")
+            {
+                this.logger.addEntry("A runtime error has occured, check the web developer console for more details.");
+                return;
+            }            
         });
     }
     

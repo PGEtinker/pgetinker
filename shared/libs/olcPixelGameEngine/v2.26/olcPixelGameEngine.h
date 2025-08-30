@@ -6542,7 +6542,7 @@ namespace olc {
 
 extern "C" 
 {
-	EMSCRIPTEN_KEEPALIVE inline int olc_OnPageUnload()
+	EMSCRIPTEN_KEEPALIVE inline int olc_OnPageUnload(void* event)
 	{ olc::platform->ApplicationCleanUp(); return 0; }
 }
 
