@@ -539,7 +539,7 @@ class Compiler
         $this->compilerCommand = array_merge($this->compilerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
             "-c",
-            "-Os",
+            "-g",
             "pgetinker.cpp",
             "-o",
             "pgetinker.o",
@@ -547,6 +547,7 @@ class Compiler
             ...$this->compilerFlags,
             "-D__PGETINKER__",
             "-std=c++20",
+            "-sNO_DISABLE_EXCEPTION_CATCHING",
         ]);
 
         $this->logger->info("Compiler command:\n\n" . implode("\n", $this->compilerCommand) . "\n");
@@ -554,6 +555,7 @@ class Compiler
         $this->logger->info("preparing linker command");
         $this->linkerCommand = array_merge($this->linkerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
+            "-g",
             "pgetinker.o",
             ...$this->linkerInputFiles,
             "-D__PGETINKER__",
@@ -567,6 +569,9 @@ class Compiler
             "-sSTACK_SIZE=131072",
             "-sLLD_REPORT_UNDEFINED",
             "-sEXPORTED_RUNTIME_METHODS=HEAPF32",
+            "-sEXCEPTION_STACK_TRACES=1",
+            "-sASSERTIONS=1",
+            "-sNO_DISABLE_EXCEPTION_CATCHING",
             "-sSINGLE_FILE",
             "-std=c++20",
         ]);
