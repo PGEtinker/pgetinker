@@ -228,9 +228,12 @@ function processStackTrace(stack)
         .filter(line => !line.includes('about:srcdoc')) // Remove lines with about:srcdoc
         .map(line => {
             // Remove parentheses from lines containing wasm://wasm/pgetinker.wasm
-            if (line.includes('wasm://wasm/pgetinker.wasm')) {
+            if(line.includes('wasm://wasm/pgetinker.wasm'))
                 return line.replace(/\([^)]*\)$/, '').replace(/pgetinker.wasm./, '');
-            }
+            
+            if(line.includes('pgetinker.html'))
+                return line.replace(/\([^)]*\)$/, '').replace(/pgetinker.wasm./, '');
+
             return line.replace(/pgetinker.wasm./, '');
         });
     
