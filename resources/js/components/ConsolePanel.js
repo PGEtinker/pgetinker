@@ -161,7 +161,7 @@ function setupLogger(consolePanel)
         if(interval)
             return;
 
-        interval = setInterval(queueHandler, 100);
+        interval = setInterval(queueHandler, 500);
     }
 
     function stop()
