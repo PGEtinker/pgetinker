@@ -305,20 +305,22 @@ export default class EditorPanel
         let statusBar = document.querySelector("#editor-panel .status");
     
         let cursor = `Ln ${this.monacoWrapper.getEditor().getPosition().lineNumber}, Col ${this.monacoWrapper.getEditor().getPosition().column}`;
+        let debugActive = getStorageValue("emscripten.debug") ? "Debug Mode" : "";
         let fileSize = `${new Intl.NumberFormat().format(this.monacoWrapper.getEditor().getValue().length)} / ${new Intl.NumberFormat().format(this.maxFileSize)}`;
-            
+
         statusBar.classList.toggle('too-fucking-big', false);
         if(this.monacoWrapper.getEditor().getValue().length > this.maxFileSize)
         {
             statusBar.classList.toggle('too-fucking-big', true);
             fileSize += " EXCEEDING MAXIMUM!";
         }
-                
+        
         statusBar.innerHTML = `
             <div class="status-left">
                 Bytes: <span>${fileSize}</span>
             </div>
             <div class="status-right">
+                <span>${debugActive}</span>
                 <span>${cursor}</span>
             </div>
         `;
