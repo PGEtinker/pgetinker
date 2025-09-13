@@ -768,10 +768,25 @@ class Compiler
             $this->html = file_get_contents("{$this->workingDirectory}/pgetinker.html");
             
             // convert workingDirectory to laravel disk path
-            $prefix = dirname($this->workingDirectory);
+            $prefix = dirname(dirname($this->workingDirectory));
             $this->workingDirectory = str_replace("{$prefix}/", "", $this->workingDirectory);
             
-            Storage::disk("local")->deleteDirectory($this->workingDirectory);
+            // clean up workspace directory
+            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/entt");
+            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/miniaudio");
+            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_DearImGui");
+            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_Gamepad");
+            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_MiniAudio");
+            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPixelGameEngine");
+            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcSoundWaveEngine");
+            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/pgetinker");
+            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/raylib");
+            Storage::disk("local")->delete([
+                $this->workingDirectory . "/compiler.log",
+                $this->workingDirectory . "/pgetinker.cpp",
+                $this->workingDirectory . "/pgetinker.o",
+                $this->workingDirectory . "/emscripten_shell.html",
+            ]);
 
             $this->logger->info("OUTPUT:\n" . $this->getOutput());
             $this->logger->info("ERROR:\n" . $this->getErrorOutput());
