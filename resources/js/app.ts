@@ -223,24 +223,36 @@ export default class PGEtinker
         }
     }
     
-    download()
+    async download()
     {
-        if(!this.playerPanel.getHtml().includes("Emscripten-Generated Code"))
-        {
-            createToast("You have to build the code before you can download!", ToastType.Danger, 10000);
-            return;
-        }
-        
-        const a = document.createElement('a');
-        
-        // create the data url
-        a.href = `data:text/html;base64,${btoa(this.playerPanel.getHtml())}`;
-        a.download = "pgetinker.html";
+        try {
+            
+            if(!this.playerPanel.getHtml().includes("pgetinker.html"))
+                throw new Error();
+            
+            const response = await fetch(this.playerPanel.getHtml(), { method: 'HEAD' });
+            if(response.ok)
+            {
+                const a = document.createElement('a');
+                
+                // create the data url
+                a.href = `${this.playerPanel.getHtml()}`;
+                a.download = "pgetinker.html";
 
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        createToast("Downloading HTML.", ToastType.Info);
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                createToast("Downloading HTML.", ToastType.Info);
+                
+                return;
+            }
+        
+            throw new Error();
+        
+        } catch (error) {
+            createToast("You have to build the code before you can download!", ToastType.Danger);
+        }
+
     }
     
     share()
