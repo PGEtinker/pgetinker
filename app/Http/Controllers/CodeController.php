@@ -173,24 +173,25 @@ class CodeController extends Controller
         {
             try
             {
-                $cachedCode = Redis::get($hashedCode);
-            
-                if(isset($cachedCode))
+                if(Storage::disk("local")->exists("workspaces/{$hashedCode}/compiler.json"))
                 {
-                    Redis::expire($hashedCode, env("REDIS_TTL", 60));
-                    Log::debug("Compile: cache hit", ["hashedCode" => $hashedCode]);
-                    
-                    $compiler = new Compiler();
-                    $compiler->deserialize($cachedCode);
-    
-                    return [
-                        "statusCode" => $compiler->getStatus(),
-                        "hash" => $hashedCode,
-                        "libraries" => $compiler->getLibraryVersions(),
-                        "html" => $compiler->getHtml(),
-                        "stdout" => $compiler->getOutput(),
-                        "stderr" => $compiler->getErrorOutput(),
-                    ];
+                    $cachedCode = Storage::disk("local")->get("workspaces/{$hashedCode}/compiler.json");
+                    if(isset($cachedCode))
+                    {
+                        Log::debug("Compile: cache hit", ["hashedCode" => $hashedCode]);
+                        
+                        $compiler = new Compiler();
+                        $compiler->deserialize($cachedCode);
+        
+                        return [
+                            "statusCode" => $compiler->getStatus(),
+                            "hash" => $hashedCode,
+                            "libraries" => $compiler->getLibraryVersions(),
+                            "html" => $compiler->getHtml(),
+                            "stdout" => $compiler->getOutput(),
+                            "stderr" => $compiler->getErrorOutput(),
+                        ];
+                    }
                 }
             }
             catch(Exception $e)
@@ -201,17 +202,17 @@ class CodeController extends Controller
             Log::debug("Compile: cache miss", ["hashedCode" => $hashedCode]);
         }
         
-        if(Storage::directoryMissing("workspaces"))
-        {
-            Storage::makeDirectory("workspaces");
-        }
+        // if(Storage::directoryMissing("workspaces"))
+        // {
+        //     Storage::makeDirectory("workspaces");
+        // }
 
-        if(Storage::disk("local")->exists("workspaces"))
+        if(!Storage::disk("local")->exists("workspaces"))
         {
             Storage::disk("local")->makeDirectory("workspaces");
         }
             
-        $directoryName = "workspaces/" . Str::uuid();
+        $directoryName = "workspaces/" . $hashedCode;
         Storage::disk("local")->makeDirectory($directoryName);
         
         Log::debug("Compile: working directory created {$directoryName}");
@@ -225,18 +226,7 @@ class CodeController extends Controller
         
         if($compiler->build())
         {
-            if(env("COMPILER_CACHING", false))
-            {
-                try
-                {
-                    Redis::setex($hashedCode, env("REDIS_TTL", 60), $compiler->serialize());
-                }
-                catch(Exception $e)
-                {
-                    Log::emergency("Compiler Caching enabled but Redis failed");
-                }
-            }
-                
+            Storage::disk("local")->put("{$directoryName}/compiler.json", $compiler->serialize());
             return [
                 "statusCode" => 200,
                 "hash" => $hashedCode,
@@ -247,17 +237,11 @@ class CodeController extends Controller
                 "stderr" => $compiler->getErrorOutput(),
             ];
         }
-
+        
+        
         if(env("COMPILER_CACHING", false))
         {
-            try
-            {
-                Redis::setex($hashedCode, env("REDIS_TTL", 60), $compiler->serialize());
-            }
-            catch(Exception $e)
-            {
-                Log::emergency("Compiler Caching enabled but Redis failed");
-            }
+            Storage::disk("local")->put("{$directoryName}/compiler.json", $compiler->serialize());
         }
     
         return [
