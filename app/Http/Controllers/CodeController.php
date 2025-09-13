@@ -24,7 +24,7 @@ class CodeController extends Controller
 {
     function Compile(Request $request)
     {
-        $result = $this->compileCode($request->input("code", null), $request->input("libraries", null));
+        $result = $this->compileCode($request->input("code", null), $request->input("libraries", null), $request->input("options", null));
         unset($result["hash"]);
         return response($result, $result["statusCode"])->header("Content-Type", "application/json");
     }
@@ -44,7 +44,8 @@ class CodeController extends Controller
     {
         $code   = $request->input("code", null);
         $libraries = $request->input("libraries", null);
-        $result = $this->compileCode($code, $libraries);
+        $options = $request->input("options", null);
+        $result = $this->compileCode($code, $libraries, $options);
     
         // if failed to compile, bail
         if($result["statusCode"] !== 200)
@@ -127,9 +128,9 @@ class CodeController extends Controller
         ], 400);
     }
 
-    function compileCode($code, $libraries)
+    function compileCode($code, $libraries, $options)
     {
-        if($code == null || $libraries == null)
+        if($code == null || $libraries == null || $options == null)
         {
             Log::debug("Compile: missing required code parameters");
     
@@ -155,9 +156,18 @@ class CodeController extends Controller
                 "message" => "inavlid libraries set",
             ];
         }
-        
         ksort($libraries);
-        $hashedCode = hash("sha256", hashCode($code) . json_encode($libraries));
+        
+        if(!$this->validateOptions($options))
+        {
+            return [
+                "statusCode" => 400,
+                "message" => "invalid compiler options set",
+            ];
+        }
+        ksort($options);
+        
+        $hashedCode = hash("sha256", hashCode($code) . json_encode($libraries) . json_encode($options));
 
         if(env("COMPILER_CACHING", false))
         {
@@ -210,6 +220,7 @@ class CodeController extends Controller
         
         $compiler->setCode($code);
         $compiler->setLibraryVersions($libraries);
+        $compiler->setOptions($options);
         $compiler->setWorkingDirectory(Storage::disk("local")->path($directoryName));
         
         if($compiler->build())
@@ -231,6 +242,7 @@ class CodeController extends Controller
                 "hash" => $hashedCode,
                 "html" => $compiler->getHtml(),
                 "libraries" => $compiler->getLibraryVersions(),
+                "options" => $compiler->getOptions(),
                 "stdout" => $compiler->getOutput(),
                 "stderr" => $compiler->getErrorOutput(),
             ];
@@ -253,6 +265,7 @@ class CodeController extends Controller
             "hash" => $hashedCode,
             "html" => $compiler->getHtml(),
             "libraries" => $compiler->getLibraryVersions(),
+            "options" => $compiler->getOptions(),
             "stdout" => $compiler->getOutput(),
             "stderr" => $compiler->getErrorOutput(),
         ];
@@ -284,6 +297,28 @@ class CodeController extends Controller
         }
 
         return true;
+    }
+
+    function validateOptions($options)
+    {
+        $validOptions = [
+            "emscripten.debug" => [true, false],
+        ];
+        
+        if(is_array($options))
+        {
+            foreach($validOptions as $key => $value)
+            {
+                if(!array_key_exists($key, $options))
+                    return false;
+
+                if(!in_array($options[$key], $value, true))
+                    return false;
+            }
+            return true;
+        }
+        
+        return false;
     }
 }
 

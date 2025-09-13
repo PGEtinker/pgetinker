@@ -53,3 +53,10 @@ export function getCompilerLibraries(): any
         raylib: getStorageValue("raylib"),
     }
 }
+
+export function getCompilerOptions(): any
+{
+    return {
+        "emscripten.debug": getStorageValue("emscripten.debug"),
+    };
+}
