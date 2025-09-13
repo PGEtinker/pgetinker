@@ -6,6 +6,7 @@
 /public/screenshots
 /public/storage
 /public/wiki
+/public/workspaces
 /services/wiki
 /shared/emsdk
 /storage/*.key
