@@ -357,7 +357,7 @@ class Compiler
         {
             $options[] = [
                 "cflags" => [
-                    "-g"
+                    "-g",
                 ],
                 "ldflags" => [
                     "-g",
@@ -706,13 +706,34 @@ class Compiler
         return $didTheThingSuccessfully;
     }
     
-    private function cleanUp()
+    private function cleanUp($message)
     {
+        // convert workingDirectory to laravel disk path
+        $prefix = dirname(dirname($this->workingDirectory));
+        $this->workingDirectory = str_replace("{$prefix}/", "", $this->workingDirectory);
+        
+        // clean up workspace directory
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/entt");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/miniaudio");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_DearImGui");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_Gamepad");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_MiniAudio");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPixelGameEngine");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcSoundWaveEngine");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/pgetinker");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/raylib");
+        Storage::disk("local")->delete([
+            $this->workingDirectory . "/compiler.log",
+            $this->workingDirectory . "/pgetinker.cpp",
+            $this->workingDirectory . "/pgetinker.o",
+            $this->workingDirectory . "/emscripten_shell.html",
+        ]);
+
         $this->logger->info("OUTPUT:\n" . $this->getOutput());
         $this->logger->info("ERROR:\n" . $this->getErrorOutput());
         $this->logger->info("LIBRARIES:\n" . implode("\n", $this->linkerInputFiles));
-        
-        Log::info("Compile: finished disgracefully");
+
+        Log::info($message);
     }
 
     public function build()
@@ -737,10 +758,9 @@ class Compiler
             $this->logger->info("Libraries not set, using latest as default!");
         }
         
-
         if(!$this->processCode())
         {
-            $this->cleanUp();
+            $this->cleanUp("Compile: finished disgracefully");
             return false;
         }
 
@@ -753,51 +773,24 @@ class Compiler
 
         if(!$this->compile())
         {
-            $this->cleanUp();
+            $this->cleanUp("Compile: finished disgracefully");
             return false;
         }
 
         if(!$this->link())
         {
-            $this->cleanUp();
+            $this->cleanUp("Compile: finished disgracefully");
             return false;
         }
 
         if(file_exists("{$this->workingDirectory}/pgetinker.html"))
         {
-            $this->html = file_get_contents("{$this->workingDirectory}/pgetinker.html");
-            
-            // convert workingDirectory to laravel disk path
-            $prefix = dirname(dirname($this->workingDirectory));
-            $this->workingDirectory = str_replace("{$prefix}/", "", $this->workingDirectory);
-            
-            // clean up workspace directory
-            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/entt");
-            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/miniaudio");
-            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_DearImGui");
-            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_Gamepad");
-            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_MiniAudio");
-            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPixelGameEngine");
-            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcSoundWaveEngine");
-            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/pgetinker");
-            Storage::disk("local")->deleteDirectory($this->workingDirectory . "/raylib");
-            Storage::disk("local")->delete([
-                $this->workingDirectory . "/compiler.log",
-                $this->workingDirectory . "/pgetinker.cpp",
-                $this->workingDirectory . "/pgetinker.o",
-                $this->workingDirectory . "/emscripten_shell.html",
-            ]);
-
-            $this->logger->info("OUTPUT:\n" . $this->getOutput());
-            $this->logger->info("ERROR:\n" . $this->getErrorOutput());
-            $this->logger->info("LIBRARIES:\n" . implode("\n", $this->linkerInputFiles));
-
-            Log::info("Compile: finished successfully");
-            $this->output[] = "Compiled Successfully";
+            $this->html = config("app.url") . "/" . str_replace(dirname(dirname($this->workingDirectory))."/", "", $this->workingDirectory) . "/pgetinker.html";
+            $this->cleanUp("Compile: finished successfully");
             return true;
         }
         
-        $this->cleanUp();
+        $this->cleanUp("Compile: finished disgracefully");
         return false;
     }
 
