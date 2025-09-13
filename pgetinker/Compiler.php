@@ -47,7 +47,9 @@ class Compiler
 
     private $logger = null;
     
-    private $options = [];
+    private $options = [
+        "emscripten.debug" => false,
+    ];
 
     private $output = [];
 
