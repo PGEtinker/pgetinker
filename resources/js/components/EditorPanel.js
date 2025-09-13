@@ -305,7 +305,7 @@ export default class EditorPanel
         let statusBar = document.querySelector("#editor-panel .status");
     
         let cursor = `Ln ${this.monacoWrapper.getEditor().getPosition().lineNumber}, Col ${this.monacoWrapper.getEditor().getPosition().column}`;
-        let debugActive = getStorageValue("emscripten.debug") ? "Debug Mode" : "";
+        
         let fileSize = `${new Intl.NumberFormat().format(this.monacoWrapper.getEditor().getValue().length)} / ${new Intl.NumberFormat().format(this.maxFileSize)}`;
 
         statusBar.classList.toggle('too-fucking-big', false);
@@ -320,10 +320,16 @@ export default class EditorPanel
                 Bytes: <span>${fileSize}</span>
             </div>
             <div class="status-right">
-                <span>${debugActive}</span>
                 <span>${cursor}</span>
             </div>
         `;
+        
+        const isDebugActive = getStorageValue("emscripten.debug");
+        const debugStatus = document.createElement('span');
+        debugStatus.className = "status-debug-mode";
+        debugStatus.appendChild(document.createTextNode(isDebugActive ? "Debug Mode  (On)" : "Debug Mode (Off)"));
+        debugStatus.addEventListener("click", () => { console.log("HERE"); setStorageValue("emscripten.debug", !isDebugActive); this.updateStatusBar(); });
+        statusBar.querySelector('.status-right').appendChild(debugStatus);
     }
 
 }

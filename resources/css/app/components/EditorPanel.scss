@@ -47,6 +47,11 @@
             }
         }
 
+        .status-debug-mode {
+            cursor: pointer;
+            user-select: none;
+        }
+
         &.too-fucking-big {
             background: #f00;
             color: #ff0;
