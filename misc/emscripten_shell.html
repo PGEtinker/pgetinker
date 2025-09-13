@@ -111,8 +111,6 @@
                             data: text + "\n",
                         }, "*");
                     }
-                    
-                    console.error(text);
                 };
             })(),
             canvas: (() => {
@@ -132,11 +130,20 @@
             }
         };
         
-        window.onerror = (event) =>
+        window.onerror = (message, source, line, col, error) =>
         {
             window.parent.postMessage({
                 message: "player-runtime-error",
+                data: {
+                    message,
+                    source,
+                    line,
+                    col,
+                    error
+                }
             }, "*");
+            
+            return false;
         };
 
         window.parent.postMessage({
