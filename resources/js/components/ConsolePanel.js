@@ -1,4 +1,5 @@
 import { createToast, ToastType } from '../lib/createToast';
+import { getStorageValue } from '../lib/storage';
 
 function setupLogger(consolePanel)
 {
@@ -218,6 +219,24 @@ function setupLogger(consolePanel)
     };
 }
 
+// utility function to filter out the error stack traces
+function processStackTrace(stack)
+{
+    const lines = stack.split('\n');
+    
+    const processedLines = lines
+        .filter(line => !line.includes('about:srcdoc')) // Remove lines with about:srcdoc
+        .map(line => {
+            // Remove parentheses from lines containing wasm://wasm/pgetinker.wasm
+            if (line.includes('wasm://wasm/pgetinker.wasm')) {
+                return line.replace(/\([^)]*\)$/, '').replace(/pgetinker.wasm./, '');
+            }
+            return line.replace(/pgetinker.wasm./, '');
+        });
+    
+    return processedLines.join("\n");
+}
+
 
 export default class ConsolePanel
 {
@@ -249,13 +268,33 @@ export default class ConsolePanel
                     this.firstRun = false;
                 }
                 
-                this.logger.addEntry(event.data.data);
+                // prevent runtime error from appearing from stdout. handled in player-runtime-error
+                if(!(event.data.data.indexOf("Aborted") != -1))
+                    this.logger.addEntry(event.data.data);
+                
                 return;
             }
 
             if(event.data.message === "player-runtime-error")
             {
-                this.logger.addEntry("A runtime error has occured, check the web developer console for more details.");
+                if(this.firstRun)
+                {
+                    this.state.setActiveTab("console");
+                    this.firstRun = false;
+                }
+                
+                if(getStorageValue("emscripten.debug"))
+                {
+                    this.logger.addEntry(`${event.data.data.message}\n`);
+                    
+                    if(event.data.data.error.stack)
+                        this.logger.addEntry(`${processStackTrace(event.data.data.error.stack)}\n`);
+                }
+                else
+                {
+                    this.logger.addEntry("A runtime error has occurred, to get more informative error messages enable Debug Mode in the Settings dialog.")
+                }
+
                 return;
             }            
         });
