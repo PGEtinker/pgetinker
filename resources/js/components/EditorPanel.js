@@ -328,7 +328,7 @@ export default class EditorPanel
         const debugStatus = document.createElement('span');
         debugStatus.className = "status-debug-mode";
         debugStatus.appendChild(document.createTextNode(isDebugActive ? "Debug Mode  (On)" : "Debug Mode (Off)"));
-        debugStatus.addEventListener("click", () => { console.log("HERE"); setStorageValue("emscripten.debug", !isDebugActive); this.updateStatusBar(); });
+        debugStatus.addEventListener("click", () => { setStorageValue("emscripten.debug", !isDebugActive); this.updateStatusBar(); });
         statusBar.querySelector('.status-right').appendChild(debugStatus);
     }
 
