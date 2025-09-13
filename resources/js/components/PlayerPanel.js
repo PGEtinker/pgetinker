@@ -1,3 +1,4 @@
+import { getStorageValue } from "../lib/storage";
 
 export default class PlayerPanel
 {
@@ -39,7 +40,14 @@ export default class PlayerPanel
 
             if(event.data.message === "player-runtime-error")
             {
-                alert("A runtime error has occured, check the web developer console for more details.");
+                if(getStorageValue("emscripten.debug"))
+                {
+                    alert("A runtime error has occurred, the Console Panel has some information but for a better debugging experience check the web developer console for more details.");
+                }
+                else
+                {
+                    alert("A runtime error has occurred, to get more informative error messages enable Debug Mode in the Settings dialog.");
+                }
             }
             
         });
