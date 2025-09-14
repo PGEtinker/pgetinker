@@ -8,6 +8,58 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - 2025-09-14</u>
+
+## Notes
+
+The recent patch to allow assertions, debugging, and exception catching came
+with a hefty performance hit that I felt shouldn't be the default behavior.
+
+Added a debug mode to the Settings dialog which will allow users who are
+interested in drilling deeper into their runtime more access to relavent
+information. Error messages are now captured, filtered, and put on the console
+panel.
+
+This update lays the foundation for some upcoming features.
+
+## Commits
+
+### 2025-09-14
+
+- main: toggling debug mode removes share url from address bar
+- screenshot: use goto instead of setContent the variable is now a URL.
+- main: add code options to the compile invokations
+- main: updater script to complete database migration for next update
+- main: remove old updater script
+- main: remove commented and unnecessary code
+- main: ensure options are set in a newly created share
+- main: add options to the Code model
+
+### 2025-09-13
+
+- main: refactor download function, use URL method.
+- main: remove HERE from status bar debug toggle
+- main: make vitejs ignore public/workspaces
+- main: tweak stack trace filter
+- main: use url instead of HTML
+- main: refactor cleanUp functions, html is now a URL.
+- main: use event listener for error reporting
+- pgetinker: update nginx.conf to allow CORS on /workspaces/
+- main: switch to file based compiler caching
+- main: clean up working directory
+- main: default compiler options, to fix tests
+- main: update ignored files
+- main: prevent user text selection of dialog buttons
+- main: add clickable debug mode toggle to editor panel
+- main: make navbar unselectable
+- main: wrap console text
+- main: add runtime error messages to console panel
+- main: console doesn't need to refresh every 100 ms... 500 instead
+- main: revamp runtime error alert popup
+- main: flesh out error reporting in emscripten shell
+- main: add debug mode indicator to editor panel status bar
+- main: add compiler options supporting backend/frontend and add emscripten.debug to settings
+
 # <u>Release Notes - 2025-08-30</u>
 
 ## Notes
