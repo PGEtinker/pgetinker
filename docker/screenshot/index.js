@@ -87,7 +87,7 @@ app.post("/", async(request, response) =>
         });    
     
         // set the page's content
-        await page.setContent(request.body.html);
+        await page.goto(request.body.html);
         console.log("Screenshot:", "set html content");
 
         // setup core update handler
