@@ -764,6 +764,7 @@ elif [ "$1" == "update" ]; then
         echo "  - Pull wiki repo."
         echo "  - Create wiki symlinks."
         echo "  - Create examples symlinks."
+        echo "  - Create workspaces symlinks."
         echo "  - Update esmcripten."
         echo "  - Build shared emscripten libraries."
         echo "  - Run laravel migration scripts."
@@ -782,7 +783,7 @@ elif [ "$1" == "update" ]; then
     
     case $proceed in
         [Yy]*)
-            rm -rf public/build public/hot public/wiki public/examples services/language-server/workspaces
+            rm -rf public/build public/hot public/wiki public/workspaces public/examples services/language-server/workspaces
 
             echo "#### Build changed docker images."
             scripts/pgetinker build
@@ -836,6 +837,11 @@ elif [ "$1" == "update" ]; then
             
             echo "#### Create examples symlinks."
             ln -s /var/www/html/examples public/examples
+            echo "## Done."
+            echo
+
+            echo "#### Create workspaces symlinks."
+            ln -s /var/www/html/storage/app/workspaces public/workspaces
             echo "## Done."
             echo
 
@@ -944,6 +950,7 @@ elif [ "$1" == "initialize" ]; then
         echo "  - Clone wiki repo."
         echo "  - Create wiki symlinks."
         echo "  - Create examples symlinks."
+        echo "#### Create workspaces symlinks."
         echo "  - Clone and install emscripten."
         echo "  - Build shared emscripten libraries."
         echo "  - Run laravel migration scripts."
@@ -1028,6 +1035,11 @@ elif [ "$1" == "initialize" ]; then
             ln -s /var/www/html/examples public/examples
             echo "## Done."
             echo
+
+            echo "#### Create workspaces symlinks."
+            ln -s /var/www/html/storage/app/workspaces public/workspaces
+            echo "## Done."
+            echo        
 
             echo "#### Clone and install emscripten."
             if [ -f "shared/emsdk/emsdk_env.sh" ]; then
