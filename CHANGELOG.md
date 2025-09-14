@@ -26,6 +26,7 @@ This update lays the foundation for some upcoming features.
 
 ### 2025-09-14
 
+- pgetinker: add "clean-temp-files" command to script
 - pgetinker: fix paste/typo
 - main: conform database script, runs for each update
 - pgetinker: add workspaces symlinks to initialize and update scripts
