@@ -687,6 +687,20 @@ elif [ "$1" == "open" ]; then
         sail_is_not_running
     fi
 
+# Clean PGEtinker's Temporary Files
+elif [ "$1" == "clean-temp-files" ]; then
+
+    if [ "$EXEC" == "no" ]; then
+        echo "PGEtinker services are not running."
+        echo "Run: ./scripts/pgetinker up -d"
+        echo ""
+        exit
+    fi
+    
+    find storage/app/workspaces -mindepth 1 -type d -mmin +60 -exec rm -rf {} + 2>/dev/null
+
+    exit
+
 # Clean PGEtinker.
 elif [ "$1" == "clean" ]; then
 
