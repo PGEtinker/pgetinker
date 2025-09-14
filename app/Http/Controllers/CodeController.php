@@ -203,11 +203,6 @@ class CodeController extends Controller
             Log::debug("Compile: cache miss", ["hashedCode" => $hashedCode]);
         }
         
-        // if(Storage::directoryMissing("workspaces"))
-        // {
-        //     Storage::makeDirectory("workspaces");
-        // }
-
         if(!Storage::disk("local")->exists("workspaces"))
         {
             Storage::disk("local")->makeDirectory("workspaces");
