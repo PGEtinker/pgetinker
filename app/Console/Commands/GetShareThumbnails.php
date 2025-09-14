@@ -44,7 +44,7 @@ class GetShareThumbnails extends Command
 
         foreach($codes as $code)
         {
-            $result = $controller->compileCode($code->code, $code->library_versions);
+            $result = $controller->compileCode($code->code, $code->library_versions, $code->options);
             if(isset($result["html"]))
             {
                 $code->thumb_url = uploadFileToPit($code->slug . ".png", takeScreenshotOfHtml($result["html"]));
