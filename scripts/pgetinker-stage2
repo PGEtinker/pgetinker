@@ -950,7 +950,7 @@ elif [ "$1" == "initialize" ]; then
         echo "  - Clone wiki repo."
         echo "  - Create wiki symlinks."
         echo "  - Create examples symlinks."
-        echo "#### Create workspaces symlinks."
+        echo "  - Create workspaces symlinks."
         echo "  - Clone and install emscripten."
         echo "  - Build shared emscripten libraries."
         echo "  - Run laravel migration scripts."
