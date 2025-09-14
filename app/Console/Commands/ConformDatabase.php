@@ -8,21 +8,21 @@ use PGEtinker\Compiler;
 
 use function PGEtinker\Utils\hashCode;
 
-class UpdateCodeHashes extends Command
+class ConformDatabase extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:update-code-hashes';
+    protected $signature = 'app:conform-database';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Code hash calculations have changed. Update them.';
+    protected $description = 'This is run on every update';
 
     /**
      * Execute the console command.
@@ -30,7 +30,7 @@ class UpdateCodeHashes extends Command
     public function handle()
     {
         $compiler = new Compiler();
-        $codes = Code::all();
+        $codes = Code::whereNull('options')->get();
         
         if(count($codes) == 0)
         {
