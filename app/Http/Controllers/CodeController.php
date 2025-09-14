@@ -94,6 +94,7 @@ class CodeController extends Controller
         $share->slug = $slug;
         $share->thumb_url = uploadFileToPit($share->slug . ".png", takeScreenshotOfHtml($result["html"]));
         $share->library_versions = $libraries;
+        $share->options = $options;
         
         if($share->save())
         {
