@@ -56,6 +56,7 @@ export default defineConfig(({ mode }) =>
             },
             watch: {
                 ignored: [
+                    path.join(process.cwd(), "public", "workspaces", "**"),
                     path.join(process.cwd(), "storage", "app", "workspaces", "**")
                 ]
             }

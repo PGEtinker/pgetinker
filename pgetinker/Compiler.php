@@ -46,6 +46,10 @@ class Compiler
     private $linkerInputFiles = [];
 
     private $logger = null;
+    
+    private $options = [
+        "emscripten.debug" => false,
+    ];
 
     private $output = [];
 
@@ -67,6 +71,16 @@ class Compiler
         return $this->libraryVersions;
     }
 
+    public function setOptions($options)
+    {
+        $this->options = $options;
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
     public function serialize()
     {
         $object = new stdClass();
@@ -81,6 +95,7 @@ class Compiler
         $object->linkerCommand = $this->linkerCommand;
         $object->linkerExitCode = $this->linkerExitCode;
         $object->linkerInputFiles = $this->linkerInputFiles;
+        $object->options = $this->options;
         $object->output = $this->output;
 
         return json_encode($object, JSON_PRETTY_PRINT);
@@ -101,6 +116,7 @@ class Compiler
         $this->linkerExitCode = $object->linkerExitCode;
         $this->linkerInputFiles = $object->linkerInputFiles;
         $this->logger = null;
+        $this->options = $object->options;
         $this->output = $object->output;
         $this->workingDirectory = "";
     }
@@ -333,6 +349,35 @@ class Compiler
         }
     }
 
+    private function processOptions()
+    {
+        $options = [];
+
+        if($this->options["emscripten.debug"])
+        {
+            $options[] = [
+                "cflags" => [
+                    "-g",
+                ],
+                "ldflags" => [
+                    "-g",
+                    "-sEXCEPTION_STACK_TRACES=1",
+                    "-sASSERTIONS=1",
+                    "-sNO_DISABLE_EXCEPTION_CATCHING",
+                ],
+            ];
+        }
+
+        if(count($options) > 0)
+        {
+            foreach($options as $flags)
+            {
+                $this->compilerFlags = array_unique(array_merge($this->compilerFlags, $flags["cflags"]), SORT_REGULAR);
+                $this->linkerFlags = array_unique(array_merge($this->linkerFlags, $flags["ldflags"]), SORT_REGULAR);
+            }
+        }
+    }
+
     private function processCodeDetectGeometryUtility($index)
     {
         preg_match(
@@ -539,7 +584,6 @@ class Compiler
         $this->compilerCommand = array_merge($this->compilerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
             "-c",
-            "-g",
             "pgetinker.cpp",
             "-o",
             "pgetinker.o",
@@ -555,7 +599,6 @@ class Compiler
         $this->logger->info("preparing linker command");
         $this->linkerCommand = array_merge($this->linkerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
-            "-g",
             "pgetinker.o",
             ...$this->linkerInputFiles,
             "-D__PGETINKER__",
@@ -569,9 +612,6 @@ class Compiler
             "-sSTACK_SIZE=131072",
             "-sLLD_REPORT_UNDEFINED",
             "-sEXPORTED_RUNTIME_METHODS=HEAPF32",
-            "-sEXCEPTION_STACK_TRACES=1",
-            "-sASSERTIONS=1",
-            "-sNO_DISABLE_EXCEPTION_CATCHING",
             "-sSINGLE_FILE",
             "-std=c++20",
         ]);
@@ -666,13 +706,34 @@ class Compiler
         return $didTheThingSuccessfully;
     }
     
-    private function cleanUp()
+    private function cleanUp($message)
     {
+        // convert workingDirectory to laravel disk path
+        $prefix = dirname(dirname($this->workingDirectory));
+        $this->workingDirectory = str_replace("{$prefix}/", "", $this->workingDirectory);
+        
+        // clean up workspace directory
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/entt");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/miniaudio");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_DearImGui");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_Gamepad");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPGEX_MiniAudio");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcPixelGameEngine");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/olcSoundWaveEngine");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/pgetinker");
+        Storage::disk("local")->deleteDirectory($this->workingDirectory . "/raylib");
+        Storage::disk("local")->delete([
+            $this->workingDirectory . "/compiler.log",
+            $this->workingDirectory . "/pgetinker.cpp",
+            $this->workingDirectory . "/pgetinker.o",
+            $this->workingDirectory . "/emscripten_shell.html",
+        ]);
+
         $this->logger->info("OUTPUT:\n" . $this->getOutput());
         $this->logger->info("ERROR:\n" . $this->getErrorOutput());
         $this->logger->info("LIBRARIES:\n" . implode("\n", $this->linkerInputFiles));
-        
-        Log::info("Compile: finished disgracefully");
+
+        Log::info($message);
     }
 
     public function build()
@@ -697,13 +758,14 @@ class Compiler
             $this->logger->info("Libraries not set, using latest as default!");
         }
         
-
         if(!$this->processCode())
         {
-            $this->cleanUp();
+            $this->cleanUp("Compile: finished disgracefully");
             return false;
         }
 
+        $this->processOptions();
+        
         if(!$this->prepareEnvironment())
         {
             return false;
@@ -711,36 +773,24 @@ class Compiler
 
         if(!$this->compile())
         {
-            $this->cleanUp();
+            $this->cleanUp("Compile: finished disgracefully");
             return false;
         }
 
         if(!$this->link())
         {
-            $this->cleanUp();
+            $this->cleanUp("Compile: finished disgracefully");
             return false;
         }
 
         if(file_exists("{$this->workingDirectory}/pgetinker.html"))
         {
-            $this->html = file_get_contents("{$this->workingDirectory}/pgetinker.html");
-            
-            // convert workingDirectory to laravel disk path
-            $prefix = dirname($this->workingDirectory);
-            $this->workingDirectory = str_replace("{$prefix}/", "", $this->workingDirectory);
-            
-            Storage::disk("local")->deleteDirectory($this->workingDirectory);
-
-            $this->logger->info("OUTPUT:\n" . $this->getOutput());
-            $this->logger->info("ERROR:\n" . $this->getErrorOutput());
-            $this->logger->info("LIBRARIES:\n" . implode("\n", $this->linkerInputFiles));
-
-            Log::info("Compile: finished successfully");
-            $this->output[] = "Compiled Successfully";
+            $this->html = config("app.url") . "/" . str_replace(dirname(dirname($this->workingDirectory))."/", "", $this->workingDirectory) . "/pgetinker.html";
+            $this->cleanUp("Compile: finished successfully");
             return true;
         }
         
-        $this->cleanUp();
+        $this->cleanUp("Compile: finished disgracefully");
         return false;
     }
 

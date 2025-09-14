@@ -305,15 +305,16 @@ export default class EditorPanel
         let statusBar = document.querySelector("#editor-panel .status");
     
         let cursor = `Ln ${this.monacoWrapper.getEditor().getPosition().lineNumber}, Col ${this.monacoWrapper.getEditor().getPosition().column}`;
+        
         let fileSize = `${new Intl.NumberFormat().format(this.monacoWrapper.getEditor().getValue().length)} / ${new Intl.NumberFormat().format(this.maxFileSize)}`;
-            
+
         statusBar.classList.toggle('too-fucking-big', false);
         if(this.monacoWrapper.getEditor().getValue().length > this.maxFileSize)
         {
             statusBar.classList.toggle('too-fucking-big', true);
             fileSize += " EXCEEDING MAXIMUM!";
         }
-                
+        
         statusBar.innerHTML = `
             <div class="status-left">
                 Bytes: <span>${fileSize}</span>
@@ -322,6 +323,23 @@ export default class EditorPanel
                 <span>${cursor}</span>
             </div>
         `;
+        
+        const isDebugActive = getStorageValue("emscripten.debug");
+        const debugStatus = document.createElement('span');
+        debugStatus.className = "status-debug-mode";
+        debugStatus.appendChild(document.createTextNode(isDebugActive ? "Debug Mode  (On)" : "Debug Mode (Off)"));
+        debugStatus.addEventListener("click", () =>
+        {
+            setStorageValue("emscripten.debug", !isDebugActive);
+            this.updateStatusBar();
+            if(this.sharedSlug)
+            {
+                this.sharedSlug = null;
+                window.history.replaceState({}, "", "/");
+            }            
+        });
+
+        statusBar.querySelector('.status-right').appendChild(debugStatus);
     }
 
 }

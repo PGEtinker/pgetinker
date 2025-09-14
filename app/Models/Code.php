@@ -11,5 +11,6 @@ class Code extends Model
     
     protected $casts = [
         'library_versions' => 'array', // Automatically converts JSON to PHP array and back
+        'options' => 'array',
     ];    
 }

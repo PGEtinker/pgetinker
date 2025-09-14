@@ -125,6 +125,22 @@ export default function settingsDialog(state)
             getStorageValue("diagnostics.javidMode")
         ));
         
+        dialog.querySelector(".content").append(toggle(
+            "Emscripten> Debug Mode",
+            "<span><b>THIS SETTING DEGRADES RUNTIME PERFORMANCE!</b> Enabling this mode will instruct emscripten to generate debug symbols and to trace exceptions to make runtime debugging easier.</span>",
+            (event) =>
+            {
+                setStorageValue("emscripten.debug", event.target.checked);
+                state.editorPanel.updateStatusBar();
+                if(state.editorPanel.sharedSlug)
+                {
+                    state.editorPanel.sharedSlug = null;
+                    window.history.replaceState({}, "", "/");
+                }
+            },
+            getStorageValue("emscripten.debug")
+        ));
+
         dialog.querySelector(".ok").addEventListener("click", (event) =>
         {
             dialog.remove();

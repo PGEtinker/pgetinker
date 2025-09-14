@@ -30,6 +30,7 @@
                     font-size: 3rem;
                     color: var(--pgetinker-link-color);
                     text-shadow: .2rem .2rem .2rem #000;
+                    user-select: none;
                 }
             }
             
@@ -50,6 +51,7 @@
                     padding: 0 .4rem;
                     text-decoration: none;
                     text-shadow: .2rem .2rem .5rem var(--pgetinker-text-shadow-color);
+                    user-select: none;
                 }
                 
                 a:hover {

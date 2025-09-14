@@ -36,7 +36,7 @@ class FindBrokenShares extends Command
 
         foreach($codes as $code)
         {
-            $result = $controller->compileCode($code->code, $code->library_versions);
+            $result = $controller->compileCode($code->code, $code->library_versions, $code->options);
             if(!isset($result["html"]))
             {
                 $brokenSlugs[] = $code->slug;

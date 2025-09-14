@@ -1,3 +1,4 @@
+import { getStorageValue } from "../lib/storage";
 
 export default class PlayerPanel
 {
@@ -39,7 +40,14 @@ export default class PlayerPanel
 
             if(event.data.message === "player-runtime-error")
             {
-                alert("A runtime error has occured, check the web developer console for more details.");
+                if(getStorageValue("emscripten.debug"))
+                {
+                    alert("A runtime error has occurred, the Console Panel has some information but for a better debugging experience check the web developer console for more details.");
+                }
+                else
+                {
+                    alert("A runtime error has occurred, to get more informative error messages enable Debug Mode in the Settings dialog.");
+                }
             }
             
         });
@@ -61,7 +69,7 @@ export default class PlayerPanel
         {
             let playerFrame = document.createElement('iframe');
             playerFrame.setAttribute("sandbox", "allow-pointer-lock allow-scripts");
-            playerFrame.setAttribute("srcdoc", this.lastPlayerHtml);
+            playerFrame.setAttribute("src", this.lastPlayerHtml);
             document.querySelector("#player-panel .iframe-container").append(playerFrame);
             
             playerFrame.classList.toggle("display-block", true);
@@ -136,7 +144,7 @@ export default class PlayerPanel
     start()
     {
         let playerFrame = document.createElement('iframe');
-        playerFrame.setAttribute("srcdoc", this.lastPlayerHtml);
+        playerFrame.setAttribute("src", this.lastPlayerHtml);
         playerFrame.setAttribute("sandbox", "allow-pointer-lock allow-scripts");
         document.querySelector("#player-panel .iframe-container").append(playerFrame);
         

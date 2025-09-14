@@ -31,7 +31,7 @@ import PlayerPanel from './components/PlayerPanel';
 import ProblemsPanel from './components/ProblemsPanel';
 import axios from 'axios';
 import { createToast, ToastType } from './lib/createToast';
-import { getCompilerLibraries } from './lib/compilerLibraries';
+import { getCompilerLibraries, getCompilerOptions } from './lib/compilerLibraries';
 
 declare function GoldenLayout(...args: any[]): void;
 
@@ -223,24 +223,36 @@ export default class PGEtinker
         }
     }
     
-    download()
+    async download()
     {
-        if(!this.playerPanel.getHtml().includes("Emscripten-Generated Code"))
-        {
-            createToast("You have to build the code before you can download!", ToastType.Danger, 10000);
-            return;
-        }
-        
-        const a = document.createElement('a');
-        
-        // create the data url
-        a.href = `data:text/html;base64,${btoa(this.playerPanel.getHtml())}`;
-        a.download = "pgetinker.html";
+        try {
+            
+            if(!this.playerPanel.getHtml().includes("pgetinker.html"))
+                throw new Error();
+            
+            const response = await fetch(this.playerPanel.getHtml(), { method: 'HEAD' });
+            if(response.ok)
+            {
+                const a = document.createElement('a');
+                
+                // create the data url
+                a.href = `${this.playerPanel.getHtml()}`;
+                a.download = "pgetinker.html";
 
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        createToast("Downloading HTML.", ToastType.Info);
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                createToast("Downloading HTML.", ToastType.Info);
+                
+                return;
+            }
+        
+            throw new Error();
+        
+        } catch (error) {
+            createToast("You have to build the code before you can download!", ToastType.Danger);
+        }
+
     }
     
     share()
@@ -266,7 +278,8 @@ export default class PGEtinker
         axios.get('/sanctum/csrf-cookie').then(_ => {
             axios.post("/api/share", {
                 code: this.editorPanel.getValue(),
-                libraries: getCompilerLibraries()
+                libraries: getCompilerLibraries(),
+                options: getCompilerOptions(),
             }).then((response) =>
             {
                 this.compileSuccessHandler(response.data);
@@ -326,7 +339,6 @@ export default class PGEtinker
         }
         
         this.SetupLayout();
-
     }
 
     preCompile()
@@ -361,7 +373,8 @@ export default class PGEtinker
                 
                 axios.post("/api/compile", {
                     code: this.editorPanel.getValue(),
-                    libraries: getCompilerLibraries()
+                    libraries: getCompilerLibraries(),
+                    options: getCompilerOptions(),
                 }).then((response) =>
                 {
                     this.compileSuccessHandler(response.data);

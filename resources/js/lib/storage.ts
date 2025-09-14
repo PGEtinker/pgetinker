@@ -53,6 +53,11 @@ export async function conformStorage(): Promise<void>
         setStorageValue("editor.inlayHints.enabled", false);
     }
     
+    if(getStorageValue("emscripten.debug") == null)
+    {
+        setStorageValue("emscripten.debug", false);
+    }
+    
     const libraries = Object.keys(window.librariesManifest.latest);
     libraries.forEach((library) =>
     {

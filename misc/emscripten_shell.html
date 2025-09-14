@@ -111,8 +111,6 @@
                             data: text + "\n",
                         }, "*");
                     }
-                    
-                    console.error(text);
                 };
             })(),
             canvas: (() => {
@@ -132,12 +130,19 @@
             }
         };
         
-        window.onerror = (event) =>
+        window.addEventListener("error", (event) =>
         {
             window.parent.postMessage({
                 message: "player-runtime-error",
+                data: {
+                    message: event.message,
+                    source: event.filename,
+                    line: event.lineno,
+                    col: event.colno,
+                    error: event.error
+                }
             }, "*");
-        };
+        });
 
         window.parent.postMessage({
             message: "player-ready",
