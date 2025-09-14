@@ -132,6 +132,11 @@ export default function settingsDialog(state)
             {
                 setStorageValue("emscripten.debug", event.target.checked);
                 state.editorPanel.updateStatusBar();
+                if(state.editorPanel.sharedSlug)
+                {
+                    state.editorPanel.sharedSlug = null;
+                    window.history.replaceState({}, "", "/");
+                }
             },
             getStorageValue("emscripten.debug")
         ));
