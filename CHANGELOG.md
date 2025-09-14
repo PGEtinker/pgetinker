@@ -26,6 +26,9 @@ This update lays the foundation for some upcoming features.
 
 ### 2025-09-14
 
+- pgetinker: fix paste/typo
+- main: conform database script, runs for each update
+- pgetinker: add workspaces symlinks to initialize and update scripts
 - main: toggling debug mode removes share url from address bar
 - screenshot: use goto instead of setContent the variable is now a URL.
 - main: add code options to the compile invokations
