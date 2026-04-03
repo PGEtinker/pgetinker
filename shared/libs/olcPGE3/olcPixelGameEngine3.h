@@ -12957,7 +12957,9 @@ namespace olc::host
             // PGE->ContextStart() failed, or user aborted OnUserCreate()
             return false;
         }
-        
+		EM_ASM({
+			Module.canvas.dispatchEvent(new Event("pgetinker-screenshot-ready"));
+		});
         emscripten_set_main_loop_arg(Host_Web_Emscripten::MainLoop, reinterpret_cast<void*>(this), 0, 1);
         
         // EMSCRIPTEN QUIRK: this code is never reached, the main loop is simulating a while(true);
