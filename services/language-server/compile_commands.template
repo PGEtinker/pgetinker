@@ -38,6 +38,7 @@
         "-I", "./olcPixelGameEngine",
         "-I", "./olcPixelGameEngine/extensions",
         "-I", "./olcPixelGameEngine/utilities",
+        "-I", "./olcPGE3",
         "-I", "./olcSoundWaveEngine",
         "-I", "include",
         "-std=c++20",
