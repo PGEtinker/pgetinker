@@ -8,6 +8,34 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - 2026-09-25</u>
+
+## Notes
+
+Some docker image updates and finally... The biggest update to PGEtinker
+in quite some time! ... The addition of PGEv3
+
+## Commits
+
+### 2026-09-25
+
+- examples: add pge3 bare example and supporting graphics
+- libraries: update PGEv3 and add miniaudio pgex
+
+### 2026-04-03
+
+- libraries: patch PGEv3 with required screenshot hook for sharing
+- libraries: add PGEv3 to libraries
+- language-server: add support for PGEv3 in language server
+- main: add support for PGEv3 in compiler.php
+
+### 2026-05-30
+
+- main: fix vulnerabilities with npm audit fix
+- libs: only build libraries that are required
+- docker: clean npm cache to prevent image blowout
+
+
 # <u>Release Notes - 2025-09-14</u>
 
 ## Notes

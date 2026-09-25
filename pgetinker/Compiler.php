@@ -225,6 +225,16 @@ class Compiler
                 ],
                 "ldflags" => []
             ],
+            'olcPixelGameEngine3.h' => [
+                "cflags"  => [
+                    "-I./olcPGE3",
+                ],
+                "ldflags" => [
+                    "-sMAX_WEBGL_VERSION=2",
+                    "-sMIN_WEBGL_VERSION=2",
+                    "-sUSE_LIBPNG=1",
+                ],
+            ],
             'olcPixelGameEngine.h' => [
                 "cflags"  => [
                     "-I./olcPixelGameEngine",
@@ -405,28 +415,22 @@ class Compiler
         
         foreach($this->libraryMap as $macro => $objectFileName)
         {
-            preg_match(
-                '/(.*)\s*#\s*define?\s+' . $macro . '(.*)/',
-                $this->code[$index],
-                $match,
-                PREG_OFFSET_CAPTURE,
-                0
-            );
-            
-            // no match, this time
-            if(count($match) == 0)
-                continue;
+            $line = $this->code[$index];
 
-            if(!empty(trim($match[1][0])) || !empty(trim($match[2][0])))
-                continue;
-            
-            $this->implementationMacros[] = [
-                "macro" => $macro,
-                "lineIndex" => $index
-            ];
-            
-            $foundImplementationMacro = true;
-            break;
+            $line = str_replace("#define", "", $line);
+            $line = str_replace($macro, "", $line);
+            $line = trim($line);
+
+            if(strlen($line) === 0)
+            {
+                $this->implementationMacros[] = [
+                    "macro" => $macro,
+                    "lineIndex" => $index
+                ];
+                
+                $foundImplementationMacro = true;
+                break;
+            }
         }
 
         if($foundImplementationMacro)
@@ -567,6 +571,10 @@ class Compiler
                 $nsJailCommand[] = "-R";
                 $nsJailCommand[] = "{$directory}:/workspace/{$library}";
             }
+            
+            $baseLibraryDirectory = env("PGETINKER_LIBS_DIRECTORY", "/opt/libs");
+            $nsJailCommand[] = "-R";
+            $nsJailCommand[] = "{$baseLibraryDirectory}/olcPGE3:/workspace/olcPGE3";
 
             if(config("app.env") === "production")
             {
@@ -583,6 +591,7 @@ class Compiler
         $this->logger->info("preparing compiler command");
         $this->compilerCommand = array_merge($this->compilerCommand, [
             "/opt/emsdk/upstream/emscripten/em++",
+            "-O2",
             "-c",
             "pgetinker.cpp",
             "-o",
@@ -604,18 +613,19 @@ class Compiler
             "-D__PGETINKER__",
             "-o",
             "pgetinker.html",
+            "-O2",
             "--shell-file",
             "./emscripten_shell.html",
             "-sASYNCIFY",
             "-sALLOW_MEMORY_GROWTH=1",
             ...$this->linkerFlags,
-            "-sSTACK_SIZE=131072",
+            "-sSTACK_SIZE=1048576",
             "-sLLD_REPORT_UNDEFINED",
             "-sEXPORTED_RUNTIME_METHODS=HEAPF32",
             "-sSINGLE_FILE",
             "-std=c++20",
         ]);
-        
+
         $this->logger->info("Linker command:\n\n" . implode("\n", $this->linkerCommand) . "\n");
         return true;
     }

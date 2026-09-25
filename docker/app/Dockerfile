@@ -75,16 +75,16 @@ RUN sed -i 's|APACHE_RUN_GROUP=www-data|APACHE_RUN_GROUP=sail|' /etc/apache2/env
 
 RUN a2enmod rewrite
 
-
-
-
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
     && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_VERSION.x nodistro main" > /etc/apt/sources.list.d/nodesource.list \
     && apt-get update \
     && apt-get install -y nodejs \
     && npm install -g npm \
+    && npm cache clean --force \
     && npm install -g pnpm \
-    && npm install -g bun
+    && npm cache clean --force \
+    && npm install -g bun \
+    && npm cache clean --force
     
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /etc/apt/keyrings/yarn.gpg >/dev/null \
     && echo "deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
