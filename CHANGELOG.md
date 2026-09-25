@@ -7,9 +7,13 @@ at the date it was published and deployed on [PGEtinker](https://pgetinker.com).
 Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
+
 # <u>Release Notes - 2026-09-25</u>
 
 ## Notes
+
+Some docker image updates and finally... The biggest update to PGEtinker
+in quite some time! ... The addition of PGEv3
 
 ## Commits
 
