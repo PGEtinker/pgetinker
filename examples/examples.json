@@ -1,5 +1,12 @@
 [
     {
+        "name": "PGEtinker Bare Example v3",
+        "library": "pge3",
+        "codeFile": "/examples/files/pgetinker-pge3-bare-example.cpp",
+        "screenshot": "/examples/files/pgetinker-pge3-bare-example.png",
+        "keywords": "BLACK Clear Colour Construct GetTextSize OnUserCreate OnUserUpdate PGEConfig PGEtinkerBareExample PixelGameEngine ScreenSize Start String WHITE bVSync bool config demo draw fElapsedTime main mountPath olc override pgetinker_file_resolve sAppName std string theString url vPixelSize vScreenSize"
+    },
+    {
         "name": "PGEtinker Classic Example",
         "library": "pge",
         "codeFile": "/examples/files/pgetinker-pge-classic-example.cpp",
@@ -7,7 +14,7 @@
         "keywords": "BLACK Clear Construct Draw DrawRect DrawSprite DrawString DrawStringDropShadow FillCircle GetMouse GetMousePos Load OnUserCreate OnUserUpdate PGEtinkerClassicExample Pixel PixelGameEngine RED RandomColor Renderable ScreenHeight ScreenWidth Sprite Start WHITE YELLOW bPressed backgroundColor bool color cout example fElapsedTime foregroundColor image main mountPath olc override pgetinker_file_resolve rand sAppName std str string text url x y"
     },
     {
-        "name": "PGEtinker Bare Example",
+        "name": "PGEtinker Bare Example v2",
         "library": "pge",
         "codeFile": "/examples/files/pgetinker-pge-bare-example.cpp",
         "screenshot": "/examples/files/pgetinker-pge-bare-example.png",
