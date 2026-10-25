@@ -21,8 +21,8 @@ RUN apt-get update && apt-get -qq install -y --no-install-recommends autoconf bi
 
 WORKDIR /
 
-RUN git clone https://github.com/google/nsjail.git \
-    && (cd nsjail; make)
+RUN git clone --depth 1 --branch 3.6 https://github.com/google/nsjail.git \
+    && (cd nsjail && make)
 
 FROM base AS run
 

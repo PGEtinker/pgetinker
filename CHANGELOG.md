@@ -8,6 +8,20 @@ Each release has notes that would be pertinent to the end user of the PGEtinker
 website. For a comprehensive understanding of the evolution of the project,
 please refer to the repository's commit history.
 
+# <u>Release Notes - 2026-10-25</u>
+
+## Notes
+
+This version patches a vulnerability in php. No other changes.
+
+## Commits
+
+### 2026-10-25
+
+- docker: check for unpatched php package and fail if found
+- docker: use version 3.6 of nsjail instead of the latest git commit
+
+
 # <u>Release Notes - 2026-09-25</u>
 
 ## Notes

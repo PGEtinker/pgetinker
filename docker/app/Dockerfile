@@ -21,8 +21,8 @@ RUN apt-get update && apt-get -qq install -y --no-install-recommends autoconf bi
 
 WORKDIR /
 
-RUN git clone https://github.com/google/nsjail.git \
-    && (cd nsjail; make)
+RUN git clone --depth 1 --branch 3.6 https://github.com/google/nsjail.git \
+    && (cd nsjail && make)
 
 FROM base AS run
 
@@ -59,6 +59,14 @@ RUN apt-get update && apt-get upgrade -y \
        php8.4-msgpack php8.4-igbinary php8.4-redis php8.4-swoole \
        php8.4-memcached php8.4-pcov php8.4-imagick php8.4-xdebug \
     && curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+# Fail the build if PHP is older than the 21 Oct 2026 security release (CVE-2026-109618 / CVE-2026-109619)
+RUN php_ver="$(php -r 'echo PHP_VERSION;')" \
+    && mod_ver="$(dpkg-query -W -f='${Version}' libapache2-mod-php8.4)" \
+    && echo "PHP CLI: ${php_ver} / mod_php package: ${mod_ver}" \
+    && dpkg --compare-versions "${php_ver}" ge 8.4.27 \
+    && dpkg --compare-versions "${mod_ver}" ge 8.4.27 \
+    || (echo "ERROR: PHP is older than 8.4.27 (unpatched). Rebuild with --no-cache --pull." >&2; exit 1)
 
 RUN sed -i 's/ServerAdmin webmaster@localhost/ServerAdmin moros1138@gmail.com/' /etc/apache2/sites-available/000-default.conf
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
