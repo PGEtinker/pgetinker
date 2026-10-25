@@ -19,6 +19,7 @@ This version patches a vulnerability in php. No other changes.
 ### 2026-10-25
 
 - docker: check for unpatched php package and fail if found
+- docker: use version 3.6 of nsjail instead of the latest git commit
 
 
 # <u>Release Notes - 2026-09-25</u>
